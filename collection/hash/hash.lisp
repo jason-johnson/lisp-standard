@@ -1,8 +1,5 @@
 (in-package #:std.collection.hash)
 
-; TODO: Should this actually be called "dictionary" and behave like set does (i.e. let the user pick which dictionary implementation)?  The only issue with that is; people will probably want to use different implementations in the same
-; TODO: program, e.g. for one variable a hash, for another a red-black tree
-
 ;;  Normal access
 
 (defun-alias 'make-hash-table 'make)
@@ -17,18 +14,6 @@
 
 (defun put! (hash key value)
   (setf (get hash key) value))
-
-(defun copy (hash)
-  (let ((result 
-	 (make-hash-table
-	  :test (hash-table-test hash)
-	  :size (hash-table-size hash)
-	  :rehash-size (hash-table-rehash-size hash)
-	  :rehash-threshold (hash-table-rehash-threshold hash))))
-    (loop for key being the hash-keys of hash
-       for value being the hash-values of hash
-       do (put! result key value))
-    result))
 
 (defun remove (hash key)
   (let* ((result (copy hash))
@@ -47,6 +32,28 @@
 	do (progn
 	     ,@body)
 	finally (return ,result)))
+
+(defun copy (hash)
+  (let ((result 
+	 (make-hash-table
+	  :test (hash-table-test hash)
+	  :size (hash-table-size hash)
+	  :rehash-size (hash-table-rehash-size hash)
+	  :rehash-threshold (hash-table-rehash-threshold hash))))
+    (do ((key value) hash result)
+	(put! result key value))))
+
+(defun-alias 'hash-table-count 'length)
+
+;; Hash specific
+
+(defun-alias 'clrhash 'clear)
+(defun-alias 'hash-table-p 'hashp)
+(defun-alias 'hash-table-size 'size)
+(defun-alias 'hash-table-test 'test)
+(defun-alias 'hash-table-rehash-size 'rehash-size)
+(defun-alias 'hash-table-rehash-threshold 'rehash-threshold)
+(defun-alias 'sxhash 'hash)
 
 ;; Generic access
 

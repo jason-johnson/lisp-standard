@@ -5,7 +5,7 @@
   (:use #:std.collection #:cl)
   (:import-from #:std.base #:defun-alias)
   (:shadowing-import-from #:std.collection #:map)
-  (:shadow #:get #:put! #:copy #:make #:remove #:remove! #:do)
+  (:shadow #:get #:put! #:copy #:make #:remove #:remove! #:do #:length)
   (:export
    #:make
    #:get
@@ -13,4 +13,12 @@
    #:copy
    #:remove
    #:remove!
-   #:do))
+   #:do
+   #:length
+   #:clear
+   #:hashp
+   #:size
+   #:test
+   #:rehash-size
+   #:rehash-threshold
+   #:hash))
