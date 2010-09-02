@@ -8,4 +8,6 @@ Note that the hash version of get takes a default value to return if the key doe
 
 We should also consider a "deep-copy" that does a deeper copy than the default (e.g. copy-tree vs. copy-list).  In many cases it just aliases with regular copy (or maybe I'll just define it for list)
 
-The way hashes look in the reader is bad.  We could follow what clojur does (e.g #{'a 3, 'b 4, 'c 5}), or keep looking around.  The reader also doesn't do the right thing with symbols, but maybe when we change syntax this will be fixed
+Maybe options to the different collections should be seperated by a |, e.g.  #{:test equal, :size 10| this 1, that 2, the 3, other 4} and #[:test equal, :size 10| 1 2 3 4 5]
+
+All collection operations should be defined generically so users can create new collections that act like "built in" ones
