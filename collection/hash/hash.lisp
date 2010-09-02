@@ -2,6 +2,13 @@
 
 ;; Hash specific
 
+(defun options (hash)
+  (list
+   :test (hash-table-test hash)
+   :size (hash-table-size hash)
+   :rehash-size (hash-table-rehash-size hash)
+   :rehash-threshold (hash-table-rehash-threshold hash)))
+
 (defun-alias 'clrhash 'clear)
 (defun-alias 'hash-table-p 'hashp)
 (defun-alias 'hash-table-size 'size)
@@ -44,12 +51,7 @@
 	finally (return ,result)))
 
 (defun copy (hash)
-  (let ((result 
-	 (make-hash-table
-	  :test (hash-table-test hash)
-	  :size (hash-table-size hash)
-	  :rehash-size (hash-table-rehash-size hash)
-	  :rehash-threshold (hash-table-rehash-threshold hash))))
+  (let ((result (apply #'make-hash-table (options hash))))
     (do ((key value) hash result)
 	(put! result key value))))
 

@@ -21,4 +21,5 @@
    #:test
    #:rehash-size
    #:rehash-threshold
-   #:hash))
+   #:hash
+   #:options))
