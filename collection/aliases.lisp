@@ -8,6 +8,8 @@
 
 ;; Sequence functions
 
+(defun-alias 'cl:map 'map-to)
+
 (defun-alias 'delete 'remove!)
 (defun-alias 'delete-if 'remove-if!)
 (defun-alias 'delete-if-not 'remove-if-not!)
