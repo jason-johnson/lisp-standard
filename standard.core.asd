@@ -11,6 +11,7 @@
 	       (:module collection
 			:components ((:file "package")
 				     (:file "collection" :depends-on ("package"))
+				     (:file "aliases" :depends-on ("package"))
 				     (:module list
 					      :components ((:file "package")
 							   (:file "list" :depends-on ("package")))
@@ -27,7 +28,6 @@
 					      :components ((:file "package")
 							   (:file "hash" :depends-on ("package")))
 					      :depends-on ("package" "collection"))
-				     (:file "aliases" :depends-on (#:list #:array))
-				     (:file "pretty-print" :depends-on (#:hash)))
+				     (:file "pretty-print" :depends-on (#:hash #:set)))
 			:depends-on (#:base))
 	       (:file "package" :depends-on (#:base #:collection))))
