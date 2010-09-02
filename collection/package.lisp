@@ -2,23 +2,20 @@
 
 (defpackage #:standard.collection
   (:nicknames #:std.collection #:collection)
-  (:use #:cl)
+  (:use #:cl #:std.base)
 ;  (:import-from #:std.functional #:uncurry) ;TODO: do we really need these functions?  Only used by the hash print/read code
-  (:shadow #:get #:set #:remove #:member #:union #:intersection #:complement #:subsetp)
+  (:shadow #:get #:remove #:map)
   (:export
    #:get
-   #:set
+   #:put!
+   #:copy
    #:remove
    #:remove!
-   #:copy
-   #:lref
-   #:copy-list
-   #:href
-   #:member
-   #:union
-   #:union!
-   #:intersection
-   #:intersection!
-   #:complement
-   #:complement!
-   #:subsetp))
+   #:mapseq
+   #:map
+   #:map!
+   #:maplist
+   #:maplist!
+   #:foreach
+   #:foreach-list
+   #:make-list))
