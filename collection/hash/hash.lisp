@@ -39,6 +39,15 @@
 (defun remove! (hash key)
   (remhash key hash))
 
+(defmacro do (((key value) hash &optional result) &body body) ;TODO: Needs a with-gensyms on hash
+  "Iterate over a hash.  key or value can be set to nil if not used"
+  `(loop
+      ,@(if key `(for ,key being the hash-keys of ,hash))
+      ,@(if value `(for ,value being the hash-values of ,hash))
+	do (progn
+	     ,@body)
+	finally (return ,result)))
+
 ;; Generic access
 
 (defmethod std.collection:get ((container hash-table) key)

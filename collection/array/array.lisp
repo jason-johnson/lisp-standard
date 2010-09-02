@@ -61,6 +61,12 @@
 	(setf (row-major-aref result i) (row-major-aref array i)))
       result)))
 
+(defmacro do ((var array &optional result) &body body)
+  `(loop for ,var across ,array
+	do (progn
+	     ,@body)
+	finally (return ,result)))
+
 ;; Generic methods
 
 (defmethod std.collection:get ((container array) index)

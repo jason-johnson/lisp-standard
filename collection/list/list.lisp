@@ -18,6 +18,11 @@
 
 (defun-alias 'copy-list 'copy)
 
+
+(defmacro do ((var list &optional result) &body body)
+  `(dolist (,var ,list ,result)
+     ,@body))
+
 ;; Generic methods
 
 (defmethod std.collection:get ((container cons) index)

@@ -5,12 +5,13 @@
   (:use #:std.collection #:cl)
   (:import-from #:std.base #:defun-alias)
   (:shadowing-import-from #:std.collection #:remove #:map)
-  (:shadow #:get #:put! #:copy)
+  (:shadow #:get #:put! #:copy #:do)
   (:export
    #:make
    #:get
    #:put!
    #:copy
+   #:do
    #:rank
    #:dimension
    #:dimensions
