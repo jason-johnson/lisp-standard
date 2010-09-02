@@ -11,18 +11,18 @@
 (defun-alias 'array-in-bounds-p 'in-bounds-p)
 (defun-alias 'array-displacement 'displacement)
 (defun-alias 'array-row-major-index 'row-major-index)
-(defun-alias 'array-has-fill-pointer-p 'has-fill-pointer)
+(defun-alias 'array-has-fill-pointer-p 'has-fill-pointer-p)
 (defun-alias 'adjustable-array-p 'adjustable-p)
 
 ;; Array specific
 
 (defun-alias 'row-major-aref 'row-major-get)
 
-(defsetf major-row-get (array index) (value)
+(defsetf row-major-get (array index) (value)
   `(setf (row-major-aref ,array ,index) ,value))
 
-(defun major-row-put! (array index value)
-  (setf (major-row-get array index) value))
+(defun row-major-put! (array index value)
+  (setf (row-major-get array index) value))
 
 ;;  Normal access
 
@@ -41,24 +41,24 @@
 
 (defun copy (array)
   (flet ((copy-arguments (array)
-	   (let ((args (list (array-dimensions array))))
-	     (unless (eq (array-element-type array) t)
+	   (let ((args (list (dimensions array))))
+	     (unless (eq (element-type array) t)
 	       (push :element-type args)
-	       (push (array-element-type array) args))
-	     (when (eq (adjustable-array-p array) t)
+	       (push (element-type array) args))
+	     (when (eq (adjustable-p array) t)
 	       (push :adjustable args)
 	       (push t args))
 	     (when (and
 		    (vectorp array)
-		    (array-has-fill-pointer-p array))
+		    (has-fill-pointer-p array))
 	       (push :fill-pointer args)
 	       (push (fill-pointer array) args))
-	     (when (array-displacement array)
+	     (when (displacement array)
 	       (error "copy not supported for displaced arrays"))
 	     (nreverse args))))
-    (let ((result (apply 'make-array (copy-arguments array))))
-      (dotimes (i (array-total-size array))
-	(setf (row-major-aref result i) (row-major-aref array i)))
+    (let ((result (apply 'make (copy-arguments array))))
+      (dotimes (i (total-size array))
+	(setf (row-major-get result i) (row-major-get array i)))
       result)))
 
 (defmacro do ((var array &optional result) &body body)
