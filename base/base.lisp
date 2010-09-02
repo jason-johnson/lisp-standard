@@ -67,9 +67,10 @@
 
 ;; TODO: Look into adding the ability to add documentation to destination
 ;; TODO: Update: documentation lives with the function, not the symbol so changing the documentation of the alias changes it for both. :(
-(defun defun-alias (source destination &optional documentation) ; TODO: if this is null then use the doc from the source function
+(defmacro defun-alias (source destination &optional documentation) ; TODO: if this is null then use the doc from the source function
   (declare (ignore documentation))
-  (setf (symbol-function destination) (symbol-function source)))
+  `(eval-when (:compile-toplevel :load-toplevel :execute)
+     (setf (symbol-function ,destination) (symbol-function ,source))))
 
 ;; Generic functions
 
