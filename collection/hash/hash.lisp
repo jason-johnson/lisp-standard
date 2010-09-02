@@ -1,5 +1,15 @@
 (in-package #:std.collection.hash)
 
+;; Hash specific
+
+(defun-alias 'clrhash 'clear)
+(defun-alias 'hash-table-p 'hashp)
+(defun-alias 'hash-table-size 'size)
+(defun-alias 'hash-table-test 'test)
+(defun-alias 'hash-table-rehash-size 'rehash-size)
+(defun-alias 'hash-table-rehash-threshold 'rehash-threshold)
+(defun-alias 'sxhash 'hash)
+
 ;;  Normal access
 
 (defun-alias 'make-hash-table 'make)
@@ -44,16 +54,6 @@
 	(put! result key value))))
 
 (defun-alias 'hash-table-count 'length)
-
-;; Hash specific
-
-(defun-alias 'clrhash 'clear)
-(defun-alias 'hash-table-p 'hashp)
-(defun-alias 'hash-table-size 'size)
-(defun-alias 'hash-table-test 'test)
-(defun-alias 'hash-table-rehash-size 'rehash-size)
-(defun-alias 'hash-table-rehash-threshold 'rehash-threshold)
-(defun-alias 'sxhash 'hash)
 
 ;; Generic access
 
