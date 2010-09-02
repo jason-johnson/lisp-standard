@@ -9,8 +9,8 @@
 
 (declaim (inline get put! remove!))
 
-(defun get (hash key)
-  (gethash key hash))
+(defun get (hash key &optional default)
+  (gethash key hash default))
 
 (defsetf get (hash key) (value)
   `(setf (gethash ,key ,hash) ,value))
