@@ -13,6 +13,7 @@
    #:put!
    #:copy
    #:do
+   #:length
    #:rank
    #:dimension
    #:dimensions

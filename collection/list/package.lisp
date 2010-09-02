@@ -12,4 +12,5 @@
    #:put!
    #:copy
    #:deep-copy
-   #:do))
+   #:do
+   #:length))
