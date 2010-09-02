@@ -11,11 +11,4 @@
    #:copy
    #:remove
    #:remove!
-   #:mapseq
-   #:map
-   #:map!
-   #:maplist
-   #:maplist!
-   #:foreach
-   #:foreach-list
-   #:make-list))
+   #:map-to))

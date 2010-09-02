@@ -6,15 +6,6 @@
 
 ;; NOTE: Nothing, it all comes from CL
 
-;; Map
-
-(defun-alias 'cl:map 'mapseq)
-(defun-alias 'mapcar 'map)
-(defun-alias 'mapcan 'map!)
-(defun-alias 'mapcon 'maplist!)
-(defun-alias 'mapc 'foreach)
-(defun-alias 'mapl 'foreach-list)
-
 ;; Sequence functions
 
 (defun-alias 'delete 'remove!)

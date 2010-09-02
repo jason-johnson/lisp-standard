@@ -13,4 +13,16 @@
    #:copy
    #:deep-copy
    #:do
-   #:length))
+   #:length
+   #:map
+   #:map!
+   #:maplist
+   #:maplist!
+   #:foreach
+   #:foreach-list
+   #:map
+   #:map!
+   #:maplist
+   #:maplist!
+   #:foreach
+   #:foreach-list))

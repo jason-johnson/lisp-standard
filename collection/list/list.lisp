@@ -1,5 +1,12 @@
 (in-package #:std.collection.list)
 
+;; List specific
+
+(defun-alias 'mapcan 'map!)
+(defun-alias 'mapcon 'maplist!)
+(defun-alias 'mapc 'foreach)
+(defun-alias 'mapl 'foreach-list)
+
 ;;  Normal access
 
 (defun-alias 'make-list 'make)
@@ -23,6 +30,8 @@
 (defmacro do ((var list &optional result) &body body)
   `(dolist (,var ,list ,result)
      ,@body))
+
+(defun-alias 'mapcar 'map)
 
 ;; Generic methods
 
