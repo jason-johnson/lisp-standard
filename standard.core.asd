@@ -27,7 +27,7 @@
 				     (:module hash
 					      :components ((:file "package")
 							   (:file "hash" :depends-on ("package")))
-					      :depends-on ("package" "collection"))
+					      :depends-on ("package" "collection" #:array #:vector))
 				     (:file "pretty-print" :depends-on (#:hash #:set)))
 			:depends-on (#:base))
 	       (:file "package" :depends-on (#:base #:collection))))
