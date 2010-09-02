@@ -1,5 +1,7 @@
 (in-package #:std.collection)
 
+;; TODO: Does this still need to come at the end?
+
 ;; List
 
 ;; NOTE: Nothing, it all comes from CL
