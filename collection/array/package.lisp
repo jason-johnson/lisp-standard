@@ -22,6 +22,7 @@
    #:displacement
    #:row-major-index
    #:has-fill-pointer
+   #:fill-pointer
    #:adjustable-p
    #:row-major-get
    #:major-row-put!))
