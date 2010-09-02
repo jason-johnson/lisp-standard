@@ -18,6 +18,7 @@
 
 (defun-alias 'copy-list 'copy)
 
+(defun-alias 'copy-tree 'deep-copy)
 
 (defmacro do ((var list &optional result) &body body)
   `(dolist (,var ,list ,result)

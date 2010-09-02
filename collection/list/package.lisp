@@ -11,4 +11,5 @@
    #:get
    #:put!
    #:copy
+   #:deep-copy
    #:do))
