@@ -150,8 +150,3 @@
 	(format stream format-string t test pairs))))
 
 (set-dispatch-macro-character #\# #\{ #'read-hash)
-
-(set-macro-character #\} (lambda (stream char)
-			   (declare (ignore stream)
-				    (ignore char))
-				    nil))
