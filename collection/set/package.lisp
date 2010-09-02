@@ -8,7 +8,10 @@
   (:shadowing-import-from #:std.collection.hash #:length)
   (:shadow #:make #:get #:put! #:clear #:size #:test #:rehash-size #:rehash-threshold #:copy #:do #:remove #:remove! #:set #:union #:intersection #:complement #:subsetp)
   (:export
+   #:set
    #:make
+   #:memberp
+   #:add
    #:copy
    #:remove
    #:remove!

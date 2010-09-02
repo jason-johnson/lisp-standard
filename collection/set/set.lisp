@@ -31,8 +31,6 @@
 (defun test (set)
   (hash:test (set-data set)))
 
-(defun member (set member)
-  (eq (hash:get set member) +dummy-set-value+))
 (defun rehash-size (set)
   (hash:rehash-size (set-data set)))
 
@@ -41,6 +39,19 @@
 
 ;;  Normal access
 
+(declaim (inline memberp add remove! remove))
+
+(defun make (&key (test 'eql) (size 16) (rehash-size 1.5) (rehash-threshold 1) hash-function synchronized)
+  (make-set :data (hash:make
+		   :test test
+		   :size size
+		   :rehash-size rehash-size
+		   :rehash-threshold rehash-threshold
+		   :hash-function hash-function
+		   :synchronized synchronized)))
+
+(defun memberp (set member)
+  (eq (get set member) +dummy-set-value+))
 
 (defun add (set member)
   (put! set member)
@@ -63,44 +74,49 @@
 (defun remove (set member)
   (remove! (copy set) member))
 
-;; Set operations (note: most of these become independent of representation after conversion to the macro)
+;; Set operations
 
 (defun union! (set1 set2)
   (do (member set2 set1)
-    (add-member set1 member)))
+    (add set1 member)))
 
 (defun union (set1 set2)
-  (union! (copy-set set1) set2))
+  (union! (copy set1) set2))
 
 (defun intersection! (set1 set2)
   (do (member set2)
-    (if (member set1 member)
+    (if (memberp set1 member)
 	(hash:put! (set-data set1) member 1)))
   (do (member set1 set1)
-    (if (eq (href set1 member) 1)
-	(setf (href set1 member) +dummy-set-value+)
-	(hdelete! set1 member))))
+    (if (eq (get set1 member) 1)
+	(put! set1 member)
+	(remove! set1 member))))
 
 (defun intersection (set1 set2)
-  (intersection! (copy-set set1) set2))
+  (intersection! (copy set1) set2))
 
 (defun complement! (set1 set2)
   (do (member set2 set1)
     (remove! set1 member)))
 
 (defun complement (set1 set2)
-  (complement! (copy-set set1) set2))
+  (complement! (copy set1) set2))
 
 (defun cartesian-product (set1 set2)
-  (let ((result (copy-hash-options set1)))
+  (let ((result (apply #'hash:make (hash:options set1))))
     (do (member1 set1 result)
       (do (member2 set2)
 	(add result (cons member1 member2))))))
 
 (defun subsetp (set1 set2)
   (do (member set1 t)
-    (unless (member set2 member)
+    (unless (memberp set2 member)
       (return nil))))
+
+;; Generic access
+
+(defmethod std.base:copy ((container set))
+  (copy container))
 
 ;; Read/write macros
 
@@ -125,15 +141,15 @@
 	 for token = (read stream nil)
 	 while token
 	 do (parse token stream))
-      (let ((set (apply #'make-hash-table (apply #'append (mapcar #'assoc->list keywords)))))
+      (let ((set (apply #'make (apply #'append (mapcar #'assoc->list keywords)))))
 	(loop
 	   for member in atoms
-	   do (add-member set member))
+	   do (add set member))
 	set))))
 
 (defun write-set (stream set)
   (let ((format-string "#[~:[~;(:test ~a) ~]~{~S~^ ~}]") 
-	(test (hash-table-test set))
+	(test (test set))
 	(atoms (loop
 		  for key being the hash-keys of (set-data set)
 		  collect key)))
