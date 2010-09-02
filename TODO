@@ -1,3 +1,3 @@
 Consider making defun aliases for the different layers of an interface, e.g. defun-highlevel, so that documentation can be generated easier
 
-NOTE: The plan is now to simply have each module/namespace use cl directly but only export the interface they provide.  std itself will just use all namespaces and export all their symbols followed by exporting everything from cl that doesn't conflict.  This will be done programmatically but just to write out the defpackage statement (like the morris code example did)
+For the ! functions that one can actually depend on the value being set, what do we do?  There should be a difference between "this function destroys its argument, and the argument isn't useful afterwards" and "this function modifies its argument, but can then be used".  Or maybe there shouldn't, maybe we just say if there is a ! you have to assign the result.
