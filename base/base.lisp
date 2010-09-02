@@ -59,6 +59,12 @@
 (defmacro defset! (access-fn &rest rest)
   `(defsetf ,access-fn ,@rest))
 
+(defmacro inc! (place &optional (delta 1))
+  `(incf ,place ,delta))
+
+(defmacro dec! (place &optional (delta 1))
+  `(decf ,place ,delta))
+
 ;; TODO: Look into adding the ability to add documentation to destination
 ;; TODO: Update: documentation lives with the function, not the symbol so changing the documentation of the alias changes it for both. :(
 (defun defun-alias (source destination &optional documentation) ; TODO: if this is null then use the doc from the source function

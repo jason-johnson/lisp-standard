@@ -8,5 +8,7 @@
    #:def-metapackage
    #:def-metapackage-compliment
    #:set!
-   #:setf				; For people who prefer this name
+   #:setf					; For people who prefer this name
+   #:inc!
+   #:dec!
    #:copy))
