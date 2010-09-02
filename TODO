@@ -7,3 +7,5 @@ I want to set up the API so that the specific pacakges (e.g. collection.list, co
 Note that the hash version of get takes a default value to return if the key doesn't exist.  Map should do this as well.
 
 We should also consider a "deep-copy" that does a deeper copy than the default (e.g. copy-tree vs. copy-list).  In many cases it just aliases with regular copy (or maybe I'll just define it for list)
+
+The way hashes look in the reader is bad.  We could follow what clojur does (e.g #{'a 3, 'b 4, 'c 5}), or keep looking around.  The reader also doesn't do the right thing with symbols, but maybe when we change syntax this will be fixed
