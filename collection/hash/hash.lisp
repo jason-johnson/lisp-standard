@@ -71,34 +71,75 @@
 ;; Read/write macros
 
 (defun read-hash (stream subchar arg)
-  (declare (ignore subchar)
-	   (ignore arg))
-  (let ((keywords (list (cons :test 'eql)))
-	pairs)
-    (labels ((assoc->list (assoc)
-	       (list (first assoc) (rest assoc)))
-	     (set-keyword (key value)
-	       (ccase key
-		 ((:test :size :rehash-size :rehash-threshold)
-		  (if (assoc key keywords)
-		      (rplacd (assoc key keywords) value)
-		      (push (cons key value) keywords)))))
-	     (parse (token stream)
-	       (ctypecase token
-		 (cons (push token pairs))
-		 (keyword (set-keyword token (read stream t))))))
-      (loop
-	 for token = (read stream nil)
-	 while token
-	 do (parse token stream))
-      (let ((hash (apply #'make-hash-table (apply #'append (mapcar #'assoc->list keywords)))))
-	(loop
-	   for (key . value) in pairs
-	   do (put! hash key value))
-	hash))))
+  (declare (ignore subchar arg))
+  (let ((buffer (array:make 0 :adjustable t :fill-pointer 0 :element-type 'character))
+	result
+	options
+	data
+	keyword
+	in-quote
+	in-double-quote)
+    (labels ((emptyp ()
+	       (= 0 (vector:length buffer)))
+	     (save (char)
+	       (vector-push-extend char buffer))
+	     (current-string ()
+	       (unless (emptyp)
+		 (prog1
+		     (read-from-string (copy-seq buffer))
+		   (setf (array:fill-pointer buffer) 0))))
+	     (handle-colon ()
+	       (cond
+		 (in-quote
+		  (setf in-quote nil)
+		  (save #\:))
+		 (keyword (error "parse error, unexpected-colon"))
+		 ((emptyp) (save #\:)) ; working with a keyword
+		 (t (setf keyword (current-string)
+			  in-quote t))))	; variable to a keyword is quoted
+	     (handle-quote ()
+	       (save #\')
+	       (setf in-quote t))
+	     (handle-double-quote ()
+	       (setf in-double-quote (not in-double-quote))
+	       (save #\"))
+	     (handle-end-token ()
+	       (let* ((token (current-string)))
+		 (if in-quote (setf in-quote nil))
+		 (when token
+		   (cond
+		     (keyword
+		      (push keyword options)
+		      (push token options)
+		      (setf keyword nil))
+		     (t (push token data))))))
+	     (handle-char (char)
+	       (case char
+		 (#\: (handle-colon))
+		 (#\' (handle-quote))
+		 (#\" (handle-double-quote))
+		 ((#\, #\Space) (handle-end-token))
+		 (t (save char))))
+	     (load-data (data)
+	       (loop
+		  for key in data by #'cddr
+		  for val in (rest data) by #'cddr
+		  do (put! result key val)))
+	     (read-until (char)
+	       (loop for ch = (read-char-no-hang stream)
+		  when (and (eq ch char) (not in-double-quote))
+		  do (progn
+		       (handle-end-token)
+		       (setf result (apply #'make (nreverse options)))
+		       (load-data (nreverse data))
+		       (return result))
+		  do (if (and in-double-quote (not (eq ch #\")))
+			 (save ch)
+			 (handle-char ch)))))
+      (read-until #\}))))
 
 (defun write-hash (stream hash)
-  (let ((format-string "#{~:[~;:test ~a ~]~{~{(~S . ~S)~}~^ ~}}") 
+  (let ((format-string "#{~:[~;:test:~a, ~]~{~{~S ~S~}~^, ~}}") ; TODO: Fix the case where there is a test but no entries (prints a comma after the test, then empty space)
 	(test (hash-table-test hash))
 	(pairs (loop
 		  for key being the hash-keys of hash
