@@ -1,0 +1,3 @@
+Consider making defun aliases for the different layers of an interface, e.g. defun-highlevel, so that documentation can be generated easier
+
+NOTE: The plan is now to simply have each module/namespace use cl directly but only export the interface they provide.  std itself will just use all namespaces and export all their symbols followed by exporting everything from cl that doesn't conflict.  This will be done programmatically but just to write out the defpackage statement (like the morris code example did)
