@@ -5,11 +5,10 @@
   (:use #:std.collection #:std.collection.hash #:cl)
   (:import-from #:std.base #:defun-alias)
   (:shadowing-import-from #:std.collection #:map)
-  (:shadow #:get #:put! #:copy #:remove #:remove! #:do)
+  (:shadowing-import-from #:std.collection.hash #:length)
+  (:shadow #:make #:get #:put! #:clear #:size #:test #:rehash-size #:rehash-threshold #:copy #:do #:remove #:remove! #:set #:union #:intersection #:complement #:subsetp)
   (:export
    #:make
-   #:get
-   #:put!
    #:copy
    #:remove
    #:remove!
