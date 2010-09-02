@@ -1,3 +1,9 @@
 Consider making defun aliases for the different layers of an interface, e.g. defun-highlevel, so that documentation can be generated easier
 
 For the ! functions that one can actually depend on the value being set, what do we do?  There should be a difference between "this function destroys its argument, and the argument isn't useful afterwards" and "this function modifies its argument, but can then be used".  Or maybe there shouldn't, maybe we just say if there is a ! you have to assign the result.
+
+I want to set up the API so that the specific pacakges (e.g. collection.list, collection.hash) have the most efficient implementation possible, while the top level uses almost exclusively generic functions, so that users can create objects that the "built in" functions work on.  Note that common lisp built in functions are always prefered over custom ones since they can be implemented much more efficiently (but if I find I can match them, then this restriction relaxes).  For example, even though e.g. remove works on lists *or* arrays, I still prefer using it as the "efficient" remove over writing one for each.
+
+Note that the hash version of get takes a default value to return if the key doesn't exist.  Map should do this as well.
+
+We should also consider a "deep-copy" that does a deeper copy than the default (e.g. copy-tree vs. copy-list).  In many cases it just aliases with regular copy (or maybe I'll just define it for list)
