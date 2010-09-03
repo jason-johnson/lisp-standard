@@ -1,7 +1,7 @@
 (in-package #:cl-user)
 
 (defpackage #:standard.collection.impl-common
-  (:nicknames #:std.collection.impl-common)
+  (:nicknames #:std.collection.impl-common #:impl-common)
   (:use #:cl)
   (:import-from #:std.base #:defun-alias)
   (:export
