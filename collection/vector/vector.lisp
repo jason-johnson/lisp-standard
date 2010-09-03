@@ -13,7 +13,7 @@
   (aref vector index))
 
 (defsetf get (vector index) (value)
-  `(aref (svref ,vector ,index) ,value))
+  `(setf (aref ,vector ,index) ,value))
 
 (defun put! (vector index value)
   (setf (get vector index) value))
