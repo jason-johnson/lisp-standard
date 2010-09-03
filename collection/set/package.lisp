@@ -8,6 +8,7 @@
   (:shadow #:make #:get #:put! #:clear #:size #:test #:rehash-size #:rehash-threshold #:length #:copy #:do #:remove #:remove! #:set #:union #:intersection #:complement #:subsetp)
   (:export
    #:set
+   #:setp
    #:make
    #:memberp
    #:add
@@ -17,7 +18,6 @@
    #:do
    #:length
    #:clear
-   #:setp
    #:size
    #:test
    #:rehash-size
