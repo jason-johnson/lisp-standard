@@ -10,4 +10,21 @@
    #:copy
    #:remove
    #:remove!
-   #:map-to))
+   #:map-to
+   #:map
+   #:remove-if
+   #:remove-if!
+   #:remove-if-not
+   #:remove-if-not!
+   #:remove-duplicates
+   #:remove-duplicates!
+   #:reverse
+   #:reverse!
+   #:substitute
+   #:substitute!
+   #:substitute-if
+   #:substitute-if!
+   #:substitute-if-not
+   #:substitute-if-not!
+   #:append
+   #:append!))

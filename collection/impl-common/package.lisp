@@ -2,9 +2,8 @@
 
 (defpackage #:standard.collection.impl-common
   (:nicknames #:std.collection.impl-common)
-  (:use #:std.collection #:cl)
+  (:use #:cl)
   (:import-from #:std.base #:defun-alias)
-  (:shadowing-import-from #:std.collection #:get)
   (:export
    #:remove
    #:remove!
@@ -24,4 +23,3 @@
    #:substitute-if-not!
    #:append
    #:append!))
-

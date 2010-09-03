@@ -2,10 +2,9 @@
 
 (defpackage #:standard.collection.list
   (:nicknames #:std.collection.list #:collection.list #:list)
-  (:use #:std.collection #:cl)
+  (:use #:cl)
   (:import-from #:std.base #:defun-alias)
-  (:shadowing-import-from #:std.collection #:remove #:map)
-  (:shadow #:get #:put! #:copy #:do)
+  (:shadow #:get #:put! #:copy #:do #:map)
   (:export
    #:make
    #:get

@@ -2,9 +2,8 @@
 
 (defpackage #:standard.collection.array
   (:nicknames #:std.collection.array #:collection.array #:array)
-  (:use #:std.collection #:cl)
+  (:use #:cl)
   (:import-from #:std.base #:defun-alias)
-  (:shadowing-import-from #:std.collection #:remove #:map)
   (:shadow #:get #:put! #:copy #:do)
   (:export
    #:make

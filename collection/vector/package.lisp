@@ -2,9 +2,9 @@
 
 (defpackage #:standard.collection.vector
   (:nicknames #:std.collection.vector #:collection.vector #:vector)
-  (:use #:std.collection #:std.collection.array #:cl)
+  (:use #:std.collection.array #:cl)
   (:import-from #:std.base #:defun-alias)
-  (:shadowing-import-from #:std.collection #:remove #:map)
+  (:shadowing-import-from #:std.collection #:map)
   (:shadowing-import-from #:std.collection.array #:copy #:do)
   (:shadow #:get #:put! #:push)
   (:export
