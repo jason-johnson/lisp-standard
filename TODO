@@ -1,15 +1,20 @@
 Consider making defun aliases for the different layers of an interface, e.g. defun-highlevel, so that documentation can be generated easier
 
-For the ! functions that one can actually depend on the value being set, what do we do?  There should be a difference between "this function destroys its argument, and the argument isn't useful afterwards" and "this function modifies its argument, but can then be used".  Or maybe there shouldn't, maybe we just say if there is a ! you have to assign the result.
-
 I want to set up the API so that the specific pacakges (e.g. collection.list, collection.hash) have the most efficient implementation possible, while the top level uses almost exclusively generic functions, so that users can create objects that the "built in" functions work on.  Note that common lisp built in functions are always prefered over custom ones since they can be implemented much more efficiently (but if I find I can match them, then this restriction relaxes).  For example, even though e.g. remove works on lists *or* arrays, I still prefer using it as the "efficient" remove over writing one for each.
 
 Note that the hash version of get takes a default value to return if the key doesn't exist.  Map should do this as well.
 
 We should also consider a "deep-copy" that does a deeper copy than the default (e.g. copy-tree vs. copy-list).  In many cases it just aliases with regular copy (or maybe I'll just define it for list)
 
-Maybe options to the different collections should be seperated by a |, e.g.  #{:test equal, :size 10| this 1, that 2, the 3, other 4} and #[:test equal, :size 10| 1 2 3 4 5]
-
-All collection operations should be defined generically so users can create new collections that act like "built in" ones
+Maybe options to the different collections should be seperated by a |, e.g.  #{:test equal, :size 10| this 1, that 2, the 3, other 4} and #[:test equal, :size 10| 1 2 3 4 5].  We could also make only "simply" hashes/sets printable.  If any options are used then the hash/set isn't simple and wont be printed out.  Kind of following existing CL behavior.
 
 We'll have to get some experience with array to see if the current syntax is ok or if (defun get (array &rest indexes)) would be better.  We can do that because we have to use apply in any case.  The problem is that it can't be consistant with generic get then. UPDATE: How do you deal with put! then?
+
+
+I will probably want to create my own defgeneric that allows the defaults to be declared in the defgeneric call, since that makes more sense.  If a method doesn't define any, what was defined in the defgeneric is used, but defmethod always overrides if spcified.  I could create my own generic function object to ensure that I have to do the minimal work.  That way the normal method detection (with the lambda list) works properly, and then I add the defaults to the method after the fact.
+
+
+For the ! functions that one can actually depend on the value being set, what do we do?  There should be a difference between "this function destroys its argument, and the argument isn't useful afterwards" and "this function modifies its argument, but can then be used".  Or maybe there shouldn't, maybe we just say if there is a ! you have to assign the result.
+
+UPDATE:
+I want to make destructive versions of functions that destroy their arguments be noted with a ' (to indicate a more efficient version of the function) and ! for functions that modify their argument (but it can be used afterward).  I would have to use e.g ^ instead of ' since ' is the quote operator
