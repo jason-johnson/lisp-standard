@@ -24,6 +24,10 @@
 					      :components ((:file "package")
 							   (:file "vector" :depends-on ("package")))
 					      :depends-on ("package" "collection" #:array))
+				     (:module buffer
+					      :components ((:file "package")
+							   (:file "buffer" :depends-on ("package")))
+					      :depends-on ("package" "collection" #:array))
 				     (:module hash
 					      :components ((:file "package")
 							   (:file "hash" :depends-on ("package")))
