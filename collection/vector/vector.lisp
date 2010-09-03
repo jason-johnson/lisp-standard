@@ -21,6 +21,9 @@
 (defun map (fun &rest vectors)
   (apply #'map-to 'vector fun (first vectors) (rest vectors)))
 
+(defun sort (vector predicate &key key)
+  (cl:sort (copy vector) predicate :key key))
+
 ;; Generic access
 
 (defmethod std.collection:get ((container vector) index)
@@ -30,3 +33,6 @@
   (setf (get container index) value))
 
 ;; NOTE: vector and simple-vector are subtypes of array so the copy defined in the array module works for us too
+
+(defmethod std.collection:sort ((container vector) predicate &key key)
+  (sort container predicate :key key))

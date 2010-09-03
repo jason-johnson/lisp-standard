@@ -15,7 +15,7 @@
 
 (defun-alias 'make-list 'make)
 
-(declaim (inline get put!))
+(declaim (inline get put! sort))
 
 (defun get (list index)
   (nth index list))
@@ -37,6 +37,9 @@
 
 (defun-alias 'mapcar 'map)
 
+(defun sort (list predicate &key key)
+  (cl:sort (deep-copy list) predicate :key key))
+
 ;; Generic methods
 
 (defmethod std.collection:get ((container cons) index)
@@ -49,4 +52,4 @@
   (copy-list object))
 
 (defmethod std.collection:sort ((container cons) predicate &key key)
-  (sort (deep-copy container) predicate :key key))
+  (sort container predicate :key key))
