@@ -20,7 +20,7 @@
 
 ;; Set specific
 
-(declaim (inline clear size test rehash-size rehash-threshold))
+(declaim (inline clear size test rehash-size rehash-threshold options))
 
 (defun clear (set)
   (hash:clear (set-data set))
@@ -37,6 +37,9 @@
 
 (defun rehash-threshold (set)
   (hash:rehash-threshold (set-data set)))
+
+(defun options (set)
+  (hash:options (set-data set)))
 
 ;;  Normal access
 
@@ -65,9 +68,9 @@
 	finally (return ,result)))
 
 (defun copy (set)
-  (let ((result (apply #'make (options (set-data set)))))
     (do ((key nil) set result)
 	(put! result key))))
+  (let ((result (apply #'make (options set))))
 
 (defun remove! (set member)
   (hash:remove! (set-data set) member))
@@ -107,7 +110,7 @@
   (complement! (copy set1) set2))
 
 (defun cartesian-product (set1 set2)
-  (let ((result (apply #'hash:make (hash:options set1))))
+  (let ((result (apply #'make (options set1))))
     (do (member1 set1 result)
       (do (member2 set2)
 	(add result (cons member1 member2))))))
