@@ -21,4 +21,4 @@
 |#
 
 ;; TODO: And it will make sure std.core is included as well so that the user can define functions etc.... is this actually a good idea?  cl doesn't work like this.  I think it's probably a bad idea.  Better to just document
-;; TODO: That users will want to use std.core for the base system
+;; TODO: That users will want to use std.core for the base system if they are only including certain packages.  They can, of course, just include standard to get everything

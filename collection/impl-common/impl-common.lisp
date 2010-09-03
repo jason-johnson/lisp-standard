@@ -4,7 +4,7 @@
 
 ;; Rename sequence functions according to the convention
 
-(defun-alias 'delete 'remove!)
+(defun-alias 'delete 'remove!)		; TODO: This should actually be remove^
 (defun-alias 'delete-if 'remove-if!)
 (defun-alias 'delete-if-not 'remove-if-not!)
 (defun-alias 'delete-duplicates 'remove-duplicates!)
