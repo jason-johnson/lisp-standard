@@ -9,17 +9,17 @@
    #:put!
    #:copy
    #:remove
-   #:remove!
+   #:remove^
    #:map-to
    #:map
    #:remove-if
-   #:remove-if!
+   #:remove-if^
    #:remove-if-not
-   #:remove-if-not!
+   #:remove-if-not^
    #:remove-duplicates
-   #:remove-duplicates!
+   #:remove-duplicates^
    #:reverse
-   #:reverse!
+   #:reverse^
    #:substitute
    #:substitute!
    #:substitute-if

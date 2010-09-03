@@ -13,31 +13,31 @@
 (defgeneric remove (item container &key from-end test test-not start end count key)
   (:documentation "Remove item from collection"))
 
-(defgeneric remove! (item container &key from-end test test-not start end count key)
+(defgeneric remove^ (item container &key from-end test test-not start end count key)
   (:documentation "Destructive form of remove"))
 
 (defgeneric remove-if (predicate container &key from-end start end count key)
   (:documentation "Remove items from container for which predicate returns t"))
 
-(defgeneric remove-if! (predicate container &key from-end start end count key)
+(defgeneric remove-if^ (predicate container &key from-end start end count key)
   (:documentation "Destructive form of remove-if"))
 
 (defgeneric remove-if-not (predicate container &key from-end start end count key)
   (:documentation "Remove items from container for which predicate returns nil"))
 
-(defgeneric remove-if-not! (predicate container &key from-end start end count key)
+(defgeneric remove-if-not^ (predicate container &key from-end start end count key)
   (:documentation "Destructive form of remove-if-not"))
 
 (defgeneric remove-duplicates (container &key test test-not start end from-end key)
   (:documentation "Remove duplicates from container"))
 
-(defgeneric remove-duplicates! (container &key test test-not start end from-end key)
+(defgeneric remove-duplicates^ (container &key test test-not start end from-end key)
   (:documentation "Destructive form of remove-duplicates"))
 
 (defgeneric reverse (container)
   (:documentation "Reverse the contents of a container"))
 
-(defgeneric reverse! (container)
+(defgeneric reverse^ (container)
   (:documentation "Reverse the contents of a container in place (destructive)"))
 
 (defgeneric substitute (new old container &key from-end test test-not start count end key)
