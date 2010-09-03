@@ -30,14 +30,13 @@
 
 (declaim (inline get put!))
 
-(defun get (array subscripts)
+(defun get (array &rest subscripts)
   (apply #'aref array subscripts))
 
-(defsetf get (array subscripts) (value)
+(defsetf get (array &rest subscripts) (value)
   `(setf (apply #'aref ,array ,subscripts) ,value))
 
-(defun put! (array subscripts value)
-  (setf (get array subscripts) value))
+; NOTE: We don't define a put! since we can't sensibly define one with &rest subscripts
 
 (defun copy (array)
   (flet ((copy-arguments (array)
@@ -73,7 +72,7 @@
   (get container index))
 
 (defmethod std.collection:put! ((container array) index value)
-  (setf (get container index) value))
+  (setf (apply #'get container index) value))
 
 (defmethod std.base:copy ((object array))
   (copy object))
