@@ -22,4 +22,13 @@
    #:test
    #:rehash-size
    #:rehash-threshold
-   #:hash))
+   #:options
+   #:hash
+   #:union!
+   #:union
+   #:intersection!
+   #:intersection
+   #:complement!
+   #:complement
+   #:cartesian-product
+   #:subsetp))
