@@ -23,7 +23,8 @@
 (declaim (inline clear size test rehash-size rehash-threshold))
 
 (defun clear (set)
-  (hash:clear (set-data set)))
+  (hash:clear (set-data set))
+  set)
     
 (defun size (set)
   (hash:size (set-data set)))
