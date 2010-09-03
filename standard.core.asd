@@ -36,6 +36,10 @@
 					      :components ((:file "package")
 							   (:file "set" :depends-on ("package")))
 					      :depends-on ("package" "collection" #:hash))
+				     (:module impl-common
+					      :components ((:file "package")
+							   (:file "impl-common" :depends-on ("package")))
+					      :depends-on ("package" "collection" #:hash))
 				     (:file "pretty-print" :depends-on (#:hash #:set)))
 			:depends-on (#:base))
 	       (:file "package" :depends-on (#:base #:collection))))
