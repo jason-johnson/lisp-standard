@@ -74,6 +74,9 @@
 (defun remove (set member)
   (remove! (copy set) member))
 
+(defun length (set)
+  (hash:length (set-data set)))
+
 ;; Set operations
 
 (defun union! (set1 set2)
