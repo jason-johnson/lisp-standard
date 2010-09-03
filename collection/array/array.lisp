@@ -75,11 +75,5 @@
 (defmethod std.collection:put! ((container array) index value)
   (setf (get container index) value))
 
-(defmethod std.collection:get ((container vector) index) ; NOTE: Maybe more efficient (doesn't need apply)
-  (aref container index))
-
-(defmethod std.collection:put! ((container vector) index value)
-  (setf (aref container index) value))
-
 (defmethod std.base:copy ((object array))
   (copy object))
