@@ -1,14 +1,61 @@
 (in-package #:std.collection)
 
-;; TODO: Actually this is going to have to somehow be defined before the package is actually defined (like is done with standard itself) because collection actually wants to expose all of list, hash, array, etc.
-;; TODO: On the other hand, that might not be the case because it may be that literally everything that comes from these packages is re-aliased as something else for collection
-;; TODO: The third possibility (and probably the one I'll go with) is to simply specify every symbol, by hand, in the collection package.  (and how do these symbols make it into collection then?  Must be with alias I think)
-
-;; TODO: Actually, what I'm doing now is fine.  We just don't export symbols that would be exactly the same except with a - instead of :  (e.g. list-copy vs list:copy).  The exception is the make functions, which will be aliased.
-;; TODO: And that's why what I'm doing now works
-
 (defgeneric get (container key)
-  (:documentation "Generic access method"))
+  (:documentation "Get value for key"))
 
 (defgeneric put! (container key value)
-  (:documentation "Generic set method"))
+  (:documentation "Put value at key"))
+
+(defgeneric remove (container item &key from-end test test-not start end count key)
+  (:documentation "Remove item from collection"))
+
+(defgeneric remove! (container item &key from-end test test-not start end count key)
+  (:documentation "Destructive form of remove"))
+
+(defgeneric remove-if (predicate container &key from-end (start 0) end count key)
+  (:documentation "Remove items from container for which predicate returns t"))
+
+(defgeneric remove-if! (predicate container &key from-end (start 0) end count key)
+  (:documentation "Destructive form of remove-if"))
+
+(defgeneric remove-if-not (predicate container &key from-end (start 0) end count key)
+  (:documentation "Remove items from container for which predicate returns nil"))
+
+(defgeneric remove-if-not! (predicate container &key from-end (start 0) end count key)
+  (:documentation "Destructive form of remove-if-not"))
+
+(defgeneric remove-duplicates (container &key (test #'eql) test-not (start 0) end from-end key)
+  (:documentation "Remove duplicates from container"))
+
+(defgeneric remove-duplicates! (container &key (test #'eql) test-not (start 0) end from-end key)
+  (:documentation "Destructive form of remove-duplicates"))
+
+(defgeneric reverse (container)
+  (:documentation "Reverse the contents of a container"))
+
+(defgeneric reverse! (container)
+  (:documentation "Reverse the contents of a container in place (destructive)"))
+
+(defgeneric substitute (container old new &key from-end test test-not start count end key)
+  (:documentation "Substitute old item for new"))
+
+(defgeneric substitute! (container old new &key from-end test test-not start count end key)
+  (:documentation "Substitute old item for new"))
+
+(defgeneric substitute-if (container predicate new &key from-end test test-not start count end key)
+  (:documentation "Substitute old item for new"))
+
+(defgeneric substitute-if! (container predicate new &key from-end test test-not start count end key)
+  (:documentation "Substitute old item for new"))
+
+(defgeneric substitute-if-not (container predicate new &key from-end test test-not start count end key)
+  (:documentation "Substitute old item for new"))
+
+(defgeneric substitute-if-not! (container predicate new &key from-end test test-not start count end key)
+  (:documentation "Substitute old item for new"))
+
+(defgeneric append (container &rest containers)
+  (:documentation "Append containers together with container"))
+
+(defgeneric append! (container &rest containers)
+  (:documentation "Destructive form of append"))
