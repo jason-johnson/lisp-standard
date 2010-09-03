@@ -4,12 +4,15 @@
   (:nicknames #:std.collection.buffer #:collection.buffer #:buffer)
   (:use #:std.collection.array #:cl #:impl-common)
   (:import-from #:std.base #:defun-alias)
+  (:import-from #:std.collection #:map-to)
   (:shadowing-import-from #:std.collection.array #:copy #:do)
-  (:shadow #:get #:put! #:make)
+  (:shadowing-import-from #:std.collection.vector #:sort)
+  (:shadow #:get #:put! #:make #:map)
   (:export
    #:make
    #:get
    #:put!
+   #:map
    #:copy
    #:do
    #:length

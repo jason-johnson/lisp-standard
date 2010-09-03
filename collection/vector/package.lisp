@@ -4,7 +4,7 @@
   (:nicknames #:std.collection.vector #:collection.vector #:vector)
   (:use #:std.collection.array #:cl)
   (:import-from #:std.base #:defun-alias)
-  (:shadowing-import-from #:std.collection #:map)
+  (:import-from #:std.collection #:map-to)
   (:shadowing-import-from #:std.collection.array #:copy #:do)
   (:shadow #:get #:put! #:push)
   (:export
@@ -13,6 +13,7 @@
    #:put!
    #:copy
    #:do
+   #:map
    #:length
    #:rank
    #:dimension

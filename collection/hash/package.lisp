@@ -4,13 +4,13 @@
   (:nicknames #:std.collection.hash #:collection.hash #:hash)
   (:use #:cl)
   (:import-from #:std.base #:defun-alias)
-  (:shadowing-import-from #:std.collection #:map)
-  (:shadow #:get #:put! #:copy #:make #:remove #:remove! #:do #:length)
+  (:shadow #:get #:put! #:copy #:make #:remove #:remove! #:do #:length #:map)
   (:export
    #:make
    #:get
    #:put!
    #:copy
+   #:map
    #:remove
    #:remove!
    #:do

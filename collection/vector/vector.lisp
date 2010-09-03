@@ -18,6 +18,9 @@
 (defun put! (vector index value)
   (setf (get vector index) value))
 
+(defun map (fun &rest vectors)
+  (apply #'map-to 'vector fun (first vectors) (rest vectors)))
+
 ;; Generic access
 
 (defmethod std.collection:get ((container vector) index)

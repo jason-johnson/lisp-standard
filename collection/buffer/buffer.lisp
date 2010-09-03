@@ -29,6 +29,9 @@
 (defun put! (buffer index value)
   (setf (get buffer index) value))
 
+(defun map (fun &rest vectors)
+  (apply #'map-to 'simple-vector fun (first vectors) (rest vectors)))
+
 ;; Generic access
 
 (defmethod std.collection:get ((container simple-vector) index)

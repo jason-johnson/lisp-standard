@@ -57,6 +57,8 @@
 
 (defun-alias 'hash-table-count 'length)
 
+(defun-alias 'maphash 'map)
+
 ;; Generic access
 
 (defmethod std.collection:get ((container hash-table) key)

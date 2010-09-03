@@ -4,8 +4,7 @@
   (:nicknames #:std.collection.set #:collection.set #:set)
   (:use #:std.collection.hash #:cl)
   (:import-from #:std.base #:defun-alias)
-  (:shadowing-import-from #:std.collection #:map)
-  (:shadow #:make #:get #:put! #:clear #:size #:test #:rehash-size #:rehash-threshold #:length #:options #:copy #:do #:remove #:remove! #:set #:union #:intersection #:complement #:subsetp)
+  (:shadow #:make #:get #:put! #:map #:do #:clear #:size #:test #:rehash-size #:rehash-threshold #:length #:options #:copy #:remove #:remove! #:set #:union #:intersection #:complement #:subsetp)
   (:export
    #:set
    #:setp
@@ -16,6 +15,7 @@
    #:remove
    #:remove!
    #:do
+   #:map
    #:length
    #:clear
    #:size

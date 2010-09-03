@@ -83,6 +83,11 @@
 (defun length (set)
   (hash:length (set-data set)))
 
+(defun map (fun set)			; NOTE: Maping over more than one unordered set makes no sense
+  (let ((result (apply #'make (options set))))
+    (do (e set result)
+	(add result (funcall fun e)))))
+
 ;; Set operations
 
 (defun union! (set1 set2)
