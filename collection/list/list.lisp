@@ -49,7 +49,7 @@
   (setf (get container index) value))
 
 (defmethod std.base:copy ((object cons))
-  (copy-list object))
+  (copy object))
 
 (defmethod std.collection:sort ((container cons) predicate &key key)
   (sort container predicate :key key))
