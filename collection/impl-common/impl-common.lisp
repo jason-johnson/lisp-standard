@@ -13,6 +13,7 @@
 (defun-alias 'nsubstitute-if 'substitute-if!)
 (defun-alias 'nsubstitute-if-not 'substitute-if-not!)
 (defun-alias 'nconc 'append!)
+(defun-alias 'sort 'sort^)
 
 ;; Define sensible default for all collection generic functions
 
@@ -69,3 +70,6 @@
 
 (defmethod std.collection:append! ((container sequence) &rest containers)
   (apply #'append! container containers))
+
+(defmethod std.collection:sort^ ((container sequence) predicate &key key)
+  (sort container predicate :key key))

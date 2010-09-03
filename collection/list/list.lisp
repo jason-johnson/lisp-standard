@@ -43,3 +43,6 @@
 
 (defmethod std.base:copy ((object cons))
   (copy-list object))
+
+(defmethod std.collection:sort ((container cons) predicate &key key)
+  (sort (deep-copy container) predicate :key key))

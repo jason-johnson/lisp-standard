@@ -75,3 +75,6 @@
 
 (defmethod std.base:copy ((object array))
   (copy object))
+
+(defmethod std.collection:sort ((container array) predicate &key key)
+  (sort (copy container) predicate :key key))

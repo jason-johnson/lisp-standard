@@ -22,4 +22,5 @@
    #:substitute-if-not
    #:substitute-if-not!
    #:append
-   #:append!))
+   #:append!
+   #:sort^))

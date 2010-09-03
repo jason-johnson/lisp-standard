@@ -63,3 +63,10 @@
 
 (defgeneric append! (container &rest containers)
   (:documentation "Destructive form of append"))
+
+
+(defgeneric std.collection:sort (container predicate &key key)
+  (:documentation "Sort the contents of a container"))
+
+(defgeneric std.collection:sort^ (container predicate &key key)
+  (:documentation "Sort the contents of a container destructively"))
