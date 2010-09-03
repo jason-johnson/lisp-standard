@@ -69,3 +69,15 @@
 
 (defgeneric sort^ (container predicate &key key)
   (:documentation "Sort the contents of a container destructively"))
+
+(defgeneric stable-sort (container predicate &key key)
+  (:documentation "Stable version of sort function"))
+
+(defgeneric stable-sort^ (container predicate &key key)
+  (:documentation "Stable version of sort function"))
+
+(defgeneric merge (container1 container2 predicate &key key)
+  (:documentation "Merge 2 sorted containers"))
+
+(defgeneric merge^ (container1 container2 predicate &key key)
+  (:documentation "Merge 2 sorted containers"))

@@ -3,7 +3,7 @@
 (defpackage #:standard.collection
   (:nicknames #:std.collection #:collection)
   (:use #:cl #:std.base)
-  (:shadow #:get #:remove #:map #:remove-if #:remove-if-not #:remove-duplicates #:reverse #:substitute #:substitute-if #:substitute-if-not #:append #:sort)
+  (:shadow #:get #:remove #:map #:remove-if #:remove-if-not #:remove-duplicates #:reverse #:substitute #:substitute-if #:substitute-if-not #:append #:sort #:stable-sort #:merge)
   (:export
    #:get
    #:put!
@@ -29,4 +29,8 @@
    #:append
    #:append!
    #:sort
-   #:sort^))
+   #:sort^
+   #:stable-sort
+   #:stable-sort^
+   #:merge
+   #:merge^))
