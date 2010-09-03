@@ -76,7 +76,9 @@
   (hash:remove! (set-data set) member))
 
 (defun remove (set member)
-  (remove! (copy set) member))
+  (let ((result (copy set)))
+    (remove! result member)
+    result))
 
 (defun length (set)
   (hash:length (set-data set)))
