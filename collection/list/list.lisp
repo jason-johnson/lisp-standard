@@ -7,6 +7,10 @@
 (defun-alias 'mapc 'foreach)
 (defun-alias 'mapl 'foreach-list)
 
+(defun-alias 'nbutlast 'butlast^)
+(defun-alias 'revappend 'reverse-append)
+(defun-alias 'nreconc 'reverse-append^)
+
 ;;  Normal access
 
 (defun-alias 'make-list 'make)
