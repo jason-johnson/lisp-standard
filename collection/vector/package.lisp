@@ -25,6 +25,7 @@
    #:row-major-index
    #:has-fill-pointer
    #:adjustable-p
+   #:adjust
    #:push
    #:push-extend
    #:pop

@@ -14,6 +14,8 @@
 (defun-alias 'array-has-fill-pointer-p 'has-fill-pointer-p)
 (defun-alias 'adjustable-array-p 'adjustable-p)
 
+(defun-alias 'adjust-array 'adjust)
+
 ;; Array specific
 
 (defun-alias 'row-major-aref 'row-major-get)

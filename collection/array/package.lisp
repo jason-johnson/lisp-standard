@@ -23,5 +23,6 @@
    #:has-fill-pointer-p
    #:fill-pointer
    #:adjustable-p
+   #:adjust
    #:row-major-get
    #:major-row-put!))
