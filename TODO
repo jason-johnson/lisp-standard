@@ -11,3 +11,5 @@ We should also consider a "deep-copy" that does a deeper copy than the default (
 Maybe options to the different collections should be seperated by a |, e.g.  #{:test equal, :size 10| this 1, that 2, the 3, other 4} and #[:test equal, :size 10| 1 2 3 4 5]
 
 All collection operations should be defined generically so users can create new collections that act like "built in" ones
+
+We'll have to get some experience with array to see if the current syntax is ok or if (defun get (array &rest indexes)) would be better.  We can do that because we have to use apply in any case.  The problem is that it can't be consistant with generic get then. UPDATE: How do you deal with put! then?
