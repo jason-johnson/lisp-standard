@@ -71,8 +71,7 @@
 (defmethod std.collection:get ((container array) index)
   (get container index))
 
-(defmethod std.collection:put! ((container array) index value)
-  (setf (apply #'get container index) value))
+; NOTE: We don't define a collection:put! because I don't know how to make (put! *array* '(0 0 0) 'value) turn into (setf (get *array* 0 0 0) 'value).  We can't use apply because setf is a macro
 
 (defmethod std.base:copy ((object array))
   (copy object))
