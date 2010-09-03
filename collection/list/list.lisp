@@ -2,8 +2,8 @@
 
 ;; List specific
 
-(defun-alias 'mapcan 'map!)
-(defun-alias 'mapcon 'maplist!)
+(defun-alias 'mapcan 'map-flatten)
+(defun-alias 'mapcon 'maplist-flatten)
 (defun-alias 'mapc 'foreach)
 (defun-alias 'mapl 'foreach-list)
 

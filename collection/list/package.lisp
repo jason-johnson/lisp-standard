@@ -14,9 +14,9 @@
    #:do
    #:length
    #:map
-   #:map!
+   #:map-flatten
    #:maplist
-   #:maplist!
+   #:maplist-flatten
    #:foreach
    #:foreach-list
    #:last
