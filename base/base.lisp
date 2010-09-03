@@ -67,6 +67,8 @@
 
 ;; TODO: Look into adding the ability to add documentation to destination
 ;; TODO: Update: documentation lives with the function, not the symbol so changing the documentation of the alias changes it for both. :(
+;; TODO: UPDATE: This macro could be changed to declare the "alias" inline and then just define it as a function that calls the aliased function.
+;; TODO: UPDATE: That should acheive all our goals here and not have the problems of the current approach
 (defmacro defun-alias (source destination &optional documentation) ; TODO: if this is null then use the doc from the source function
   (declare (ignore documentation))
   `(eval-when (:compile-toplevel :load-toplevel :execute)
