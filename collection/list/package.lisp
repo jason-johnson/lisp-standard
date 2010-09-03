@@ -13,6 +13,8 @@
    #:deep-copy
    #:do
    #:length
+   #:push
+   #:pop
    #:map
    #:map-flatten
    #:maplist

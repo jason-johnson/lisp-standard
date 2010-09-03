@@ -6,7 +6,7 @@
   (:import-from #:std.base #:defun-alias)
   (:import-from #:std.collection #:map-to)
   (:shadowing-import-from #:std.collection.array #:copy #:do)
-  (:shadow #:get #:put! #:push #:map #:sort)
+  (:shadow #:get #:put! #:push #:pop #:map #:sort)
   (:export
    #:make
    #:get
@@ -27,6 +27,7 @@
    #:adjustable-p
    #:push
    #:push-extend
+   #:pop
    #:remove
    #:remove^
    #:remove-if
