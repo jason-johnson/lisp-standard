@@ -9,14 +9,13 @@
   "Make a simple, fixed size buffer"
   (flet ((compute-arguments ()
 	   (let ((result (list dimension)))
-	     (push :element-type result)
-	     (push element-type result)
-	     (when initial-contents
-	       (push :initial-contents result)
-	       (push initial-contents result))
-	     (when initial-element
-	       (push :initial-element result)
-	       (push initial-element result))
+	     (flet ((maybe-put! (key value)
+		      (when value
+			(push key result)
+			(push value result))))
+	       (maybe-put! :element-type element-type)
+	       (maybe-put! :initial-contents initial-contents)
+	       (maybe-put! :initial-element initial-element))
 	     (nreverse result))))
     (apply #'make-array (compute-arguments))))
 
