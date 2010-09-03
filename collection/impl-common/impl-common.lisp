@@ -16,10 +16,10 @@
 
 ;; Define sensible default for all collection generic functions
 
-(defmethod std.collection:remove ((container sequence) item &key from-end (test #'eql) test-not (start 0) end count key)
+(defmethod std.collection:remove (item (container sequence) &key from-end (test #'eql) test-not (start 0) end count key)
   (remove item container :from-end from-end :test test :test-not test-not :start start :end end :count count :key key))
 
-(defmethod std.collection:remove! ((container sequence) item &key from-end (test #'eql) test-not (start 0) end count key)
+(defmethod std.collection:remove! (item (container sequence) &key from-end (test #'eql) test-not (start 0) end count key)
   (remove! item container :from-end from-end :test test :test-not test-not :start start :end end :count count :key key))
 
 (defmethod std.collection:remove-if (predicate (container sequence) &key from-end (start 0) end count key)
@@ -46,22 +46,22 @@
 (defmethod std.collection:reverse! ((container sequence))
   (reverse! container))
 
-(defmethod std.collection:substitute ((container sequence) old new &key from-end (test #'eql) test-not (start 0) count end key)
+(defmethod std.collection:substitute (new old (container sequence) &key from-end (test #'eql) test-not (start 0) count end key)
   (substitute new old container :from-end from-end :test test :test-not test-not :start start :end end :count count :key key))
 
-(defmethod std.collection:substitute! ((container sequence) old new &key from-end (test #'eql) test-not (start 0) count end key)
+(defmethod std.collection:substitute! (new old (container sequence) &key from-end (test #'eql) test-not (start 0) count end key)
   (substitute! new old container :from-end from-end :test test :test-not test-not :start start :end end :count count :key key))
 
-(defmethod std.collection:substitute-if ((container sequence) predicate new &key from-end (test #'eql) test-not (start 0) count end key)
-  (substitute-if new predicate container :from-end from-end :test test :test-not test-not :start start :end end :count count :key key))
+(defmethod std.collection:substitute-if (new predicate (container sequence) &key from-end (start 0) count end key)
+  (substitute-if new predicate container :from-end from-end :start start :end end :count count :key key))
 
-(defmethod std.collection:substitute-if! ((container sequence) predicate new &key from-end (test #'eql) test-not (start 0) count end key)
+(defmethod std.collection:substitute-if! (new predicate (container sequence) &key from-end (start 0) count end key)
   (substitute-if! new predicate container :from-end from-end :start start :end end :count count :key key))
 
-(defmethod std.collection:substitute-if-not ((container sequence) predicate new &key from-end (test #'eql) test-not (start 0) count end key)
+(defmethod std.collection:substitute-if-not ((container sequence) predicate new &key from-end (start 0) count end key)
   (substitute-if-not new predicate container :from-end from-end :start start :end end :count count :key key))
 
-(defmethod std.collection:substitute-if-not! ((container sequence) predicate new &key from-end (test #'eql) test-not (start 0) count end key)
+(defmethod std.collection:substitute-if-not! (new predicate (container sequence) &key from-end (start 0) count end key)
   (substitute-if-not! new predicate container :from-end from-end :start start :end end :count count :key key))
 
 (defmethod std.collection:append ((container sequence) &rest containers)

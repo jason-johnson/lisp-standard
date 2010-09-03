@@ -10,10 +10,10 @@
 ;; TODO: what was defined in the defgeneric is used, but defmethod always overrides if specified.  I could create my own generic function object to ensure that I have
 ;; TODO: have to do the minimal work.  That way the normal method detection (with the labmda list) works properly, and then I add the defaults to the method after the fact.
 
-(defgeneric remove (container item &key from-end test test-not start end count key)
+(defgeneric remove (item container &key from-end test test-not start end count key)
   (:documentation "Remove item from collection"))
 
-(defgeneric remove! (container item &key from-end test test-not start end count key)
+(defgeneric remove! (item container &key from-end test test-not start end count key)
   (:documentation "Destructive form of remove"))
 
 (defgeneric remove-if (predicate container &key from-end start end count key)
@@ -40,22 +40,22 @@
 (defgeneric reverse! (container)
   (:documentation "Reverse the contents of a container in place (destructive)"))
 
-(defgeneric substitute (container old new &key from-end test test-not start count end key)
+(defgeneric substitute (new old container &key from-end test test-not start count end key)
   (:documentation "Substitute old item for new"))
 
-(defgeneric substitute! (container old new &key from-end test test-not start count end key)
+(defgeneric substitute! (new old container &key from-end test test-not start count end key)
   (:documentation "Substitute old item for new"))
 
-(defgeneric substitute-if (container predicate new &key from-end test test-not start count end key)
+(defgeneric substitute-if (new predicate container &key from-end start count end key)
   (:documentation "Substitute old item for new"))
 
-(defgeneric substitute-if! (container predicate new &key from-end test test-not start count end key)
+(defgeneric substitute-if! (new predicate container &key from-end start count end key)
   (:documentation "Substitute old item for new"))
 
-(defgeneric substitute-if-not (container predicate new &key from-end test test-not start count end key)
+(defgeneric substitute-if-not (new predicate container &key from-end start count end key)
   (:documentation "Substitute old item for new"))
 
-(defgeneric substitute-if-not! (container predicate new &key from-end test test-not start count end key)
+(defgeneric substitute-if-not! (new predicate container &key from-end start count end key)
   (:documentation "Substitute old item for new"))
 
 (defgeneric append (container &rest containers)
