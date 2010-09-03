@@ -68,9 +68,9 @@
 	finally (return ,result)))
 
 (defun copy (set)
-    (do ((key nil) set result)
-	(put! result key))))
   (let ((result (apply #'make (options set))))
+    (do (member set result)
+	(add result member))))
 
 (defun remove! (set member)
   (hash:remove! (set-data set) member))
