@@ -6,7 +6,7 @@ Note that the hash version of get takes a default value to return if the key doe
 
 We should also consider a "deep-copy" that does a deeper copy than the default (e.g. copy-tree vs. copy-list).  In many cases it just aliases with regular copy (or maybe I'll just define it for list)
 
-Maybe options to the different collections should be seperated by a |, e.g.  #{:test equal, :size 10| this 1, that 2, the 3, other 4} and #[:test equal, :size 10| 1 2 3 4 5].  We could also make only "simply" hashes/sets printable.  If any options are used then the hash/set isn't simple and wont be printed out.  Kind of following existing CL behavior.
+Maybe options to the different collections should be seperated by a |, e.g.  #{:test equal, :size 10| this 1, that 2, the 3, other 4} and #[:test equal, :size 10| 1 2 3 4 5].  We could also make only "simple" hashes/sets printable.  If any options are used then the hash/set isn't simple and wont be printed out.  Kind of following existing CL behavior.
 
 We'll have to get some experience with array to see if the current syntax is ok or if (defun get (array &rest indexes)) would be better.  We can do that because we have to use apply in any case.  The problem is that it can't be consistant with generic get then. UPDATE: How do you deal with put! then?
 
@@ -18,3 +18,11 @@ For the ! functions that one can actually depend on the value being set, what do
 
 UPDATE:
 I want to make destructive versions of functions that destroy their arguments be noted with a ' (to indicate a more efficient version of the function) and ! for functions that modify their argument (but it can be used afterward).  I would have to use e.g ^ instead of ' since ' is the quote operator
+
+
+
+I am considering changing some of the functions that want an output spec to continue to function that way and do the generic dispatch based on the symbol.  At least concatenate should work like this
+
+Go back and make sure all function arguments are as consistant as possible
+
+GENERIC MERGE IS WRONG (copy wont work unless all seqs are the right type)
