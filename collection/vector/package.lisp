@@ -14,6 +14,7 @@
    #:copy
    #:do
    #:map
+   #:concatenate
    #:length
    #:rank
    #:dimension

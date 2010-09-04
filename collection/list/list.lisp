@@ -37,6 +37,9 @@
 
 (defun-alias 'mapcar 'map)
 
+(defun concatenate (&rest sequences)
+  (apply #'cl:concatenate 'list sequences))
+
 (defun sort (list predicate &key key)
   (cl:sort (deep-copy list) predicate :key key))
 

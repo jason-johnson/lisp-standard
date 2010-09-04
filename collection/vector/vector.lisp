@@ -8,7 +8,7 @@
 
 ;; Normal access
 
-(declaim (inline get put!))
+(declaim (inline get put! sort stable-sort merge^ merge concatenate))
 
 (defun get (vector index)
   (aref vector index))
@@ -33,6 +33,9 @@
 
 (defun merge (vector1 vector2 predicate &key key)
   (merge^ (copy vector1) (copy vector2) predicate :key key))
+
+(defun concatenate (&rest sequences)
+  (apply #'cl:concatenate 'vector sequences))
 
 ;; Generic access
 

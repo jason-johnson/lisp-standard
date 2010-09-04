@@ -13,6 +13,7 @@
    #:deep-copy
    #:do
    #:length
+   #:concatenate
    #:push
    #:pop
    #:map
