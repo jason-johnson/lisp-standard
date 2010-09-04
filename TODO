@@ -25,4 +25,4 @@ I am considering changing some of the functions that want an output spec to cont
 
 Go back and make sure all function arguments are as consistant as possible
 
-GENERIC MERGE IS WRONG (copy wont work unless all seqs are the right type)
+NOTE: cl-user doesn't export anything, so std-user shouldn't either.  Just collect all the packages
