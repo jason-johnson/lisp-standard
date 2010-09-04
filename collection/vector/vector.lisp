@@ -2,9 +2,9 @@
 
 ;; Vector specific
 
-(defun-alias 'vector-push 'push)
-(defun-alias 'vector-push-extend 'push-extend)
-(defun-alias 'vector-pop 'pop)
+(defun-alias 'vector-push 'push!)
+(defun-alias 'vector-push-extend 'push-extend!)
+(defun-alias 'vector-pop 'pop!)
 
 ;; Normal access
 

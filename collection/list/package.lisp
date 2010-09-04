@@ -14,8 +14,8 @@
    #:do
    #:length
    #:concatenate
-   #:push
-   #:pop
+   #:push!
+   #:pop!
    #:map
    #:map-flatten
    #:maplist

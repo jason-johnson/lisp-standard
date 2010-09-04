@@ -11,6 +11,12 @@
 (defun-alias 'revappend 'reverse-append)
 (defun-alias 'nreconc 'reverse-append^)
 
+(defmacro push! (obj list)
+  `(push ,obj ,list))
+
+(defmacro pop! (list)
+  `(pop ,list))
+
 ;;  Normal access
 
 (defun-alias 'make-list 'make)
