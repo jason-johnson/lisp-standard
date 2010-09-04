@@ -162,14 +162,10 @@
 	set))))
 
 (defun write-set (stream set)
-  (let ((format-string "#[~:[~;(:test ~a) ~]~{~S~^ ~}]") 
-	(test (test set))
-	(atoms (loop
+  (let ((atoms (loop
 		  for key being the hash-keys of (set-data set)
 		  collect key)))
-    (if (eq test 'eql)
-	(format stream format-string nil atoms)
-	(format stream format-string t test atoms))))
+    (format stream "#[~{~S~^ ~}]" atoms)))
 
 (set-dispatch-macro-character #\# #\[ #'read-set)
 

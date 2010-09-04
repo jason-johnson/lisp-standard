@@ -141,14 +141,10 @@
       (read-until #\}))))
 
 (defun write-hash (stream hash)
-  (let ((format-string "#{~:[~;:test:~a, ~]~{~{~S ~S~}~^, ~}}") ; TODO: Fix the case where there is a test but no entries (prints a comma after the test, then empty space)
-	(test (hash-table-test hash))
-	(pairs (loop
+  (let ((pairs (loop
 		  for key being the hash-keys of hash
 		  for value being the hash-values of hash
 		  collect (list key value))))
-    (if (eq test 'eql)
-	(format stream format-string nil pairs)
-	(format stream format-string t test pairs))))
+    (format stream "#{~{~{~S ~S~}~^, ~}}" pairs)))
 
 (set-dispatch-macro-character #\# #\{ #'read-hash)
