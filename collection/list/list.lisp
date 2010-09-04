@@ -37,6 +37,8 @@
 
 (defun-alias 'copy-tree 'deep-copy)
 
+(defun-alias 'list-length 'length)
+
 (defmacro do ((var list &optional result) &body body)
   `(dolist (,var ,list ,result)
      ,@body))
