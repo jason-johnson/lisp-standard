@@ -25,6 +25,15 @@
 (defun sort (vector predicate &key key)
   (cl:sort (copy vector) predicate :key key))
 
+(defun stable-sort (vector predicate &key key)
+  (cl:stable-sort (copy vector) predicate :key key))
+
+(defun merge^ (vector1 vector2 predicate &key key)
+  (cl:merge 'vector vector1 vector2 predicate :key key))
+
+(defun merge (vector1 vector2 predicate &key key)
+  (merge^ (copy vector1) (copy vector2) predicate :key key))
+
 ;; Generic access
 
 (defmethod std.collection:get ((container vector) index)
@@ -37,3 +46,9 @@
 
 (defmethod std.collection:sort ((container vector) predicate &key key)
   (sort container predicate :key key))
+
+(defmethod std.collection:stable-sort ((container vector) predicate &key key)
+  (stable-sort container predicate :key key))
+
+(defmethod std.collection:merge ((container1 vector) (container2 vector) predicate &key key)
+  (merge container1 container2  predicate :key key))

@@ -6,7 +6,7 @@
   (:import-from #:std.base #:defun-alias)
   (:import-from #:std.collection #:map-to)
   (:shadowing-import-from #:std.collection.array #:copy #:do)
-  (:shadowing-import-from #:std.collection.vector #:sort)
+  (:shadowing-import-from #:std.collection.vector #:sort #:stable-sort #:merge^ #:merge)
   (:shadow #:get #:put! #:make #:map)
   (:export
    #:make
@@ -45,4 +45,8 @@
    #:append
    #:append!
    #:sort
-   #:sort^))
+   #:sort^
+   #:stable-sort
+   #:stable-sort^
+   #:merge
+   #:merge^))

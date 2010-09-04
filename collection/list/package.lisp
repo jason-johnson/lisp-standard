@@ -4,7 +4,7 @@
   (:nicknames #:std.collection.list #:collection.list #:list)
   (:use #:cl #:impl-common)
   (:import-from #:std.base #:defun-alias)
-  (:shadow #:get #:put! #:copy #:do #:map #:sort)
+  (:shadow #:get #:put! #:copy #:do #:map #:concatenate #:sort #:stable-sort #:merge)
   (:export
    #:make
    #:get
@@ -47,4 +47,8 @@
    #:append
    #:append!
    #:sort
-   #:sort^))
+   #:sort^
+   #:stable-sort
+   #:stable-sort^
+   #:merge
+   #:merge^))
