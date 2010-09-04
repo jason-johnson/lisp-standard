@@ -76,8 +76,8 @@
 (defgeneric stable-sort^ (container predicate &key key)
   (:documentation "Stable version of sort function"))
 
-(defgeneric merge (container1 container2 predicate &key key)
+(defgeneric merge (output-spec container1 container2 predicate &key key)
   (:documentation "Merge 2 sorted containers"))
 
-(defgeneric merge^ (container1 container2 predicate &key key)
+(defgeneric merge^ (output-spec container1 container2 predicate &key key)
   (:documentation "Merge 2 sorted containers"))

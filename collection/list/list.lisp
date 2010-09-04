@@ -69,5 +69,5 @@
 (defmethod std.collection:stable-sort ((container cons) predicate &key key)
   (stable-sort container predicate :key key))
 
-(defmethod std.collection:merge ((container1 cons) (container2 cons) predicate &key key)
+(defmethod std.collection:merge ((output-spec (eql 'list)) (container1 cons) (container2 cons) predicate &key key)
   (merge container1 container2  predicate :key key))

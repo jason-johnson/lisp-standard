@@ -77,8 +77,8 @@
 (defmethod std.collection:stable-sort^ ((container sequence) predicate &key key)
   (stable-sort container predicate :key key))
 
-(defmethod std.collection:merge^ ((container1 sequence) (container2 sequence) predicate &key key)
-  (merge (type-of container1) container1 container2 predicate :key key))
+(defmethod std.collection:merge^ (output-spec (container1 sequence) (container2 sequence) predicate &key key)
+  (merge output-spec container1 container2 predicate :key key))
 
-(defmethod std.collection:merge ((container1 sequence) (container2 sequence) predicate &key key)
-  (std.collection:merge^ (copy-seq container1) (copy-seq container2) predicate :key key))
+(defmethod std.collection:merge (output-spec (container1 sequence) (container2 sequence) predicate &key key)
+  (std.collection:merge^ output-spec (copy-seq container1) (copy-seq container2) predicate :key key))
