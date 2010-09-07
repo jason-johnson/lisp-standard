@@ -7,4 +7,8 @@
   :depends-on (#:standard #:lift)
   :components ((:module :test
 			:components ((:file "package")
-				     (:file "test" :depends-on ("package"))))))
+				     (:file "test" :depends-on ("package"))
+				     (:module collection
+					      :components ((:file "package")
+							   (:file "test" :depends-on ("package"))))))))
+	
