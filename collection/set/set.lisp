@@ -18,6 +18,10 @@
 (defun put! (set member)
   (hash:put! (set-data set) member +dummy-set-value+))
 
+; NOTE: It seems I have to do this because I use a struct for implementation and if you define a struct as a constant or literal CL forces you to define how to load it
+(defmethod make-load-form ((object set) &optional environment)
+  (make-load-form-saving-slots object :environment environment))
+
 ;; Set specific
 
 (declaim (inline clear size test rehash-size rehash-threshold options))
