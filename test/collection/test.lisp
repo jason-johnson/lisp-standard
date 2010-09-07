@@ -7,7 +7,7 @@
    (setf -array- (array:make '(2 2) :initial-contents '((a b) (c d))))
    (setf -vector- (vector:make 3 :adjustable t :initial-contents (list 'a 'b 'c) :fill-pointer 3))
    (setf -buffer- (vector 'a 'b 'c))
-   (setf -string- (string "abc"))
+   (setf -string- (string:copy "abc"))
    (setf -hash- (hash:copy #{1 a, 2 b, 3 c}))
    (setf -set- (set:copy #[a b c])))
   (:function
