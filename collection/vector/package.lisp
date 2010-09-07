@@ -24,7 +24,7 @@
    #:in-bounds-p
    #:displacement
    #:row-major-index
-   #:has-fill-pointer
+   #:has-fill-pointer-p
    #:adjustable-p
    #:adjust
    #:push!
