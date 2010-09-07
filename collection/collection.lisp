@@ -47,22 +47,22 @@
   (:documentation "Substitute old item for new"))
 
 (defgeneric substitute-if (new predicate container &key from-end start count end key)
-  (:documentation "Substitute old item for new"))
+  (:documentation "Substitute matching items for new"))
 
 (defgeneric substitute-if! (new predicate container &key from-end start count end key)
-  (:documentation "Substitute old item for new"))
+  (:documentation "Substitute matching items for new in place"))
 
 (defgeneric substitute-if-not (new predicate container &key from-end start count end key)
-  (:documentation "Substitute old item for new"))
+  (:documentation "Substitute non-matching items for new"))
 
 (defgeneric substitute-if-not! (new predicate container &key from-end start count end key)
-  (:documentation "Substitute old item for new"))
+  (:documentation "Substitute non-matching item for new in place"))
 
 (defgeneric append (container &rest containers)
   (:documentation "Append containers together with container"))
 
 (defgeneric append! (container &rest containers)
-  (:documentation "Destructive form of append"))
+  (:documentation "Like append, but in place"))
 
 (defgeneric sort (container predicate &key key)
   (:documentation "Sort the contents of a container"))
@@ -74,10 +74,10 @@
   (:documentation "Stable version of sort function"))
 
 (defgeneric stable-sort^ (container predicate &key key)
-  (:documentation "Stable version of sort function"))
+  (:documentation "Destructive version of stable-sort"))
 
 (defgeneric merge (output-spec container1 container2 predicate &key key)
   (:documentation "Merge 2 sorted containers"))
 
 (defgeneric merge^ (output-spec container1 container2 predicate &key key)
-  (:documentation "Merge 2 sorted containers"))
+  (:documentation "Merge 2 sorted containers destrucively"))
