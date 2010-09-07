@@ -17,6 +17,15 @@
 
 ;; Define sensible default for all collection generic functions
 
+(defmethod std.collection:find (item (container sequence) &key from-end (start 0) end key test test-not)
+  (find item container :from-end from-end :test test :test-not test-not :start start :end end :key key))
+
+(defmethod std.collection:find-if (predicate container &key from-end (start 0) end key)
+  (find-if predicate container :from-end from-end :start start :end end :key key))
+
+(defmethod std.collection:find-if-not (predicate container &key from-end (start 0) end key)
+  (find-if-not predicate container :from-end from-end :start start :end end :key key))
+
 (defmethod std.collection:remove (item (container sequence) &key from-end (test #'eql) test-not (start 0) end count key)
   (remove item container :from-end from-end :test test :test-not test-not :start start :end end :count count :key key))
 

@@ -10,6 +10,15 @@
 ;; TODO: what was defined in the defgeneric is used, but defmethod always overrides if specified.  I could create my own generic function object to ensure that I have
 ;; TODO: have to do the minimal work.  That way the normal method detection (with the labmda list) works properly, and then I add the defaults to the method after the fact.
 
+(defgeneric find (item container &key from-end start end key test test-not)
+  (:documentation "Find item in collection"))
+
+(defgeneric find-if (predicate container &key from-end start end key)
+  (:documentation "Find first matching item in collection"))
+
+(defgeneric find-if-not (predicate container &key from-end start end key)
+  (:documentation "Find first non-matching item in collection"))
+
 (defgeneric remove (item container &key from-end test test-not start end count key)
   (:documentation "Remove item from collection"))
 
