@@ -2,11 +2,10 @@
 
 (defpackage #:standard.collection.buffer
   (:nicknames #:std.collection.buffer #:collection.buffer #:buffer)
-  (:use #:std.collection.array #:cl #:impl-common)
+  (:use #:std.collection.vector #:cl #:impl-common)
   (:import-from #:std.base #:defun-alias)
   (:import-from #:std.collection #:map-to)
-  (:shadowing-import-from #:std.collection.array #:copy #:do)
-  (:shadowing-import-from #:std.collection.vector #:sort #:stable-sort #:merge^ #:merge)
+  (:shadowing-import-from #:std.collection.vector #:copy #:do #:sort #:stable-sort #:merge^ #:merge)
   (:shadow #:get #:put! #:make #:concatenate #:map)
   (:export
    #:make
