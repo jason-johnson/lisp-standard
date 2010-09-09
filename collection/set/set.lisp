@@ -153,6 +153,18 @@
 (defmethod std.base:copy ((container set))
   (copy container))
 
+(defmethod std.collection:find (item (container set) &key from-end start end key test test-not)
+  (declare (ignore from-end start end))
+  (find container item :key key :test test :test-not test-not))
+
+(defmethod std.collection:find-if (predicate (container set) &key from-end start end key)
+  (declare (ignore from-end start end))
+  (find-if container predicate key))
+
+(defmethod std.collection:find-if-not (predicate (container set) &key from-end start end key)
+  (declare (ignore from-end start end))
+  (find-if-not container predicate key))
+
 ;; Read/write macros
 
 (defun read-set (stream subchar arg)
