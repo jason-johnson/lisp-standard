@@ -29,6 +29,7 @@
    #:tailp
    #:reverse-append
    #:reverse-append^
+   #:reduce
    #:find
    #:find-if
    #:find-if-not

@@ -29,6 +29,7 @@
    #:has-fill-pointer
    #:fill-pointer
    #:adjustable-p
+   #:reduce
    #:find
    #:find-if
    #:find-if-not

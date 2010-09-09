@@ -30,6 +30,7 @@
    #:push!
    #:push-extend!
    #:pop!
+   #:reduce
    #:find
    #:find-if
    #:find-if-not
