@@ -6,7 +6,7 @@
   (:import-from #:std.base #:defun-alias)
   (:shadowing-import-from #:std.collection.array #:copy #:do)
   (:shadowing-import-from #:std.collection.vector #:get #:map #:sort #:stable-sort #:merge^ #:merge)
-  (:shadow #:make #:concatenate)
+  (:shadow #:make)
   (:export
    #:make
    #:get
