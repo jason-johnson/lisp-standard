@@ -31,6 +31,9 @@
 (defun map (fun &rest vectors)
   (apply #'map-to 'simple-vector fun (first vectors) (rest vectors)))
 
+(defun concatenate (&rest sequences)
+  (apply #'cl:concatenate 'simple-vector sequences))
+
 ;; Generic access
 
 (defmethod std.collection:get ((container simple-vector) index)

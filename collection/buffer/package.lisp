@@ -7,7 +7,7 @@
   (:import-from #:std.collection #:map-to)
   (:shadowing-import-from #:std.collection.array #:copy #:do)
   (:shadowing-import-from #:std.collection.vector #:sort #:stable-sort #:merge^ #:merge)
-  (:shadow #:get #:put! #:make #:map)
+  (:shadow #:get #:put! #:make #:concatenate #:map)
   (:export
    #:make
    #:get
