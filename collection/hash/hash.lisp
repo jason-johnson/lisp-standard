@@ -55,6 +55,23 @@
     (do ((key value) hash result)
 	(put! result key value))))
 
+(defun find-if (hash predicate &optional key)
+  (let ((p (if key
+	       (compose predicate key)
+	       predicate)))
+    (do ((nil value) hash)
+	(when (funcall p value)
+	    (return-from find-if value)))))
+
+(defun find-if-not (hash predicate &optional key)
+  (find-if hash (compose #'not predicate) key))
+
+(defun find (hash item &key key test test-not)
+  (cond
+    (test (find-if hash (lambda (v) (funcall test v item)) key))
+    (test-not (find-if-not hash (lambda (v) (funcall test-not v item)) key))
+    (t (find-if hash (lambda (v) (eql v item)) key))))      
+
 (defun-alias 'hash-table-count 'length)
 
 (defun-alias 'maphash 'map)

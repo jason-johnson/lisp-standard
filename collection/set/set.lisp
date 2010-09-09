@@ -87,6 +87,23 @@
 (defun length (set)
   (hash:length (set-data set)))
 
+(defun find-if (set predicate &optional key)
+  (let ((p (if key
+	       (compose predicate key)
+	       predicate)))
+    (do (value set)
+	(when (funcall p value)
+	    (return-from find-if value)))))
+
+(defun find-if-not (set predicate &optional key)
+  (find-if set (compose #'not predicate) key))
+
+(defun find (set item &key key test test-not)
+  (cond
+    (test (find-if set (lambda (v) (funcall test v item)) key))
+    (test-not (find-if-not set (lambda (v) (funcall test-not v item)) key))
+    (t (find-if set (lambda (v) (eql v item)) key))))
+
 (defun map (fun set)			; NOTE: Maping over more than one unordered set makes no sense
   (let ((result (apply #'make (options set))))
     (do (e set result)

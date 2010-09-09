@@ -30,6 +30,9 @@
    #:has-fill-pointer
    #:fill-pointer
    #:adjustable-p
+   #:find
+   #:find-if
+   #:find-if-not
    #:remove
    #:remove^
    #:remove-if

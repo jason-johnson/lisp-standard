@@ -3,8 +3,8 @@
 (defpackage #:standard.collection.set
   (:nicknames #:std.collection.set #:collection.set #:set)
   (:use #:std.collection.hash #:cl)
-  (:import-from #:std.base #:defun-alias)
-  (:shadow #:make #:get #:put! #:map #:do #:clear #:size #:test #:rehash-size #:rehash-threshold #:length #:options #:copy #:remove #:remove! #:set #:union #:intersection #:complement #:subsetp)
+  (:import-from #:std.base #:defun-alias #:compose)
+  (:shadow #:make #:get #:put! #:map #:do #:clear #:size #:test #:rehash-size #:rehash-threshold #:length #:options #:copy #:find #:find-if #:find-if-not #:remove #:remove! #:set #:union #:intersection #:complement #:subsetp)
   (:export
    #:set
    #:setp
@@ -16,6 +16,9 @@
    #:remove!
    #:do
    #:map
+   #:find
+   #:find-if
+   #:find-if-not
    #:length
    #:clear
    #:size

@@ -3,14 +3,17 @@
 (defpackage #:standard.collection.hash
   (:nicknames #:std.collection.hash #:collection.hash #:hash)
   (:use #:cl)
-  (:import-from #:std.base #:defun-alias)
-  (:shadow #:get #:put! #:copy #:make #:remove #:remove! #:do #:length #:map)
+  (:import-from #:std.base #:defun-alias #:compose)
+  (:shadow #:get #:put! #:copy #:make #:find #:find-if #:find-if-not #:remove #:remove! #:do #:length #:map)
   (:export
    #:make
    #:get
    #:put!
    #:copy
    #:map
+   #:find
+   #:find-if
+   #:find-if-not
    #:remove
    #:remove!
    #:do

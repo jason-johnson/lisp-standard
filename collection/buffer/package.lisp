@@ -26,6 +26,9 @@
    #:row-major-index
    #:has-fill-pointer
    #:adjustable-p
+   #:find
+   #:find-if
+   #:find-if-not
    #:remove
    #:remove^
    #:remove-if
