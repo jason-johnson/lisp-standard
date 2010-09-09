@@ -4,8 +4,7 @@
   (:nicknames #:std.collection.string #:collection.string #:string)
   (:use #:std.collection.vector #:cl #:impl-common)
   (:import-from #:std.base #:defun-alias)
-  (:shadowing-import-from #:std.collection.array #:copy #:do)
-  (:shadowing-import-from #:std.collection.vector #:get #:map #:sort #:stable-sort #:merge^ #:merge)
+  (:shadowing-import-from #:std.collection.vector #:copy #:do #:concatenate #:get #:map #:sort #:stable-sort #:merge^ #:merge)
   (:shadow #:make)
   (:export
    #:make
