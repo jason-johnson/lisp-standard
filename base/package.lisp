@@ -11,4 +11,5 @@
    #:setf					; For people who prefer this name
    #:inc!
    #:dec!
+   #:compose
    #:copy))
