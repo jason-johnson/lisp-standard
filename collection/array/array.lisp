@@ -36,7 +36,7 @@
   (apply #'aref array subscripts))
 
 (defsetf get (array &rest subscripts) (value)
-  `(setf (apply #'aref ,array ',subscripts) ,value))
+  `(setf (aref ,array ,@subscripts) ,value))
 
 ; NOTE: We don't define a put! since we can't sensibly define one with &rest subscripts
 
