@@ -63,8 +63,8 @@
       result)))
 
 (defmacro do ((var array &optional result) &body body)
-  `(loop for ,var across ,array
-	do (progn
+  `(loop for i from 0 below (total-size ,array)
+	do (let ((,var (row-major-get ,array i)))
 	     ,@body)
 	finally (return ,result)))
 

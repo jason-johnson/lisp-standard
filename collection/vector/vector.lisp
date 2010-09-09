@@ -19,6 +19,12 @@
 (defun put! (vector index value)
   (setf (get vector index) value))
 
+(defmacro do ((var array &optional result) &body body)
+  `(loop for ,var across ,array
+	do (progn
+	     ,@body)
+	finally (return ,result)))
+
 (defun map (fun &rest vectors)
   (apply #'map-to 'vector fun (first vectors) (rest vectors)))
 
