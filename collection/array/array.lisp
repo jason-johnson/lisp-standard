@@ -43,17 +43,17 @@
 (defun copy (array)
   (flet ((copy-arguments (array)
 	   (let ((args (list (dimensions array))))
-	     (unless (eq (element-type array) t)
-	       (push :element-type args)
-	       (push (element-type array) args))
-	     (when (eq (adjustable-p array) t)
-	       (push :adjustable args)
-	       (push t args))
-	     (when (and
-		    (vectorp array)
-		    (has-fill-pointer-p array))
-	       (push :fill-pointer args)
-	       (push (fill-pointer array) args))
+	     (macrolet ((when-put! (test key value)
+			  `(when ,test
+			     (push ,key args)
+			     (push ,value args))))
+	       (when-put! (not (eq (element-type array) t)) :element-type (element-type array))
+	       (when-put! (eq (adjustable-p array) t) :adjustable t)
+	       (when-put! (and
+			    (vectorp array)
+			    (has-fill-pointer-p array))
+			   :fill-pointer
+			   (fill-pointer array)))
 	     (when (displacement array)
 	       (error "copy not supported for displaced arrays"))
 	     (nreverse args))))
