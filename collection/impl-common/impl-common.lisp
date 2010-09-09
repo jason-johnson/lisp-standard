@@ -17,6 +17,9 @@
 
 ;; Define sensible default for all collection generic functions
 
+(defmethod std.collection:reduce (function container &key key from-end (start 0) end initial-value)
+  (reduce function container :key key :from-end from-end :start start :end end :initial-value initial-value))
+
 (defmethod std.collection:find (item (container sequence) &key from-end (start 0) end key test test-not)
   (find item container :from-end from-end :test test :test-not test-not :start start :end end :key key))
 

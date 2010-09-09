@@ -10,6 +10,11 @@
 ;; TODO: what was defined in the defgeneric is used, but defmethod always overrides if specified.  I could create my own generic function object to ensure that I have
 ;; TODO: have to do the minimal work.  That way the normal method detection (with the labmda list) works properly, and then I add the defaults to the method after the fact.
 
+;; TODO: Update, this may be a bad idea because sometimes the overriding method really doesn't want any defaults.  If I did the above that would cause it to take the generic defaults
+
+(defgeneric reduce (function container &key key from-end start end initial-value)
+  (:documentation "Reduce function accross collection"))
+
 (defgeneric find (item container &key from-end start end key test test-not)
   (:documentation "Find item in collection"))
 
