@@ -87,7 +87,7 @@
 (defun length (set)
   (hash:length (set-data set)))
 
-(defun find-if (set predicate &optional key)
+(defun find-if (predicate set &optional key)
   (let ((p (if key
 	       (compose predicate key)
 	       predicate)))
@@ -95,10 +95,10 @@
 	(when (funcall p value)
 	    (return-from find-if value)))))
 
-(defun find-if-not (set predicate &optional key)
+(defun find-if-not (predicate set &optional key)
   (find-if set (compose #'not predicate) key))
 
-(defun find (set item &key key test test-not)
+(defun find (item set &key key test test-not)
   (cond
     (test (find-if set (lambda (v) (funcall test v item)) key))
     (test-not (find-if-not set (lambda (v) (funcall test-not v item)) key))
@@ -155,15 +155,15 @@
 
 (defmethod std.collection:find (item (container set) &key from-end start end key test test-not)
   (declare (ignore from-end start end))
-  (find container item :key key :test test :test-not test-not))
+  (find item container :key key :test test :test-not test-not))
 
 (defmethod std.collection:find-if (predicate (container set) &key from-end start end key)
   (declare (ignore from-end start end))
-  (find-if container predicate key))
+  (find-if predicate container key))
 
 (defmethod std.collection:find-if-not (predicate (container set) &key from-end start end key)
   (declare (ignore from-end start end))
-  (find-if-not container predicate key))
+  (find-if-not predicate container key))
 
 ;; Read/write macros
 
