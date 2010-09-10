@@ -3,14 +3,17 @@
 (defpackage #:standard.collection.array
   (:nicknames #:std.collection.array #:collection.array #:array)
   (:use #:cl)
-  (:import-from #:std.base #:defun-alias)
-  (:shadow #:get #:put! #:copy #:do)
+  (:import-from #:std.base #:defun-alias #:compose)
+  (:shadow #:get #:put! #:find #:find-if #:find-if-not #:length #:copy #:do)
   (:export
    #:make
    #:get
    #:put!
    #:copy
    #:do
+   #:find
+   #:find-if
+   #:find-if-not
    #:length
    #:rank
    #:dimension

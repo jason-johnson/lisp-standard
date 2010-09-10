@@ -40,6 +40,30 @@
 
 ; NOTE: We don't define a put! since we can't sensibly define one with &rest subscripts
 
+(defun find-if (predicate array &key from-end (start 0) end key)
+  (unless end (setf end (1- (total-size array))))
+  (let ((p (if key
+	       (compose predicate key)
+	       predicate))
+	s e step check)
+    (if from-end
+	(setf s end e start step #'1- check #'<=)
+	(setf s start e end step #'1+ check #'>=))
+    (cl:do* ((i s (funcall step i))
+	     (item (row-major-get array i) (row-major-get array i)))
+	    ((funcall check i e))
+      (if (funcall p item)
+	  (return-from find-if item)))))
+
+(defun find-if-not (predicate array &key from-end (start 0) end key)
+  (find-if (compose #'not predicate) array :from-end from-end :start start :end end :key key))
+
+(defun find (item array &key from-end (start 0) end key test test-not)
+  (cond
+    (test (find-if (lambda (v) (funcall test v item)) array :from-end from-end :start start :end end :key key))
+    (test-not (find-if-not (lambda (v) (funcall test-not v item)) array :from-end from-end :start start :end end :key key))
+    (t (find-if (lambda (v) (eql v item)) array :from-end from-end :start start :end end :key key))))
+
 (defun copy (array)
   (flet ((copy-arguments (array)
 	   (let ((args (list (dimensions array))))
