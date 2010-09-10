@@ -98,6 +98,10 @@
 (defmethod std.base:copy ((container hash-table))
   (copy container))
 
+(defmethod std.collection:reduce (function (container hash-table) &key key from-end start end initial-value)
+  (declare (ignore from-end start end))
+  (reduce function container :key key :initial-value initial-value))
+
 (defmethod std.collection:find (item (container hash-table) &key from-end start end key test test-not)
   (declare (ignore from-end start end))
   (find item container :key key :test test :test-not test-not))
