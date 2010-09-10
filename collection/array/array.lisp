@@ -30,7 +30,7 @@
 
 (defun-alias 'make-array 'make)
 
-(declaim (inline get put!))
+(declaim (inline get length find-if-not find))
 
 (defun get (array &rest subscripts)
   (apply #'aref array subscripts))
