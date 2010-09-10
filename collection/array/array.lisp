@@ -105,5 +105,14 @@
 (defmethod std.base:copy ((object array))
   (copy object))
 
+(defmethod std.collection:find-if (predicate (container array) &key from-end (start 0) end key)
+  (find-if predicate container :from-end from-end :start start :end end :key key))
+
+(defmethod std.collection:find-if-not (predicate (container array) &key from-end (start 0) end key)
+  (find-if-not predicate container :from-end from-end :start start :end end :key key))
+
+(defmethod std.collection:find (item (container array) &key from-end (start 0) end key test test-not)
+  (find item container :from-end from-end :start start :end end :key key :test test :test-not test-not))
+
 (defmethod std.collection:sort ((container array) predicate &key key)
   (sort (copy container) predicate :key key))

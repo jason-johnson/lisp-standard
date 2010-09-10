@@ -51,7 +51,16 @@
 (defmethod std.collection:put! ((container vector) index value)
   (setf (get container index) value))
 
-;; NOTE: vector and simple-vector are subtypes of array so the copy defined in the array module works for us too
+;; NOTE: vector and simple-vector are subtypes of array so the copy defined in the array module works for us too.  This also requires us to override the find methods
+
+(defmethod std.collection:find (item (container vector) &key from-end (start 0) end key test test-not)
+  (find item container :from-end from-end :test test :test-not test-not :start start :end end :key key))
+
+(defmethod std.collection:find-if (predicate (container vector) &key from-end (start 0) end key)
+  (find-if predicate container :from-end from-end :start start :end end :key key))
+
+(defmethod std.collection:find-if-not (predicate (container vector) &key from-end (start 0) end key)
+  (find-if-not predicate container :from-end from-end :start start :end end :key key))
 
 (defmethod std.collection:sort ((container vector) predicate &key key)
   (sort container predicate :key key))
