@@ -24,7 +24,6 @@
    #:element-type
    #:in-bounds-p
    #:displacement
-   #:row-major-index
    #:has-fill-pointer-p
    #:adjustable-p
    #:adjust
