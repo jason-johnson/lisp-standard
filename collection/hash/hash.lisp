@@ -55,6 +55,17 @@
     (do ((key value) hash result)
 	(put! result key value))))
 
+(defun reduce (function hash &key key initial-value)
+  (let ((last-result initial-value))
+    (do ((nil value) hash last-result)
+	(let ((v (if key		; TODO: Would it be faster to set key to id by default and always call it?
+		     (funcall key value)
+		     value)))
+	      (setf last-result
+		    (if last-result
+			(funcall function last-result v)
+			v))))))
+
 (defun find-if (predicate hash &optional key)
   (let ((p (if key
 	       (compose predicate key)
