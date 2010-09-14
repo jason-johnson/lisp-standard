@@ -1,5 +1,8 @@
 (in-package #:standard-test.collection)
 
+(defun run-all-tests ()
+  (run-tests :suite 'standard-collection-test))
+
 (deftestsuite standard-collection-test ()
   (-list- -array- -vector- -buffer- -string- -hash- -set-)
   (:setup
