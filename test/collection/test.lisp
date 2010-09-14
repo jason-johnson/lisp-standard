@@ -97,25 +97,34 @@
   (flet ((test (collection item)
 	   (%test-find #'collection:find item collection)))
     (test -list- 'b)
+    (test -array- 'b)
     (test -vector- 'b)
     (test -buffer- 'b)
-    (test -string- #\b)))
+    (test -string- #\b)
+    (test -hash- 'b)
+    (test -set- 'b)))
 
 (addtest test-find-if
   (flet ((test (collection item)
 	   (%test-find-if #'collection:find-if item collection)))
     (test -list- 'b)
+    (test -array- 'b)
     (test -vector- 'b)
     (test -buffer- 'b)
-    (test -string- #\b)))
+    (test -string- #\b)
+    (test -hash- 'b)
+    (test -set- 'b)))
 
 (addtest test-find-if-not
   (flet ((test (collection item)
 	   (%test-find-if-not #'collection:find-if-not item collection)))
     (test -list- 'b)
+    (test -array- 'b)
     (test -vector- 'b)
     (test -buffer- 'b)
-    (test -string- #\b)))
+    (test -string- #\b)
+    (test -hash- 'b)
+    (test -set- 'b)))
 
 (addtest test-remove^
   (flet ((test (collection item)
