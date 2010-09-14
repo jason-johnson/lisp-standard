@@ -142,6 +142,9 @@
 (defmethod std.base:copy ((object array))
   (copy object))
 
+(defmethod std.collection:reduce (function (container array) &key key from-end (start 0) end (initial-value nil initial-value-p))
+  (apply #'reduce function container :key key :from-end from-end :start start :end end (if initial-value-p (list :initial-value initial-value))))
+
 (defmethod std.collection:find-if (predicate (container array) &key from-end (start 0) end key)
   (find-if predicate container :from-end from-end :start start :end end :key key))
 

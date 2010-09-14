@@ -5,7 +5,7 @@
   (:use #:std.collection.array #:cl #:impl-common)
   (:import-from #:std.base #:defun-alias)
   (:import-from #:std.collection #:map-to)
-  (:shadowing-import-from #:cl #:find #:find-if #:find-if-not #:length)
+  (:shadowing-import-from #:cl #:reduce #:find #:find-if #:find-if-not #:length)
   (:shadowing-import-from #:std.collection.array #:copy)
   (:shadow #:get #:do #:map #:sort #:stable-sort #:merge #:concatenate)
   (:export
