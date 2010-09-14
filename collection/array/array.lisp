@@ -41,7 +41,7 @@
 ; NOTE: We don't define a put! since we can't sensibly define one with &rest subscripts
 
 (defun length (array)			; TODO: Is this what we want?  We already have total-size for total size, but this is different than everything else we do with arrays
-  (first (dimensions array)))
+  (first (dimensions array)))		; TODO: I don't think so.  Since all functions use the total-size, length wouldn't be useful for anything
 
 (defun find-if (predicate array &key from-end (start 0) end key)
   (unless end (setf end (1- (total-size array))))
