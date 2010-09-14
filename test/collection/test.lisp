@@ -28,9 +28,9 @@
 		 (ensure-same result collection)
 		 (ensure-null (eq result collection)))))
   (:function
-   (%test-reduce (reduce collection f expected)
+   (%test-reduce (reduce collection f expected from-end)
 		 (let ((*lift-equality-test* 'equalp))
-		   (ensure-same expected (funcall reduce f collection)))))
+		   (ensure-same expected (funcall reduce f collection :from-end from-end)))))
   (:function
    (%test-find (find item collection)
 	       (ensure-same item (funcall find item collection))))
@@ -83,8 +83,8 @@
     (test -set-)))
 
 (addtest test-reduce
-  (flet ((test (collection &optional (expected (list (list 'a 'b) 'c)))
-	   (%test-reduce #'collection:reduce collection #'list expected)))
+  (flet ((test (collection &optional (fun #'+) (expected 6))
+	   (%test-reduce #'collection:reduce collection fun expected nil)))
     (test -list-)
     (test -array- (list (list (list 'a 'b) 'c) 'd))
     (test -vector-)
