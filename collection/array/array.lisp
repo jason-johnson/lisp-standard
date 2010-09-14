@@ -50,8 +50,16 @@
 	       predicate))
 	s e step check)
     (if from-end
-	(setf s end e start step #'1- check #'<=)
-	(setf s start e end step #'1+ check #'>=))
+	(setf
+	 s end
+	 e start
+	 step #'1-
+	 check #'<=)
+	(setf
+	 s start
+	 e end
+	 step #'1+
+	 check #'>=))
     (cl:do* ((i s (funcall step i))
 	     (item (row-major-get array i) (row-major-get array i)))
 	    ((funcall check i e))
