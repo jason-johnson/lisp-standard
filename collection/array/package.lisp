@@ -4,13 +4,14 @@
   (:nicknames #:std.collection.array #:collection.array #:array)
   (:use #:cl)
   (:import-from #:std.base #:defun-alias #:compose)
-  (:shadow #:get #:put! #:find #:find-if #:find-if-not #:length #:copy #:do)
+  (:shadow #:get #:put! #:reduce #:find #:find-if #:find-if-not #:length #:copy #:do)
   (:export
    #:make
    #:get
    #:put!
    #:copy
    #:do
+   #:reduce
    #:find
    #:find-if
    #:find-if-not

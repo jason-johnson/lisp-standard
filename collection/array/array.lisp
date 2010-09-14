@@ -43,6 +43,35 @@
 (defun length (array)			; TODO: Is this what we want?  We already have total-size for total size, but this is different than everything else we do with arrays
   (first (dimensions array)))		; TODO: I don't think so.  Since all functions use the total-size, length wouldn't be useful for anything
 
+(defun reduce (function array &key key from-end (start 0) end (initial-value nil initial-value-p))
+  (unless end (setf end (1- (total-size array))))
+  (let ((last-result initial-value)
+	(get #'row-major-get)
+	f s e step check)
+    (if from-end
+	(setf
+	 f (lambda (r v) (funcall function v r))
+	 s end
+	 e start
+	 step #'1-
+	 check #'<=)
+	(setf
+	 f function
+	 s start
+	 e end
+	 step #'1+
+	 check #'>=))
+    (if key
+	(setf get (compose key get)))
+    (unless initial-value-p
+      (setf
+       last-result (funcall get array s)
+       s (funcall step s)))
+    (cl:do* ((i s (funcall step i))
+	     (value (funcall get array i) (funcall get array i))
+	     (result (funcall f last-result value) (funcall f result value)))
+	    ((funcall check i e) result))))
+
 (defun find-if (predicate array &key from-end (start 0) end key)
   (unless end (setf end (1- (total-size array))))
   (let ((p (if key
