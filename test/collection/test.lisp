@@ -32,6 +32,10 @@
 		 (let ((*lift-equality-test* 'equalp))
 		   (ensure-same expected (funcall reduce f collection :from-end from-end)))))
   (:function
+   (%test-reduce-with-i-v (reduce collection f expected from-end initial-value)
+		 (let ((*lift-equality-test* 'equalp))
+		   (ensure-same expected (funcall reduce f collection :from-end from-end :initial-value initial-value)))))
+  (:function
    (%test-find (find item collection)
 	       (ensure-same item (funcall find item collection))))
   (:function
@@ -85,11 +89,22 @@
 (addtest test-reduce
   (flet ((test (collection &optional (fun #'+) (expected 6))
 	   (%test-reduce #'collection:reduce collection fun expected nil)))
+    (test (list 1 2 3))
+    (test (array:make '(2 2) :initial-contents '((1 2) (3 0))))
+    (test (vector:make 3 :adjustable t :initial-contents (list 1 2 3) :fill-pointer 3))
+    (test (vector 1 2 3))
+    (test -string- #'list (list (list #\a #\b) #\c))
+    (test (hash:copy #{a 1, b 2, c 3}))
+    (test (set:copy #[1 2 3]))))
+
+(addtest test-reduce-from-end
+  (flet ((test (collection &optional (expected (list 'a 'b 'c)) (fun #'cons))
+	   (%test-reduce-with-i-v #'collection:reduce collection fun expected t nil)))
     (test -list-)
-    (test -array- (list (list (list 'a 'b) 'c) 'd))
+    (test -array- (list 'a 'b 'c 'd))
     (test -vector-)
     (test -buffer-)
-    (test -string- (list (list #\a #\b) #\c))
+    (test -string- (list #\a #\b #\c))
     (test -hash-)
     (test -set-)))
 
