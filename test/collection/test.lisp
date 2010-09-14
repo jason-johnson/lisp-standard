@@ -28,6 +28,10 @@
 		 (ensure-same result collection)
 		 (ensure-null (eq result collection)))))
   (:function
+   (%test-reduce (reduce collection f expected)
+		 (let ((*lift-equality-test* 'equalp))
+		   (ensure-same expected (funcall reduce f collection)))))
+  (:function
    (%test-find (find item collection)
 	       (ensure-same item (funcall find item collection))))
   (:function
@@ -75,6 +79,17 @@
     (test -vector-)
     (test -buffer-)
     (test -string-)
+    (test -hash-)
+    (test -set-)))
+
+(addtest test-reduce
+  (flet ((test (collection &optional (expected (list (list 'a 'b) 'c)))
+	   (%test-reduce #'collection:reduce collection #'list expected)))
+    (test -list-)
+    (test -array- (list (list (list 'a 'b) 'c) 'd))
+    (test -vector-)
+    (test -buffer-)
+    (test -string- (list (list #\a #\b) #\c))
     (test -hash-)
     (test -set-)))
 
