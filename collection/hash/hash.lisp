@@ -55,16 +55,21 @@
     (do ((key value) hash result)
 	(put! result key value))))
 
-(defun reduce (function hash &key key initial-value)
-  (let ((last-result initial-value))
+(defun reduce (function hash &key key from-end (initial-value nil initial-value-p))
+  (let ((last-result initial-value)
+	(has-value initial-value-p)
+	(f (if from-end
+	       (lambda (r v) (funcall function v r))
+	       function)))
     (do ((nil value) hash last-result)
 	(let ((v (if key		; TODO: Would it be faster to set key to id by default and always call it?
 		     (funcall key value)
 		     value)))
 	      (setf last-result
-		    (if last-result
-			(funcall function last-result v)
-			v))))))
+		    (if has-value
+			(funcall f last-result v)
+			v)
+		    has-value t)))))
 
 (defun find-if (predicate hash &optional key)
   (let ((p (if key
@@ -98,9 +103,9 @@
 (defmethod std.base:copy ((container hash-table))
   (copy container))
 
-(defmethod std.collection:reduce (function (container hash-table) &key key from-end start end initial-value)
-  (declare (ignore from-end start end))
-  (reduce function container :key key :initial-value initial-value))
+(defmethod std.collection:reduce (function (container hash-table) &key key from-end start end (initial-value nil initial-value-p))
+  (declare (ignore start end))
+  (apply #'reduce function container :key key :from-end from-end (if initial-value-p (list :initial-value initial-value))))
 
 (defmethod std.collection:find (item (container hash-table) &key from-end start end key test test-not)
   (declare (ignore from-end start end))
