@@ -107,13 +107,13 @@
 	    (return-from find-if value)))))
 
 (defun find-if-not (predicate set &optional key)
-  (find-if set (compose #'not predicate) key))
+  (find-if (compose #'not predicate) set key))
 
 (defun find (item set &key key test test-not)
   (cond
-    (test (find-if set (lambda (v) (funcall test v item)) key))
-    (test-not (find-if-not set (lambda (v) (funcall test-not v item)) key))
-    (t (find-if set (lambda (v) (eql v item)) key))))
+    (test (find-if (lambda (v) (funcall test v item)) set key))
+    (test-not (find-if-not (lambda (v) (funcall test-not v item)) set key))
+    (t (find-if (lambda (v) (eql v item)) set key))))
 
 (defun map (fun set)			; NOTE: Maping over more than one unordered set makes no sense
   (let ((result (apply #'make (options set))))

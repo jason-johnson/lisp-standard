@@ -75,13 +75,13 @@
 	    (return-from find-if value)))))
 
 (defun find-if-not (predicate hash &optional key)
-  (find-if hash (compose #'not predicate) key))
+  (find-if (compose #'not predicate) hash key))
 
 (defun find (item hash &key key test test-not)
   (cond
-    (test (find-if hash (lambda (v) (funcall test v item)) key))
-    (test-not (find-if-not hash (lambda (v) (funcall test-not v item)) key))
-    (t (find-if hash (lambda (v) (eql v item)) key))))      
+    (test (find-if (lambda (v) (funcall test v item)) hash key))
+    (test-not (find-if-not (lambda (v) (funcall test-not v item)) hash key))
+    (t (find-if (lambda (v) (eql v item)) hash key))))
 
 (defun-alias 'hash-table-count 'length)
 
