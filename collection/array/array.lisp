@@ -168,7 +168,9 @@
 (defmethod std.collection:get ((container array) indexes)
   (apply #'get container indexes))
 
-; NOTE: We don't define a collection:put! because I don't know how to make (put! *array* '(0 0 0) 'value) turn into (setf (get *array* 0 0 0) 'value).  We can't use apply because setf is a macro
+(defmethod std.collection:put! ((container array) indexes value)
+  (let ((i (apply #'row-major-index container indexes)))
+    (row-major-put! container i value)))
 
 (defmethod std.base:copy ((object array))
   (copy object))
