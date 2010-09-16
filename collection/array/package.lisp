@@ -30,4 +30,4 @@
    #:adjustable-p
    #:adjust
    #:row-major-get
-   #:major-row-put!))
+   #:row-major-put!))
