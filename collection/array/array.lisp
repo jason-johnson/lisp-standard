@@ -152,7 +152,7 @@
 	     (when (displacement array)
 	       (error "copy not supported for displaced arrays"))
 	     (nreverse args))))
-    (let ((result (apply 'make (copy-arguments array))))
+    (let ((result (apply #'make (copy-arguments array))))
       (dotimes (i (total-size array))
 	(setf (row-major-get result i) (row-major-get array i)))
       result)))
