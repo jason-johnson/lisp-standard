@@ -169,9 +169,9 @@
 (defmethod std.base:copy ((container set))
   (copy container))
 
-(defmethod std.collection:reduce (function (container set) &key key from-end start end initial-value)
-  (declare (ignore from-end start end))
-  (reduce function container :key key :initial-value initial-value))
+(defmethod std.collection:reduce (function (container set) &key key from-end start end (initial-value nil initial-value-p))
+  (declare (ignore start end))
+  (apply #'reduce function container :key key :from-end from-end (if initial-value-p (list :initial-value initial-value))))
 
 (defmethod std.collection:find (item (container set) &key from-end start end key test test-not)
   (declare (ignore from-end start end))
