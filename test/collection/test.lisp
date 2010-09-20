@@ -28,6 +28,12 @@
 (defun %test-count (count collection item expected)
   (ensure-same expected (funcall count item collection)))
 
+(defun %test-count-if (count collection item expected)
+  (ensure-same expected (funcall count (lambda (i) (eql i item)) collection)))
+
+(defun %test-count-if-not (count collection item expected)
+  (ensure-same expected (funcall count (lambda (i) (not (eql i item))) collection)))
+
 (defun %test-find (find collection item)
   (ensure-same item (funcall find item collection)))
 
@@ -157,7 +163,17 @@
 (add-collection-tests
  count
  %test-count (#'std:count) (item expected)
- (list array vector buffer (string #\a 2) hash set) ('a 2))
+ (list array vector buffer (string #\a 2) hash (set 'a 1)) ('a 2))
+
+(add-collection-tests
+ count-if
+ %test-count-if (#'std:count-if) (item expected)
+ (list array vector buffer (string #\a 2) hash (set 'a 1)) ('a 2))
+
+(add-collection-tests
+ count-if-not
+ %test-count-if-not (#'std:count-if-not) (item expected)
+ (list array vector buffer (string #\a 2) hash (set 'a 1)) ('a 2))
 
 (add-collection-tests
  find
