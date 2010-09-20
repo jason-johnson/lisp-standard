@@ -17,6 +17,17 @@
 
 ;; Define sensible default for all collection generic functions
 
+(defmethod std.collection:count (item (collection sequence) &key from-end (start 0) end key (test #'eql) (test-not nil test-not-p))
+  (apply #'count item collection :from-end from-end :start start :end end :key key
+	 (if test-not-p
+	     (list :test-not test-not)
+	     (list :test test))))
+
+(defmethod std.collection:count-if (predicate (collection sequence) &key from-end (start 0) end key)
+  (count-if predicate collection :from-end from-end :start start :end end :key key))
+
+(defmethod std.collection:count-if-not (predicate (collection sequence) &key from-end (start 0) end key)
+  (count-if-not predicate collection :from-end from-end :start start :end end :key key))
 
 (defmethod std.collection:reduce (function (collection sequence) &key key from-end (start 0) end (initial-value nil initial-value-p))
   (apply #'reduce function collection :key key :from-end from-end :start start :end end (if initial-value-p (list :initial-value initial-value))))

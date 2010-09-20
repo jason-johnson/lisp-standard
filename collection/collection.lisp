@@ -12,6 +12,15 @@
 
 ;; TODO: Update, this may be a bad idea because sometimes the overriding method really doesn't want any defaults.  If I did the above that would cause it to take the generic defaults
 
+(defgeneric count (item collection &key from-end start end key test test-not)
+  (:documentation "How many times item occurs in collection"))
+
+(defgeneric count-if (predicate collection &key from-end start end key)
+  (:documentation "How many times predicate is statisfied in collection"))
+
+(defgeneric count-if-not (predicate collection &key from-end start end key)
+  (:documentation "How many times predicate is not statisfied in collection"))
+
 (defgeneric reduce (function collection &key key from-end start end initial-value)
   (:documentation "Reduce function accross collection"))
 
