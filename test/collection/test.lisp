@@ -120,26 +120,38 @@
  %test-copy (#'std:copy) ()
  (list array vector buffer string hash set) ())
 
-(addtest test-reduce
-  (flet ((test (collection &optional (fun #'+) (expected 6))
-	   (%test-reduce #'collection:reduce collection fun expected nil)))
-    (test (list 1 2 3))
-    (test (array:make '(2 2) :initial-contents '((1 2) (3 0))))
-    (test (vector:make 3 :adjustable t :initial-contents (list 1 2 3) :fill-pointer 3))
-    (test (vector 1 2 3))
-    (test -string- #'list (list (list #\a #\b) #\c))
-    (test (hash:copy #{a 1, b 2, c 3}))
+(flet ((test (collection &optional (fun #'+) (expected 6))
+	 (%test-reduce #'std:reduce collection fun expected nil)))
+  (addtest test-reduce-list
+    (test (list 1 2 3)))
+  (addtest test-reduce-array
+    (test (array:make '(2 2) :initial-contents '((1 2) (3 0)))))
+  (addtest test-reduce-vector
+    (test (vector:make 3 :adjustable t :initial-contents (list 1 2 3) :fill-pointer 3)))
+  (addtest test-reduce-buffer
+    (test (vector 1 2 3)))
+  (addtest test-reduce-string
+    (test -string- #'list (list (list #\a #\b) #\c)))
+  (addtest test-reduce-hash
+    (test (hash:copy #{a 1, b 2, c 3})))
+  (addtest test-reduce-set
     (test (set:copy #[1 2 3]))))
 
-(addtest test-reduce-from-end
-  (flet ((test (collection &optional (expected (list 'a 'b 'c)) (fun #'cons))
-	   (%test-reduce-with-i-v #'collection:reduce collection fun expected t nil)))
-    (test -list-)
-    (test -array- (list 'a 'b 'c 'd))
-    (test -vector-)
-    (test -buffer-)
-    (test -string- (list #\a #\b #\c))
-    (test -hash-)
+(flet ((test (collection &optional (expected (list 'a 'b 'c)) (fun #'cons))
+	 (%test-reduce-with-i-v #'std:reduce collection fun expected t nil)))
+  (addtest test-reduce-from-end-list
+    (test -list-))
+  (addtest test-reduce-from-end-array
+    (test -array- (list 'a 'b 'c 'd)))
+  (addtest test-reduce-from-end-vector
+    (test -vector-))
+  (addtest test-reduce-from-end-buffer
+    (test -buffer-))
+  (addtest test-reduce-from-end-string
+    (test -string- (list #\a #\b #\c)))
+  (addtest test-reduce-from-end-hash
+    (test -hash-))
+  (addtest test-reduce-from-end-set
     (test -set-)))
 
 (add-collection-tests
