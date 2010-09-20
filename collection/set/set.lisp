@@ -87,6 +87,24 @@
 (defun length (set)
   (hash:length (set-data set)))
 
+(defun count-if (predicate set &optional key)
+  (let ((p (if key
+	       (compose predicate key)
+	       predicate))
+	(count 0))
+    (do (value set count)
+	(when (funcall p value)
+	  (incf count)))))
+
+(defun count-if-not (predicate set &optional key)
+  (count-if (compose #'not predicate) set key))
+
+(defun count (item set &key key test test-not)
+  (cond
+    (test (count-if (lambda (v) (funcall test v item)) set key))
+    (test-not (count-if-not (lambda (v) (funcall test-not v item)) set key))
+    (t (count-if (lambda (v) (eql v item)) set key))))
+
 (defun reduce (function set &key key from-end (initial-value nil initial-value-p))
   (let ((last-result initial-value)
 	(has-value initial-value-p)
@@ -168,6 +186,18 @@
 
 (defmethod std.base:copy ((collection set))
   (copy collection))
+
+(defmethod std.collection:count (item (collection set) &key from-end start end key test test-not)
+  (declare (ignore from-end start end))
+  (count item collection :key key :test test :test-not test-not))
+
+(defmethod std.collection:count-if (predicate (collection set) &key from-end start end key)
+  (declare (ignore from-end start end))
+  (count-if predicate collection key))
+
+(defmethod std.collection:count-if-not (predicate (collection set) &key from-end start end key)
+  (declare (ignore from-end start end))
+  (count-if-not predicate collection key))
 
 (defmethod std.collection:reduce (function (collection set) &key key from-end start end (initial-value nil initial-value-p))
   (declare (ignore start end))

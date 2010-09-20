@@ -51,7 +51,19 @@
 (defmethod std.collection:put! ((collection vector) index value)
   (setf (get collection index) value))
 
-;; NOTE: vector and simple-vector are subtypes of array so the copy defined in the array module works for us too.  This also requires us to override the find methods
+;; NOTE: vector and simple-vector are subtypes of array so the copy defined in the array module works for us too.  This also requires us to override various generic methods
+
+(defmethod std.collection:count (item (collection vector) &key from-end (start 0) end key (test #'eql) (test-not nil test-not-p))
+  (apply #'count item collection :from-end from-end :start start :end end :key key
+	 (if test-not-p
+	     (list :test-not test-not)
+	     (list :test test))))
+
+(defmethod std.collection:count-if (predicate (collection vector) &key from-end (start 0) end key)
+  (count-if predicate collection :from-end from-end :start start :end end :key key))
+
+(defmethod std.collection:count-if-not (predicate (collection vector) &key from-end (start 0) end key)
+  (count-if-not predicate collection :from-end from-end :start start :end end :key key))
 
 (defmethod std.collection:reduce (function (collection vector) &key key from-end (start 0) end (initial-value nil initial-value-p))
   (apply #'reduce function collection :key key :from-end from-end :start start :end end (if initial-value-p (list :initial-value initial-value))))

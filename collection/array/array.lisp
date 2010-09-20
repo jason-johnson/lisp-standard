@@ -75,6 +75,38 @@
 	       (%map)))
       (%map))))
 
+(defun count-if (predicate array &key from-end (start 0) end key)
+  (unless end (setf end (1- (total-size array))))
+  (let ((count 0)
+	(p (if key
+	       (compose predicate key)
+	       predicate))
+	s e step check)
+    (if from-end
+	(setf
+	 s end
+	 e start
+	 step #'1-
+	 check #'<)
+	(setf
+	 s start
+	 e end
+	 step #'1+
+	 check #'>))
+    (cl:do* ((i s (funcall step i)))
+	    ((funcall check i e) count)
+      (when (funcall p (row-major-get array i))
+	  (incf count)))))
+
+(defun count-if-not (predicate array &key from-end (start 0) end key)
+  (count-if (compose #'not predicate) array :from-end from-end :start start :end end :key key))
+
+(defun count (item array &key from-end (start 0) end key test test-not)
+  (cond
+    (test (count-if (lambda (v) (funcall test v item)) array :from-end from-end :start start :end end :key key))
+    (test-not (count-if-not (lambda (v) (funcall test-not v item)) array :from-end from-end :start start :end end :key key))
+    (t (count-if (lambda (v) (eql v item)) array :from-end from-end :start start :end end :key key))))
+
 (defun reduce (function array &key key from-end (start 0) end (initial-value nil initial-value-p))
   (unless end (setf end (1- (total-size array))))
   (let ((last-result initial-value)
@@ -175,6 +207,15 @@
 
 (defmethod std.base:copy ((object array))
   (copy object))
+
+(defmethod std.collection:count (item (collection array) &key from-end (start 0) end key test test-not)
+  (count item collection :from-end from-end :start start :end end :key key :test test :test-not test-not))
+
+(defmethod std.collection:count-if (predicate (collection array) &key from-end (start 0) end key)
+  (count-if predicate collection :from-end from-end :start start :end end :key key))
+
+(defmethod std.collection:count-if-not (predicate (collection array) &key from-end (start 0) end key)
+  (count-if-not predicate collection :from-end from-end :start start :end end :key key))
 
 (defmethod std.collection:reduce (function (collection array) &key key from-end (start 0) end (initial-value nil initial-value-p))
   (apply #'reduce function collection :key key :from-end from-end :start start :end end (if initial-value-p (list :initial-value initial-value))))

@@ -71,6 +71,24 @@
 			v)
 		    has-value t)))))
 
+(defun count-if (predicate hash &optional key)
+  (let ((p (if key
+	       (compose predicate key)
+	       predicate))
+	(count 0))
+    (do ((nil value) hash count)
+	(when (funcall p value)
+	  (incf count)))))
+
+(defun count-if-not (predicate hash &optional key)
+  (count-if (compose #'not predicate) hash key))
+
+(defun count (item hash &key key test test-not)
+  (cond
+    (test (count-if (lambda (v) (funcall test v item)) hash key))
+    (test-not (count-if-not (lambda (v) (funcall test-not v item)) hash key))
+    (t (count-if (lambda (v) (eql v item)) hash key))))
+
 (defun find-if (predicate hash &optional key)
   (let ((p (if key
 	       (compose predicate key)
@@ -118,6 +136,18 @@
 (defmethod std.collection:find-if-not (predicate (collection hash-table) &key from-end start end key)
   (declare (ignore from-end start end))
   (find-if-not predicate collection key))
+
+(defmethod std.collection:count (item (collection hash-table) &key from-end start end key test test-not)
+  (declare (ignore from-end start end))
+  (count item collection :key key :test test :test-not test-not))
+
+(defmethod std.collection:count-if (predicate (collection hash-table) &key from-end start end key)
+  (declare (ignore from-end start end))
+  (count-if predicate collection key))
+
+(defmethod std.collection:count-if-not (predicate (collection hash-table) &key from-end start end key)
+  (declare (ignore from-end start end))
+  (count-if-not predicate collection key))
 
 ;; NOTE: count ignored because it makes no sense.  If the user wants to remove all but one they can use remove-duplicates
 ;; (defmethod std.collection:remove^ (item (collection hash-table) &key from-end test test-not start end count key)
