@@ -166,27 +166,27 @@
 
 ;; Generic methods
 
-(defmethod std.collection:get ((container array) indexes)
-  (apply #'get container indexes))
+(defmethod std.collection:get ((collection array) indexes)
+  (apply #'get collection indexes))
 
-(defmethod std.collection:put! ((container array) indexes value)
-  (let ((i (apply #'row-major-index container indexes)))
-    (row-major-put! container i value)))
+(defmethod std.collection:put! ((collection array) indexes value)
+  (let ((i (apply #'row-major-index collection indexes)))
+    (row-major-put! collection i value)))
 
 (defmethod std.base:copy ((object array))
   (copy object))
 
-(defmethod std.collection:reduce (function (container array) &key key from-end (start 0) end (initial-value nil initial-value-p))
-  (apply #'reduce function container :key key :from-end from-end :start start :end end (if initial-value-p (list :initial-value initial-value))))
+(defmethod std.collection:reduce (function (collection array) &key key from-end (start 0) end (initial-value nil initial-value-p))
+  (apply #'reduce function collection :key key :from-end from-end :start start :end end (if initial-value-p (list :initial-value initial-value))))
 
-(defmethod std.collection:find-if (predicate (container array) &key from-end (start 0) end key)
-  (find-if predicate container :from-end from-end :start start :end end :key key))
+(defmethod std.collection:find-if (predicate (collection array) &key from-end (start 0) end key)
+  (find-if predicate collection :from-end from-end :start start :end end :key key))
 
-(defmethod std.collection:find-if-not (predicate (container array) &key from-end (start 0) end key)
-  (find-if-not predicate container :from-end from-end :start start :end end :key key))
+(defmethod std.collection:find-if-not (predicate (collection array) &key from-end (start 0) end key)
+  (find-if-not predicate collection :from-end from-end :start start :end end :key key))
 
-(defmethod std.collection:find (item (container array) &key from-end (start 0) end key test test-not)
-  (find item container :from-end from-end :start start :end end :key key :test test :test-not test-not))
+(defmethod std.collection:find (item (collection array) &key from-end (start 0) end key test test-not)
+  (find item collection :from-end from-end :start start :end end :key key :test test :test-not test-not))
 
-(defmethod std.collection:sort ((container array) predicate &key key)
-  (sort (copy container) predicate :key key))
+(defmethod std.collection:sort ((collection array) predicate &key key)
+  (sort (copy collection) predicate :key key))

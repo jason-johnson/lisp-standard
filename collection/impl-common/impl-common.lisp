@@ -17,80 +17,81 @@
 
 ;; Define sensible default for all collection generic functions
 
-(defmethod std.collection:reduce (function (container sequence) &key key from-end (start 0) end (initial-value nil initial-value-p))
-  (apply #'reduce function container :key key :from-end from-end :start start :end end (if initial-value-p (list :initial-value initial-value))))
 
-(defmethod std.collection:find (item (container sequence) &key from-end (start 0) end key test test-not)
-  (find item container :from-end from-end :test test :test-not test-not :start start :end end :key key))
+(defmethod std.collection:reduce (function (collection sequence) &key key from-end (start 0) end (initial-value nil initial-value-p))
+  (apply #'reduce function collection :key key :from-end from-end :start start :end end (if initial-value-p (list :initial-value initial-value))))
 
-(defmethod std.collection:find-if (predicate (container sequence) &key from-end (start 0) end key)
-  (find-if predicate container :from-end from-end :start start :end end :key key))
+(defmethod std.collection:find (item (collection sequence) &key from-end (start 0) end key test test-not)
+  (find item collection :from-end from-end :test test :test-not test-not :start start :end end :key key))
 
-(defmethod std.collection:find-if-not (predicate (container sequence) &key from-end (start 0) end key)
-  (find-if-not predicate container :from-end from-end :start start :end end :key key))
+(defmethod std.collection:find-if (predicate (collection sequence) &key from-end (start 0) end key)
+  (find-if predicate collection :from-end from-end :start start :end end :key key))
 
-(defmethod std.collection:remove (item (container sequence) &key from-end (test #'eql) test-not (start 0) end count key)
-  (remove item container :from-end from-end :test test :test-not test-not :start start :end end :count count :key key))
+(defmethod std.collection:find-if-not (predicate (collection sequence) &key from-end (start 0) end key)
+  (find-if-not predicate collection :from-end from-end :start start :end end :key key))
 
-(defmethod std.collection:remove^ (item (container sequence) &key from-end (test #'eql) test-not (start 0) end count key)
-  (remove^ item container :from-end from-end :test test :test-not test-not :start start :end end :count count :key key))
+(defmethod std.collection:remove (item (collection sequence) &key from-end (test #'eql) test-not (start 0) end count key)
+  (remove item collection :from-end from-end :test test :test-not test-not :start start :end end :count count :key key))
 
-(defmethod std.collection:remove-if (predicate (container sequence) &key from-end (start 0) end count key)
-  (remove-if predicate container :from-end from-end :start start :end end :count count :key key))
+(defmethod std.collection:remove^ (item (collection sequence) &key from-end (test #'eql) test-not (start 0) end count key)
+  (remove^ item collection :from-end from-end :test test :test-not test-not :start start :end end :count count :key key))
 
-(defmethod std.collection:remove-if^ (predicate (container sequence) &key from-end (start 0) end count key)
-  (remove-if^ predicate container :from-end from-end :start start :end end :count count :key key))
+(defmethod std.collection:remove-if (predicate (collection sequence) &key from-end (start 0) end count key)
+  (remove-if predicate collection :from-end from-end :start start :end end :count count :key key))
 
-(defmethod std.collection:remove-if-not (predicate (container sequence) &key from-end (start 0) end count key)
-  (remove-if-not predicate container :from-end from-end :start start :end end :count count :key key))
+(defmethod std.collection:remove-if^ (predicate (collection sequence) &key from-end (start 0) end count key)
+  (remove-if^ predicate collection :from-end from-end :start start :end end :count count :key key))
 
-(defmethod std.collection:remove-if-not^ (predicate (container sequence) &key from-end (start 0) end count key)
-  (remove-if-not^ predicate container :from-end from-end :start start :end end :count count :key key))
+(defmethod std.collection:remove-if-not (predicate (collection sequence) &key from-end (start 0) end count key)
+  (remove-if-not predicate collection :from-end from-end :start start :end end :count count :key key))
 
-(defmethod std.collection:remove-duplicates ((container sequence) &key (test #'eql) test-not (start 0) end from-end key)
-  (remove-duplicates container :from-end from-end :test test :test-not test-not :start start :end end :key key))
+(defmethod std.collection:remove-if-not^ (predicate (collection sequence) &key from-end (start 0) end count key)
+  (remove-if-not^ predicate collection :from-end from-end :start start :end end :count count :key key))
 
-(defmethod std.collection:remove-duplicates^ ((container sequence) &key (test #'eql) test-not (start 0) end from-end key)
-  (remove-duplicates^ container :from-end from-end :test test :test-not test-not :start start :end end :key key))
+(defmethod std.collection:remove-duplicates ((collection sequence) &key (test #'eql) test-not (start 0) end from-end key)
+  (remove-duplicates collection :from-end from-end :test test :test-not test-not :start start :end end :key key))
 
-(defmethod std.collection:reverse ((container sequence))
-  (reverse container))
+(defmethod std.collection:remove-duplicates^ ((collection sequence) &key (test #'eql) test-not (start 0) end from-end key)
+  (remove-duplicates^ collection :from-end from-end :test test :test-not test-not :start start :end end :key key))
 
-(defmethod std.collection:reverse^ ((container sequence))
-  (reverse^ container))
+(defmethod std.collection:reverse ((collection sequence))
+  (reverse collection))
 
-(defmethod std.collection:substitute (new old (container sequence) &key from-end (test #'eql) test-not (start 0) count end key)
-  (substitute new old container :from-end from-end :test test :test-not test-not :start start :end end :count count :key key))
+(defmethod std.collection:reverse^ ((collection sequence))
+  (reverse^ collection))
 
-(defmethod std.collection:substitute! (new old (container sequence) &key from-end (test #'eql) test-not (start 0) count end key)
-  (substitute! new old container :from-end from-end :test test :test-not test-not :start start :end end :count count :key key))
+(defmethod std.collection:substitute (new old (collection sequence) &key from-end (test #'eql) test-not (start 0) count end key)
+  (substitute new old collection :from-end from-end :test test :test-not test-not :start start :end end :count count :key key))
 
-(defmethod std.collection:substitute-if (new predicate (container sequence) &key from-end (start 0) count end key)
-  (substitute-if new predicate container :from-end from-end :start start :end end :count count :key key))
+(defmethod std.collection:substitute! (new old (collection sequence) &key from-end (test #'eql) test-not (start 0) count end key)
+  (substitute! new old collection :from-end from-end :test test :test-not test-not :start start :end end :count count :key key))
 
-(defmethod std.collection:substitute-if! (new predicate (container sequence) &key from-end (start 0) count end key)
-  (substitute-if! new predicate container :from-end from-end :start start :end end :count count :key key))
+(defmethod std.collection:substitute-if (new predicate (collection sequence) &key from-end (start 0) count end key)
+  (substitute-if new predicate collection :from-end from-end :start start :end end :count count :key key))
 
-(defmethod std.collection:substitute-if-not ((container sequence) predicate new &key from-end (start 0) count end key)
-  (substitute-if-not new predicate container :from-end from-end :start start :end end :count count :key key))
+(defmethod std.collection:substitute-if! (new predicate (collection sequence) &key from-end (start 0) count end key)
+  (substitute-if! new predicate collection :from-end from-end :start start :end end :count count :key key))
 
-(defmethod std.collection:substitute-if-not! (new predicate (container sequence) &key from-end (start 0) count end key)
-  (substitute-if-not! new predicate container :from-end from-end :start start :end end :count count :key key))
+(defmethod std.collection:substitute-if-not ((collection sequence) predicate new &key from-end (start 0) count end key)
+  (substitute-if-not new predicate collection :from-end from-end :start start :end end :count count :key key))
 
-(defmethod std.collection:append ((container sequence) &rest containers)
-  (apply #'append container containers))
+(defmethod std.collection:substitute-if-not! (new predicate (collection sequence) &key from-end (start 0) count end key)
+  (substitute-if-not! new predicate collection :from-end from-end :start start :end end :count count :key key))
 
-(defmethod std.collection:append! ((container sequence) &rest containers)
-  (apply #'append! container containers))
+(defmethod std.collection:append ((collection sequence) &rest collections)
+  (apply #'append collection collections))
 
-(defmethod std.collection:sort^ ((container sequence) predicate &key key)
-  (sort container predicate :key key))
+(defmethod std.collection:append! ((collection sequence) &rest collections)
+  (apply #'append! collection collections))
 
-(defmethod std.collection:stable-sort^ ((container sequence) predicate &key key)
-  (stable-sort container predicate :key key))
+(defmethod std.collection:sort^ ((collection sequence) predicate &key key)
+  (sort collection predicate :key key))
 
-(defmethod std.collection:merge^ (output-spec (container1 sequence) (container2 sequence) predicate &key key)
-  (merge output-spec container1 container2 predicate :key key))
+(defmethod std.collection:stable-sort^ ((collection sequence) predicate &key key)
+  (stable-sort collection predicate :key key))
 
-(defmethod std.collection:merge (output-spec (container1 sequence) (container2 sequence) predicate &key key)
-  (std.collection:merge^ output-spec (copy-seq container1) (copy-seq container2) predicate :key key))
+(defmethod std.collection:merge^ (output-spec (collection1 sequence) (collection2 sequence) predicate &key key)
+  (merge output-spec collection1 collection2 predicate :key key))
+
+(defmethod std.collection:merge (output-spec (collection1 sequence) (collection2 sequence) predicate &key key)
+  (std.collection:merge^ output-spec (copy-seq collection1) (copy-seq collection2) predicate :key key))

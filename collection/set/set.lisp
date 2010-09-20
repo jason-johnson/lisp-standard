@@ -166,24 +166,24 @@
 
 ;; Generic access
 
-(defmethod std.base:copy ((container set))
-  (copy container))
+(defmethod std.base:copy ((collection set))
+  (copy collection))
 
-(defmethod std.collection:reduce (function (container set) &key key from-end start end (initial-value nil initial-value-p))
+(defmethod std.collection:reduce (function (collection set) &key key from-end start end (initial-value nil initial-value-p))
   (declare (ignore start end))
-  (apply #'reduce function container :key key :from-end from-end (if initial-value-p (list :initial-value initial-value))))
+  (apply #'reduce function collection :key key :from-end from-end (if initial-value-p (list :initial-value initial-value))))
 
-(defmethod std.collection:find (item (container set) &key from-end start end key test test-not)
+(defmethod std.collection:find (item (collection set) &key from-end start end key test test-not)
   (declare (ignore from-end start end))
-  (find item container :key key :test test :test-not test-not))
+  (find item collection :key key :test test :test-not test-not))
 
-(defmethod std.collection:find-if (predicate (container set) &key from-end start end key)
+(defmethod std.collection:find-if (predicate (collection set) &key from-end start end key)
   (declare (ignore from-end start end))
-  (find-if predicate container key))
+  (find-if predicate collection key))
 
-(defmethod std.collection:find-if-not (predicate (container set) &key from-end start end key)
+(defmethod std.collection:find-if-not (predicate (collection set) &key from-end start end key)
   (declare (ignore from-end start end))
-  (find-if-not predicate container key))
+  (find-if-not predicate collection key))
 
 ;; Read/write macros
 

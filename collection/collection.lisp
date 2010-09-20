@@ -1,9 +1,9 @@
 (in-package #:std.collection)
 
-(defgeneric get (container key)
+(defgeneric get (collection key)
   (:documentation "Get value for key"))
 
-(defgeneric put! (container key value)
+(defgeneric put! (collection key value)
   (:documentation "Put value at key"))
 
 ;; TODO: I will probably want to create my own defgeneric that allows the defaults to be declared here, since this makes more sense.  If a method doesn't define any then
@@ -12,86 +12,86 @@
 
 ;; TODO: Update, this may be a bad idea because sometimes the overriding method really doesn't want any defaults.  If I did the above that would cause it to take the generic defaults
 
-(defgeneric reduce (function container &key key from-end start end initial-value)
+(defgeneric reduce (function collection &key key from-end start end initial-value)
   (:documentation "Reduce function accross collection"))
 
-(defgeneric find (item container &key from-end start end key test test-not)
+(defgeneric find (item collection &key from-end start end key test test-not)
   (:documentation "Find item in collection"))
 
-(defgeneric find-if (predicate container &key from-end start end key)
+(defgeneric find-if (predicate collection &key from-end start end key)
   (:documentation "Find first matching item in collection"))
 
-(defgeneric find-if-not (predicate container &key from-end start end key)
+(defgeneric find-if-not (predicate collection &key from-end start end key)
   (:documentation "Find first non-matching item in collection"))
 
-(defgeneric remove (item container &key from-end test test-not start end count key)
+(defgeneric remove (item collection &key from-end test test-not start end count key)
   (:documentation "Remove item from collection"))
 
-(defgeneric remove^ (item container &key from-end test test-not start end count key)
+(defgeneric remove^ (item collection &key from-end test test-not start end count key)
   (:documentation "Destructive form of remove"))
 
-(defgeneric remove-if (predicate container &key from-end start end count key)
-  (:documentation "Remove items from container for which predicate returns t"))
+(defgeneric remove-if (predicate collection &key from-end start end count key)
+  (:documentation "Remove items from collection for which predicate returns t"))
 
-(defgeneric remove-if^ (predicate container &key from-end start end count key)
+(defgeneric remove-if^ (predicate collection &key from-end start end count key)
   (:documentation "Destructive form of remove-if"))
 
-(defgeneric remove-if-not (predicate container &key from-end start end count key)
-  (:documentation "Remove items from container for which predicate returns nil"))
+(defgeneric remove-if-not (predicate collection &key from-end start end count key)
+  (:documentation "Remove items from collection for which predicate returns nil"))
 
-(defgeneric remove-if-not^ (predicate container &key from-end start end count key)
+(defgeneric remove-if-not^ (predicate collection &key from-end start end count key)
   (:documentation "Destructive form of remove-if-not"))
 
-(defgeneric remove-duplicates (container &key test test-not start end from-end key)
-  (:documentation "Remove duplicates from container"))
+(defgeneric remove-duplicates (collection &key test test-not start end from-end key)
+  (:documentation "Remove duplicates from collection"))
 
-(defgeneric remove-duplicates^ (container &key test test-not start end from-end key)
+(defgeneric remove-duplicates^ (collection &key test test-not start end from-end key)
   (:documentation "Destructive form of remove-duplicates"))
 
-(defgeneric reverse (container)
-  (:documentation "Reverse the contents of a container"))
+(defgeneric reverse (collection)
+  (:documentation "Reverse the contents of a collection"))
 
-(defgeneric reverse^ (container)
-  (:documentation "Reverse the contents of a container in place (destructive)"))
+(defgeneric reverse^ (collection)
+  (:documentation "Reverse the contents of a collection in place (destructive)"))
 
-(defgeneric substitute (new old container &key from-end test test-not start count end key)
+(defgeneric substitute (new old collection &key from-end test test-not start count end key)
   (:documentation "Substitute old item for new"))
 
-(defgeneric substitute! (new old container &key from-end test test-not start count end key)
+(defgeneric substitute! (new old collection &key from-end test test-not start count end key)
   (:documentation "Substitute old item for new"))
 
-(defgeneric substitute-if (new predicate container &key from-end start count end key)
+(defgeneric substitute-if (new predicate collection &key from-end start count end key)
   (:documentation "Substitute matching items for new"))
 
-(defgeneric substitute-if! (new predicate container &key from-end start count end key)
+(defgeneric substitute-if! (new predicate collection &key from-end start count end key)
   (:documentation "Substitute matching items for new in place"))
 
-(defgeneric substitute-if-not (new predicate container &key from-end start count end key)
+(defgeneric substitute-if-not (new predicate collection &key from-end start count end key)
   (:documentation "Substitute non-matching items for new"))
 
-(defgeneric substitute-if-not! (new predicate container &key from-end start count end key)
+(defgeneric substitute-if-not! (new predicate collection &key from-end start count end key)
   (:documentation "Substitute non-matching item for new in place"))
 
-(defgeneric append (container &rest containers)
-  (:documentation "Append containers together with container"))
+(defgeneric append (collection &rest collections)
+  (:documentation "Append collections together with collection"))
 
-(defgeneric append! (container &rest containers)
+(defgeneric append! (collection &rest collections)
   (:documentation "Like append, but in place"))
 
-(defgeneric sort (container predicate &key key)
-  (:documentation "Sort the contents of a container"))
+(defgeneric sort (collection predicate &key key)
+  (:documentation "Sort the contents of a collection"))
 
-(defgeneric sort^ (container predicate &key key)
-  (:documentation "Sort the contents of a container destructively"))
+(defgeneric sort^ (collection predicate &key key)
+  (:documentation "Sort the contents of a collection destructively"))
 
-(defgeneric stable-sort (container predicate &key key)
+(defgeneric stable-sort (collection predicate &key key)
   (:documentation "Stable version of sort function"))
 
-(defgeneric stable-sort^ (container predicate &key key)
+(defgeneric stable-sort^ (collection predicate &key key)
   (:documentation "Destructive version of stable-sort"))
 
-(defgeneric merge (output-spec container1 container2 predicate &key key)
-  (:documentation "Merge 2 sorted containers"))
+(defgeneric merge (output-spec collection1 collection2 predicate &key key)
+  (:documentation "Merge 2 sorted collections"))
 
-(defgeneric merge^ (output-spec container1 container2 predicate &key key)
-  (:documentation "Merge 2 sorted containers destrucively"))
+(defgeneric merge^ (output-spec collection1 collection2 predicate &key key)
+  (:documentation "Merge 2 sorted collections destrucively"))

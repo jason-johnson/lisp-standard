@@ -36,10 +36,10 @@
 
 ;; Generic access
 
-(defmethod std.collection:get ((container simple-vector) index)
-  (get container index))
+(defmethod std.collection:get ((collection simple-vector) index)
+  (get collection index))
 
-(defmethod std.collection:put! ((container simple-vector) index value)
-  (setf (get container index) value))
+(defmethod std.collection:put! ((collection simple-vector) index value)
+  (setf (get collection index) value))
 
 ;; NOTE: vector and simple-vector are subtypes of array so the copy defined in the array module works for us too

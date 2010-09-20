@@ -45,31 +45,31 @@
 
 ;; Generic access
 
-(defmethod std.collection:get ((container vector) index)
-  (get container index))
+(defmethod std.collection:get ((collection vector) index)
+  (get collection index))
 
-(defmethod std.collection:put! ((container vector) index value)
-  (setf (get container index) value))
+(defmethod std.collection:put! ((collection vector) index value)
+  (setf (get collection index) value))
 
 ;; NOTE: vector and simple-vector are subtypes of array so the copy defined in the array module works for us too.  This also requires us to override the find methods
 
-(defmethod std.collection:reduce (function (container vector) &key key from-end (start 0) end (initial-value nil initial-value-p))
-  (apply #'reduce function container :key key :from-end from-end :start start :end end (if initial-value-p (list :initial-value initial-value))))
+(defmethod std.collection:reduce (function (collection vector) &key key from-end (start 0) end (initial-value nil initial-value-p))
+  (apply #'reduce function collection :key key :from-end from-end :start start :end end (if initial-value-p (list :initial-value initial-value))))
 
-(defmethod std.collection:find (item (container vector) &key from-end (start 0) end key test test-not)
-  (find item container :from-end from-end :test test :test-not test-not :start start :end end :key key))
+(defmethod std.collection:find (item (collection vector) &key from-end (start 0) end key test test-not)
+  (find item collection :from-end from-end :test test :test-not test-not :start start :end end :key key))
 
-(defmethod std.collection:find-if (predicate (container vector) &key from-end (start 0) end key)
-  (find-if predicate container :from-end from-end :start start :end end :key key))
+(defmethod std.collection:find-if (predicate (collection vector) &key from-end (start 0) end key)
+  (find-if predicate collection :from-end from-end :start start :end end :key key))
 
-(defmethod std.collection:find-if-not (predicate (container vector) &key from-end (start 0) end key)
-  (find-if-not predicate container :from-end from-end :start start :end end :key key))
+(defmethod std.collection:find-if-not (predicate (collection vector) &key from-end (start 0) end key)
+  (find-if-not predicate collection :from-end from-end :start start :end end :key key))
 
-(defmethod std.collection:sort ((container vector) predicate &key key)
-  (sort container predicate :key key))
+(defmethod std.collection:sort ((collection vector) predicate &key key)
+  (sort collection predicate :key key))
 
-(defmethod std.collection:stable-sort ((container vector) predicate &key key)
-  (stable-sort container predicate :key key))
+(defmethod std.collection:stable-sort ((collection vector) predicate &key key)
+  (stable-sort collection predicate :key key))
 
-(defmethod std.collection:merge ((output-spec (eql 'vector)) (container1 vector) (container2 vector) predicate &key key)
-  (merge container1 container2  predicate :key key))
+(defmethod std.collection:merge ((output-spec (eql 'vector)) (collection1 vector) (collection2 vector) predicate &key key)
+  (merge collection1 collection2  predicate :key key))
