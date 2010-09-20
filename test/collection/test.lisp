@@ -3,6 +3,79 @@
 (defun run-all-tests ()
   (run-tests :suite 'standard-collection-test))
 
+(defun %test-get (get collection index expected)
+  (ensure-same expected (funcall get collection index)))
+
+(defun %test-put! (get put! collection index old new)
+  (ensure-same old (funcall get collection index))
+  (funcall put! collection index new)
+  (ensure-same new (funcall get collection index)))
+
+(defun %test-copy (copy collection)
+  (let ((result (funcall copy collection))
+	(*lift-equality-test* 'equalp))
+    (ensure-same result collection)
+    (ensure-null (eq result collection))))
+
+(defun %test-reduce (reduce collection f expected from-end)
+  (let ((*lift-equality-test* 'equalp))
+    (ensure-same expected (funcall reduce f collection :from-end from-end))))
+
+(defun %test-reduce-with-i-v (reduce collection f expected from-end initial-value)
+  (let ((*lift-equality-test* 'equalp))
+    (ensure-same expected (funcall reduce f collection :from-end from-end :initial-value initial-value))))
+
+(defun %test-count (count collection item expected)
+  (ensure-same expected (funcall count item collection)))
+
+(defun %test-find (find collection item)
+  (ensure-same item (funcall find item collection)))
+
+(defun %test-find-if (find collection item)
+  (ensure-same item (funcall find (lambda (i) (eql i item)) collection)))
+
+(defun %test-find-if-not (find collection item)
+  (ensure-same item (funcall find (lambda (i) (not (eql i item))) collection)))
+
+(defun %test-remove^ (find remove^ collection item)
+  (ensure-same item (funcall find item collection))
+  (let ((result (funcall remove^ item collection)))
+    (ensure-null (funcall find item result))
+    (ensure-null (funcall find item collection)))) ; NOTE: This is not necassarily true.  E.g. if you use a vector and remove the last element, the vector will probably be unchanged
+
+(defun %test-remove (find remove collection item)
+  (ensure-same item (funcall find item collection))
+  (let ((result (funcall remove item collection)))
+    (ensure-null (funcall find item result))
+    (ensure-same item (funcall find item collection))))
+
+(defun %test-remove-if^ (find remove^ collection item)
+  (let ((f (lambda (i) (eql i item))))
+    (ensure-same item (funcall find f collection))
+    (let ((result (funcall remove^ f collection)))
+      (ensure-null (funcall find f result))
+      (ensure-null (funcall find f collection))))) ; NOTE: This is not necassarily true.  E.g. if you use a vector and remove the last element, the vector will probably be unchanged
+
+(defun %test-remove-if (find remove collection item)
+  (let ((f (lambda (i) (eql i item))))
+    (ensure-same item (funcall find f collection))
+    (let ((result (funcall remove f collection)))
+      (ensure-null (funcall find f result))
+      (ensure-same item (funcall find f collection)))))
+
+(defun %test-remove-if-not^ (find remove^ collection item)
+  (let ((f (lambda (i) (not (eql i item)))))
+    (ensure-same item (funcall find f collection))
+    (let ((result (funcall remove^ f collection)))
+      (ensure-null (funcall find f result))
+      (ensure-null (funcall find f collection))))) ; NOTE: This is not necassarily true.  E.g. if you use a vector and remove the last element, the vector will probably be unchanged
+
+(defun %test-remove-if-not (find remove collection item)
+  (let ((f (lambda (i) (not (eql i item)))))
+    (ensure-same item (funcall find f collection))
+    (let ((result (funcall remove f collection)))
+      (ensure-null (funcall find f result))
+      (ensure-same item (funcall find f collection)))))
 (deftestsuite standard-collection-test ()
   (-list- -array- -vector- -buffer- -string- -hash- -set-)
   (:setup
@@ -12,50 +85,6 @@
    (setf -buffer- (vector 'a 'b 'c))
    (setf -string- (string:copy "abc"))
    (setf -hash- (hash:copy #{1 a, 2 b, 3 c}))
-   (setf -set- (set:copy #[a b c])))
-  (:function
-   (%test-get (get collection index expected)
-	      (ensure-same expected (funcall get collection index))))
-  (:function
-   (%test-put! (get put! collection index old new)
-	       (ensure-same old (funcall get collection index))
-	       (funcall put! collection index new)
-	       (ensure-same new (funcall get collection index))))
-  (:function
-   (%test-copy (copy collection)
-	       (let ((result (funcall copy collection))
-		     (*lift-equality-test* 'equalp))
-		 (ensure-same result collection)
-		 (ensure-null (eq result collection)))))
-  (:function
-   (%test-reduce (reduce collection f expected from-end)
-		 (let ((*lift-equality-test* 'equalp))
-		   (ensure-same expected (funcall reduce f collection :from-end from-end)))))
-  (:function
-   (%test-reduce-with-i-v (reduce collection f expected from-end initial-value)
-		 (let ((*lift-equality-test* 'equalp))
-		   (ensure-same expected (funcall reduce f collection :from-end from-end :initial-value initial-value)))))
-  (:function
-   (%test-find (find item collection)
-	       (ensure-same item (funcall find item collection))))
-  (:function
-   (%test-find-if (find item collection)
-		  (ensure-same item (funcall find (lambda (i) (eql i item)) collection))))
-  (:function
-   (%test-find-if-not (find item collection)
-		      (ensure-same item (funcall find (lambda (i) (not (eql i item))) collection))))
-  (:function
-   (%test-remove^ (find remove^ item collection)
-		 (ensure-same item (funcall find item collection))
-		 (let ((result (funcall remove^ item collection)))
-		   (ensure-null (funcall find item result))
-		   (ensure-null (funcall find item collection))))) ; NOTE: This is not necassarily true.  E.g. if you use a vector and remove the last element, the vector will probably be unchanged
-  (:function
-   (%test-remove (find remove item collection)
-		 (ensure-same item (funcall find item collection))
-		 (let ((result (funcall remove item collection)))
-		   (ensure-null (funcall find item result))
-		   (ensure-same item (funcall find item collection))))))
 
 (addtest test-get
   (flet ((test (collection index expected)
