@@ -97,12 +97,12 @@
 (deftestsuite standard-collection-test ()
   (-list- -array- -vector- -buffer- -string- -hash- -set-)
   (:setup
-   (setf -list- (list 'a 'b 'c))
-   (setf -array- (array:make '(2 2) :initial-contents '((a b) (c d))))
-   (setf -vector- (vector:make 3 :adjustable t :initial-contents (list 'a 'b 'c) :fill-pointer 3))
-   (setf -buffer- (vector 'a 'b 'c))
-   (setf -string- (string:copy "abc"))
-   (setf -hash- (hash:copy #{1 a, 2 b, 3 c}))
+   (setf -list- (list 'a 'b 'c 'a))
+   (setf -array- (array:make '(2 2) :initial-contents '((a b) (c a))))
+   (setf -vector- (vector:make 4 :adjustable t :initial-contents (list 'a 'b 'c 'a) :fill-pointer 4))
+   (setf -buffer- (vector 'a 'b 'c 'a))
+   (setf -string- (string:copy "abca"))
+   (setf -hash- (hash:copy #{1 a, 2 b, 3 c, 4 a}))
    (setf -set- (set:copy #[a b c]))))
 
 (add-collection-tests
@@ -131,24 +131,24 @@
   (addtest test-reduce-buffer
     (test (vector 1 2 3)))
   (addtest test-reduce-string
-    (test -string- #'list (list (list #\a #\b) #\c)))
+    (test -string- #'list (list (list (list #\a #\b) #\c) #\a)))
   (addtest test-reduce-hash
     (test (hash:copy #{a 1, b 2, c 3})))
   (addtest test-reduce-set
     (test (set:copy #[1 2 3]))))
 
-(flet ((test (collection &optional (expected (list 'a 'b 'c)) (fun #'cons))
+(flet ((test (collection &optional (expected (list 'a 'b 'c 'a)) (fun #'cons))
 	 (%test-reduce-with-i-v #'std:reduce collection fun expected t nil)))
   (addtest test-reduce-from-end-list
     (test -list-))
   (addtest test-reduce-from-end-array
-    (test -array- (list 'a 'b 'c 'd)))
+    (test -array-))
   (addtest test-reduce-from-end-vector
     (test -vector-))
   (addtest test-reduce-from-end-buffer
     (test -buffer-))
   (addtest test-reduce-from-end-string
-    (test -string- (list #\a #\b #\c)))
+    (test -string- (list #\a #\b #\c #\a)))
   (addtest test-reduce-from-end-hash
     (test -hash-))
   (addtest test-reduce-from-end-set
@@ -157,7 +157,7 @@
 (add-collection-tests
  count
  %test-count (#'std:count) (item expected)
- (list array vector buffer (string #\b 1) hash set) ('b 1))
+ (list array vector buffer (string #\a 2) hash set) ('a 2))
 
 (add-collection-tests
  find
