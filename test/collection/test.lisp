@@ -217,7 +217,7 @@
   (%test-copy #'buffer:copy -buffer-))
 
 (addtest test-remove^
-  (%test-remove^ #'buffer:find #'buffer:remove^ 'b -buffer-))
+  (%test-remove^ #'buffer:find #'buffer:remove^ -buffer- 'b))
 
 (addtest test-remove
-  (%test-remove #'buffer:find #'buffer:remove 'b -buffer-))
+  (%test-remove #'buffer:find #'buffer:remove -buffer- 'b))
