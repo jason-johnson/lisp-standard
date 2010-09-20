@@ -115,17 +115,17 @@
 	 s end
 	 e start
 	 step #'1-
-	 check #'<=)
+	 check #'<)
 	(setf
 	 s start
 	 e end
 	 step #'1+
-	 check #'>=))
-    (cl:do* ((i s (funcall step i))
-	     (item (row-major-get array i) (row-major-get array i)))
+	 check #'>))
+    (cl:do* ((i s (funcall step i)))
 	    ((funcall check i e))
-      (if (funcall p item)
-	  (return-from find-if item)))))
+      (let ((item (row-major-get array i)))
+	(if (funcall p item)
+	    (return-from find-if item))))))
 
 (defun find-if-not (predicate array &key from-end (start 0) end key)
   (find-if (compose #'not predicate) array :from-end from-end :start start :end end :key key))
