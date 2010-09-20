@@ -76,6 +76,24 @@
     (let ((result (funcall remove f collection)))
       (ensure-null (funcall find f result))
       (ensure-same item (funcall find f collection)))))
+
+(defmacro add-collection-tests (name local-test-fun target-test-funs extra-args collections default-args)
+  (flet ((as-symbol (&rest args)
+	   (intern (string-upcase (apply #'format nil args)))))
+    `(flet ((test (collection ,@extra-args)
+	      (,local-test-fun ,@target-test-funs collection ,@extra-args)))
+       ,@(loop for c in collections
+	    collect (let (cc args)
+		      (if (atom c)
+			  (setf
+			   cc c
+			   args default-args)
+			  (setf
+			   cc (first c)
+			   args (rest c)))
+		      `(addtest ,(as-symbol "test-~a-~a" name cc)
+			(test ,(as-symbol "-~a-" cc) ,@args)))))))
+
 (deftestsuite standard-collection-test ()
   (-list- -array- -vector- -buffer- -string- -hash- -set-)
   (:setup
@@ -85,35 +103,22 @@
    (setf -buffer- (vector 'a 'b 'c))
    (setf -string- (string:copy "abc"))
    (setf -hash- (hash:copy #{1 a, 2 b, 3 c}))
+   (setf -set- (set:copy #[a b c]))))
 
-(addtest test-get
-  (flet ((test (collection index expected)
-	     (%test-get #'collection:get collection index expected)))
-    (test -list- 1 'b)
-    (test -vector- 1 'b)
-    (test -buffer- 1 'b)
-    (test -string- 1 #\b)
-    (test -hash- 2 'b)))
+(add-collection-tests
+ get
+ %test-get (#'std:get) (index expected)
+ (list (array (list 0 1) 'b)  vector buffer (string 1 #\b) (hash 2 'b)) (1 'b))
 
-(addtest test-put!
-  (flet ((test (collection index old new)
-	   (%test-put! #'collection:get #'collection:put! collection index old new)))
-    (test -list- 1 'b 'z)
-    (test -vector- 1 'b 'z)
-    (test -buffer- 1 'b 'z)
-    (test -string- 1 #\b #\z)
-    (test -hash- 2 'b 'z)))
+(add-collection-tests
+ put!
+ %test-put! (#'std:get #'std:put!) (index old new)
+(list (array (list 0 1) 'b 'z) vector buffer (string 1 #\b #\z) (hash 2 'b 'z)) (1 'b 'z))
 
-(addtest test-copy
-  (flet ((test (collection)
-	   (%test-copy #'collection:copy collection)))
-    (test -list-)
-    (test -array-)
-    (test -vector-)
-    (test -buffer-)
-    (test -string-)
-    (test -hash-)
-    (test -set-)))
+(add-collection-tests
+ copy
+ %test-copy (#'std:copy) ()
+ (list array vector buffer string hash set) ())
 
 (addtest test-reduce
   (flet ((test (collection &optional (fun #'+) (expected 6))
@@ -137,54 +142,55 @@
     (test -hash-)
     (test -set-)))
 
-(addtest test-find
-  (flet ((test (collection item)
-	   (%test-find #'collection:find item collection)))
-    (test -list- 'b)
-    (test -array- 'b)
-    (test -vector- 'b)
-    (test -buffer- 'b)
-    (test -string- #\b)
-    (test -hash- 'b)
-    (test -set- 'b)))
+(add-collection-tests
+ count
+ %test-count (#'std:count) (item expected)
+ (list array vector buffer (string #\b 1) hash set) ('b 1))
 
-(addtest test-find-if
-  (flet ((test (collection item)
-	   (%test-find-if #'collection:find-if item collection)))
-    (test -list- 'b)
-    (test -array- 'b)
-    (test -vector- 'b)
-    (test -buffer- 'b)
-    (test -string- #\b)
-    (test -hash- 'b)
-    (test -set- 'b)))
+(add-collection-tests
+ find
+ %test-find (#'std:find) (item)
+ (list array vector buffer (string #\b) hash set) ('b))
 
-(addtest test-find-if-not
-  (flet ((test (collection item)
-	   (%test-find-if-not #'collection:find-if-not item collection)))
-    (test -list- 'b)
-    (test -array- 'b)
-    (test -vector- 'b)
-    (test -buffer- 'b)
-    (test -string- #\b)
-    (test -hash- 'b)
-    (test -set- 'b)))
+(add-collection-tests
+ find-if
+ %test-find-if (#'std:find-if) (item)
+ (list array vector buffer (string #\b) hash set) ('b))
 
-(addtest test-remove^
-  (flet ((test (collection item)
-	   (%test-remove^ #'collection:find #'collection:remove^ item collection)))
-    (test -list- 'b)
-    (test -vector- 'b)
-    (test -buffer- 'b)
-    (test -string- #\b)))
+(add-collection-tests
+ find-if-not
+ %test-find-if-not (#'std:find-if-not) (item)
+ (list array vector buffer (string #\b) hash set) ('b))
 
-(addtest test-remove
-  (flet ((test (collection item)
-	   (%test-remove #'collection:find #'collection:remove item collection)))
-    (test -list- 'b)
-    (test -vector- 'b)
-    (test -buffer- 'b)
-    (test -string- #\b)))    
+(add-collection-tests
+ remove^
+ %test-remove^ (#'std:find #'std:remove^) (item)
+ (list vector buffer (string #\b)) ('b))
+
+(add-collection-tests
+ remove
+ %test-remove (#'std:find #'std:remove) (item)
+ (list vector buffer (string #\b)) ('b))
+
+(add-collection-tests
+ remove-if^
+ %test-remove-if^ (#'std:find-if #'std:remove-if^) (item)
+ (list vector buffer (string #\b)) ('b))
+
+(add-collection-tests
+ remove-if
+ %test-remove-if (#'std:find-if #'std:remove-if) (item)
+ (list vector buffer (string #\b)) ('b))
+
+(add-collection-tests
+ remove-if-not^
+ %test-remove-if-not^ (#'std:find-if-not #'std:remove-if-not^) (item)
+ (list vector buffer (string #\b)) ('b))
+
+(add-collection-tests
+ remove-if-not
+ %test-remove-if-not (#'std:find-if-not #'std:remove-if-not) (item)
+ (list vector buffer (string #\b)) ('b))
 
 (deftestsuite standard-collection-buffer-test (standard-collection-test)
   ())
