@@ -83,6 +83,18 @@
       (ensure-null (funcall find f result))
       (ensure-same item (funcall find f collection)))))
 
+(defun %test-remove-duplicates (count remove collection item starting)
+  (ensure-same starting (funcall count item collection))
+  (let ((result (funcall remove collection)))
+    (ensure-same 1 (funcall count item result))
+    (ensure-same starting (funcall count item collection))))
+
+(defun %test-remove-duplicates^ (count remove^ collection item starting)
+  (ensure-same starting (funcall count item collection))
+  (let ((result (funcall remove^ collection)))
+    (ensure-same 1 (funcall count item result))
+    (ensure (not (equalp result collection)))))
+
 (defmacro add-collection-tests (name local-test-fun target-test-funs extra-args collections default-args)
   (flet ((as-symbol (&rest args)
 	   (intern (string-upcase (apply #'format nil args)))))
@@ -219,6 +231,16 @@
  remove-if-not
  %test-remove-if-not (#'std:find-if-not #'std:remove-if-not) (item)
  (list vector buffer (string #\b)) ('b))
+
+(add-collection-tests
+ remove-duplicates
+ %test-remove-duplicates (#'std:count #'std:remove-duplicates) (item starting)
+ (list array vector buffer (string #\a 2) hash (set 'a 1)) ('a 2))
+
+(add-collection-tests
+ remove-duplicates^
+ %test-remove-duplicates^ (#'std:count #'std:remove-duplicates^) (item starting)
+ (list array vector buffer (string #\a 2) hash (set 'a 1)) ('a 2))
 
 (deftestsuite standard-collection-buffer-test (standard-collection-test)
   ())
