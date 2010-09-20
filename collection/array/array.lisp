@@ -43,7 +43,7 @@
 (defun length (array)			; TODO: Is this what we want?  We already have total-size for total size, but this is different than everything else we do with arrays
   (first (dimensions array)))		; TODO: I don't think so.  Since all functions use the total-size, length wouldn't be useful for anything
 
-; TODO: This function needs lots of efficiency work
+; TODO: This function needs some efficiency work
 (defun map (function &rest arrays)
   (declare (optimize (debug 3) (speed 0) (space 0)))
   (let* ((dimensions-list (apply #'mapcar #'min (mapcar #'dimensions arrays)))
