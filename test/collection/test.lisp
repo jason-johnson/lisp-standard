@@ -246,7 +246,7 @@
 (add-collection-tests
  remove-duplicates^
  %test-remove-duplicates^ (#'std:count #'std:remove-duplicates^) (item starting)
- (list array vector buffer (string #\a 2) hash (set 'a 1)) ('a 2))
+ (((list (list 'a 'b 'a 'a 'c 'a)) 'a 4) array vector buffer (string #\a 2) hash (set 'a 1)) ('a 2))
 
 (deftestsuite standard-collection-buffer-test (standard-collection-test)
   ())
