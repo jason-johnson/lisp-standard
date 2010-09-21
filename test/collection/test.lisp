@@ -91,9 +91,10 @@
 
 (defun %test-remove-duplicates^ (count remove^ collection item starting)
   (ensure-same starting (funcall count item collection))
-  (let ((result (funcall remove^ collection)))
+  (let ((original (std:copy collection))
+	(result (funcall remove^ collection)))
     (ensure-same 1 (funcall count item result))
-    (ensure (not (equalp result collection)))))
+    (ensure (not (equalp original collection)))))
 
 (defmacro add-collection-tests (name local-test-fun target-test-funs extra-args collections default-args)
   (flet ((as-symbol (&rest args)
