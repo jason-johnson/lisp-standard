@@ -102,7 +102,7 @@
     `(flet ((test (collection ,@extra-args)
 	      (,local-test-fun ,@target-test-funs collection ,@extra-args)))
        ,@(loop for c in collections
-	    collect (let (cc args)
+	    collect (let (cc args collection)
 		      (if (atom c)
 			  (setf
 			   cc c
@@ -110,8 +110,13 @@
 			  (setf
 			   cc (first c)
 			   args (rest c)))
+		      (if (atom cc)
+			  (setf collection (as-symbol "-~a-" cc))
+			  (setf
+			   collection (second cc)
+			   cc (first cc)))
 		      `(addtest ,(as-symbol "test-~a-~a" name cc)
-			(test ,(as-symbol "-~a-" cc) ,@args)))))))
+			(test ,collection ,@args)))))))
 
 (deftestsuite standard-collection-test ()
   (-list- -array- -vector- -buffer- -string- -hash- -set-)
