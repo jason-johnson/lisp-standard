@@ -96,6 +96,20 @@
     (ensure-same 1 (funcall count item result))
     (ensure (not (equalp original collection)))))
 
+(defun %test-reverse (reverse collection)
+  (let ((result (funcall reverse collection)))
+    (ensure-null (equalp result collection))
+    (setf result (funcall reverse result))
+    (ensure (equalp result collection))))
+
+(defun %test-reverse^ (reverse^ collection)
+  (let ((original (std:copy collection))
+	(result (funcall reverse^ collection)))
+    (ensure-null (equalp result original))
+    (ensure-null (equalp original collection))
+    (setf result (funcall reverse^ result))
+    (ensure (equalp result original))))
+
 (defmacro add-collection-tests (name local-test-fun target-test-funs extra-args collections)
   (flet ((strip-defaults (args)
 	   (mapcar
@@ -236,6 +250,16 @@
  remove-duplicates^
  %test-remove-duplicates^ (#'std:count #'std:remove-duplicates^) ((item 'a) (starting 2))
  (((list (list 'a 'b 'a 'a 'c 'a)) 'a 4) array vector buffer (string #\a 2) hash (set 'a 1)))
+
+(add-collection-tests
+ reverse
+ %test-reverse (#'std:reverse) ()
+ (list array vector buffer string hash set))
+
+(add-collection-tests
+ reverse^
+ %test-reverse^ (#'std:reverse^) ()
+ (list array vector buffer string hash set))
 
 (deftestsuite standard-collection-buffer-test (standard-collection-test)
   ())
