@@ -39,7 +39,11 @@
 				     (:module hash
 					      :components ((:file "package")
 							   (:file "hash" :depends-on ("package"))
-							   (:file "generic" :depends-on ("package" "hash")))
+							   (:module values
+								    :components ((:file "package")
+										 (:file "values" :depends-on ("package")))
+								    :depends-on ("package" "hash"))
+							   (:file "generic" :depends-on ("package" "hash" #:values)))
 					      :depends-on ("package" "collection" #:array #:vector))
 				     (:module set
 					      :components ((:file "package")
