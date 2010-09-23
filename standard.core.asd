@@ -38,7 +38,8 @@
 					      :depends-on ("package" "collection" "aliases" #:array #:vector #:impl-common))
 				     (:module hash
 					      :components ((:file "package")
-							   (:file "hash" :depends-on ("package")))
+							   (:file "hash" :depends-on ("package"))
+							   (:file "generic" :depends-on ("package" "hash")))
 					      :depends-on ("package" "collection" #:array #:vector))
 				     (:module set
 					      :components ((:file "package")
