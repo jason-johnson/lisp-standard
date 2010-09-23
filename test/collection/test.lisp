@@ -110,6 +110,22 @@
     (setf result (funcall reverse^ result))
     (ensure (equalp result original))))
 
+(defun %test-substitute (substitute count collection old new)
+  (let ((c (funcall count old collection))
+	(result (funcall substitute new old collection)))
+    (ensure (< 0 c))
+    (ensure-same c (funcall count old collection))
+    (ensure-same 0 (funcall count old result))
+    (ensure-same c (funcall count new result))))
+
+(defun %test-substitute! (substitute! count collection old new)
+  (let ((c (funcall count old collection))
+	(result (funcall substitute! new old collection)))
+    (ensure (< 0 c))
+    (ensure-same 0 (funcall count old collection))
+    (ensure-same c (funcall count new collection))
+    (ensure (equalp result collection))))
+
 (defmacro add-collection-tests (name local-test-fun target-test-funs extra-args collections)
   (flet ((strip-defaults (args)
 	   (mapcar
@@ -260,6 +276,16 @@
  reverse^
  %test-reverse^ (#'std:reverse^) ()
  (list array vector buffer string hash set))
+
+(add-collection-tests
+ substitute
+ %test-substitute (#'std:substitute #'std:count) ((old 'a) (new 'z))
+ (list array vector buffer (string #\a #\z) hash set))
+
+(add-collection-tests
+ substitute!
+ %test-substitute! (#'std:substitute! #'std:count) ((old 'a) (new 'z))
+ (list array vector buffer (string #\a #\z) hash set))
 
 (deftestsuite standard-collection-buffer-test (standard-collection-test)
   ())
