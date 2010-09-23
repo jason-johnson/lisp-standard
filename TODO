@@ -8,18 +8,15 @@ We should also consider a "deep-copy" that does a deeper copy than the default (
 
 Maybe options to the different collections should be seperated by a |, e.g.  #{:test equal, :size 10| this 1, that 2, the 3, other 4} and #[:test equal, :size 10| 1 2 3 4 5].  We could also make only "simple" hashes/sets printable.  If any options are used then the hash/set isn't simple and wont be printed out.  Kind of following existing CL behavior.
 
-We'll have to get some experience with array to see if the current syntax is ok or if (defun get (array &rest indexes)) would be better.  We can do that because we have to use apply in any case.  The problem is that it can't be consistant with generic get then. UPDATE: How do you deal with put! then?
-
+We'll have to get some experience with array to see if the current syntax is ok or if (defun get (array &rest indexes)) would be better.  We can do that because we have to use apply in any case.  The problem is that it can't be consistant with generic get then.
 
 I will probably want to create my own defgeneric that allows the defaults to be declared in the defgeneric call, since that makes more sense.  If a method doesn't define any, what was defined in the defgeneric is used, but defmethod always overrides if spcified.  I could create my own generic function object to ensure that I have to do the minimal work.  That way the normal method detection (with the lambda list) works properly, and then I add the defaults to the method after the fact.
 
+UPDATE: This wont work because then you could never define a generic method that didn't have default values
 
-For the ! functions that one can actually depend on the value being set, what do we do?  There should be a difference between "this function destroys its argument, and the argument isn't useful afterwards" and "this function modifies its argument, but can then be used".  Or maybe there shouldn't, maybe we just say if there is a ! you have to assign the result.
-
-UPDATE:
 I want to make destructive versions of functions that destroy their arguments be noted with a ' (to indicate a more efficient version of the function) and ! for functions that modify their argument (but it can be used afterward).  I would have to use e.g ^ instead of ' since ' is the quote operator
 
-
+For hash I should probably make the local collection functions have value and key variations (e.g. key-find-if/value-find-if) because for a hash the interesting data could be either the key (e.g. a hash with a complex structure for a key and its count as the value) *or* the value or both.  Then the generic functions just call the value versions.  We could even have a variation that doesn't have the key/value prefix that works on pairs of key values.  This would make it consistent with e.g. hash:remove.  It should only be the collection generic functions that view e.g. a hash as a collection of values that just happens to have different indexing.  The local functions should not have this behavior, that's why we use them.
 
 I am considering changing some of the functions that want an output spec to continue to function that way and do the generic dispatch based on the symbol.  At least concatenate should work like this
 
