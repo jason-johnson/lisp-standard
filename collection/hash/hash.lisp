@@ -61,8 +61,24 @@
     (do ((key value) hash result)
 	(put! result key value))))
 
-;; These functions should go in the hash.values namespace.  Need to split out this code into files.  collection.lisp is for generic collection overrides, etc.  collection is last in dependencies, but in hash namespace so it can use fully qualified from
-;; hash.values without depending on it in a use
+;; Operations across pairs
+
+(defun reduce (function hash &key key from-end (initial-value nil initial-value-p))
+  (let ((last-result initial-value)
+	(has-value initial-value-p)
+	(f (if from-end
+	       (lambda (r v) (funcall function v r))
+	       function)))
+    (do ((k v) hash last-result)
+	(let* ((val (cons k v))
+	       (value (if key		; TODO: Would it be faster to set key to id by default and always call it?
+		     (funcall key val)
+		     val)))
+	      (setf last-result
+		    (if has-value
+			(funcall f last-result value)
+			value)
+		    has-value t)))))
 
 ;; Read/write macros
 
