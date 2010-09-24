@@ -39,6 +39,10 @@
 				     (:module hash
 					      :components ((:file "package")
 							   (:file "hash" :depends-on ("package"))
+							   (:module keys
+								    :components ((:file "package")
+										 (:file "keys" :depends-on ("package")))
+								    :depends-on ("package" "hash"))
 							   (:module values
 								    :components ((:file "package")
 										 (:file "values" :depends-on ("package")))
