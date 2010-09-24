@@ -41,6 +41,12 @@
 (defun remove! (hash key)
   (remhash key hash))
 
+;; Actions for the whole hash
+
+(defun-alias 'hash-table-count 'length)
+
+(defun-alias 'maphash 'map)
+
 (defmacro do (((key value) hash &optional result) &body body) ;TODO: Needs a with-gensyms on hash
   "Iterate over a hash.  key or value can be set to nil if not used"
   `(loop
