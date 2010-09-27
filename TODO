@@ -16,7 +16,7 @@ UPDATE: This wont work because then you could never define a generic method that
 
 I want to make destructive versions of functions that destroy their arguments be noted with a ' (to indicate a more efficient version of the function) and ! for functions that modify their argument (but it can be used afterward).  I would have to use e.g ^ instead of ' since ' is the quote operator
 
-For hash I should probably make the local collection functions have value and key variations (e.g. key-find-if/value-find-if) because for a hash the interesting data could be either the key (e.g. a hash with a complex structure for a key and its count as the value) *or* the value or both.  Then the generic functions just call the value versions.  We could even have a variation that doesn't have the key/value prefix that works on pairs of key values.  This would make it consistent with e.g. hash:remove.  It should only be the collection generic functions that view e.g. a hash as a collection of values that just happens to have different indexing.  The local functions should not have this behavior, that's why we use them.
+NOTE: hash.keys and hash.values do not provide a map function.  This is because it is not clear what kind of result they should return.
 
 I am considering changing some of the functions that want an output spec to continue to function that way and do the generic dispatch based on the symbol.  At least concatenate should work like this
 
