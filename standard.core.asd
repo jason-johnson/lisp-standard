@@ -14,7 +14,11 @@
 				     (:file "aliases" :depends-on ("package"))
 				     (:module impl-common
 					      :components ((:file "package")
-							   (:file "impl-common" :depends-on ("package")))
+							   (:file "impl-common" :depends-on ("package"))
+							   (:module unordered
+								    :components ((:file "package")
+										 (:file "unordered"))
+								    :depends-on ()))
 					      :depends-on ("package" "collection"))
 				     (:module list
 					      :components ((:file "package")
