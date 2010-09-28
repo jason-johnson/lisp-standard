@@ -110,6 +110,12 @@
     (setf result (funcall reverse^ result))
     (ensure (equalp result original))))
 
+(defun %test-fill (count fill collection item)
+  (ensure-same 0 (funcall count item collection))
+  (let ((result (funcall fill collection item :end 2)))
+    (ensure-same 2 (funcall count item result))
+    (ensure (equalp result collection))))
+
 (defun %test-substitute (substitute count collection old new)
   (let ((c (funcall count old collection))
 	(result (funcall substitute new old collection)))
@@ -278,6 +284,11 @@
  reverse^
  %test-reverse^ (#'std:reverse^) ()
  (list array vector buffer string))
+
+(add-collection-tests
+ fill
+ %test-fill (#'std:count #'std:fill) ((item 'z))
+ (list array vector buffer (string #\z)))
 
 (add-collection-tests
  substitute

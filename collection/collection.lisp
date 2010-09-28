@@ -63,6 +63,9 @@
 (defgeneric reverse^ (collection)
   (:documentation "Reverse the contents of a collection in place (destructive)"))
 
+(defgeneric fill (collection item &key start end)
+  (:documentation "Replace specified elements of COLLECTION with ITEM"))
+
 (defgeneric substitute (new old collection &key from-end test test-not start count end key)
   (:documentation "Substitute old item for new"))
 

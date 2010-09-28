@@ -71,6 +71,9 @@
 (defmethod std.collection:reverse^ ((collection sequence))
   (reverse^ collection))
 
+(defmethod std.collection:fill ((collection sequence) item &key (start 0) end)
+  (fill collection item :start start :end end))
+
 (defmethod std.collection:substitute (new old (collection sequence) &key from-end (test #'eql) test-not (start 0) count end key)
   (substitute new old collection :from-end from-end :test test :test-not test-not :start start :end end :count count :key key))
 
