@@ -65,6 +65,9 @@
 (defmacro dec! (place &optional (delta 1))
   `(decf ,place ,delta))
 
+(defmacro rotate! (&rest args)
+  `(rotatef ,@args))
+
 ;; TODO: Look into adding the ability to add documentation to destination
 ;; TODO: Update: documentation lives with the function, not the symbol so changing the documentation of the alias changes it for both. :(
 ;; TODO: UPDATE: This macro could be changed to declare the "alias" inline and then just define it as a function that calls the aliased function.
