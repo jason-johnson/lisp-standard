@@ -6,11 +6,7 @@
 (defgeneric put! (collection key value)
   (:documentation "Put value at key"))
 
-;; TODO: I will probably want to create my own defgeneric that allows the defaults to be declared here, since this makes more sense.  If a method doesn't define any then
-;; TODO: what was defined in the defgeneric is used, but defmethod always overrides if specified.  I could create my own generic function object to ensure that I have
-;; TODO: have to do the minimal work.  That way the normal method detection (with the labmda list) works properly, and then I add the defaults to the method after the fact.
 
-;; TODO: Update, this may be a bad idea because sometimes the overriding method really doesn't want any defaults.  If I did the above that would cause it to take the generic defaults
 
 (defgeneric count (item collection &key from-end start end key test test-not)
   (:documentation "How many times item occurs in collection"))
