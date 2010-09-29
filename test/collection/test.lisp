@@ -263,16 +263,16 @@
  %test-remove-if-not (#'std:find-if-not #'std:remove-if-not) ((item 'b))
  (list vector buffer (string #\b)))
 
-;; NOTE: Hash makes no sense for remove-duplicates because keys are also relevant (how do you know which to keep?)
+;; NOTE: Hash makes no sense for remove-duplicates because keys are also relevant (how do you know which to keep?).  Array makes no sense because how would you truncate on subarray but not the other at that level
 (add-collection-tests
  remove-duplicates
  %test-remove-duplicates (#'std:count #'std:remove-duplicates) ((item 'a) (starting 2))
- (list array vector buffer (string #\a 2) (set 'a 1)))
+ (list vector buffer (string #\a 2) (set 'a 1)))
 
 (add-collection-tests
  remove-duplicates^
  %test-remove-duplicates^ (#'std:count #'std:remove-duplicates^) ((item 'a) (starting 2))
- (((list (list 'a 'b 'a 'a 'c 'a)) 'a 4) array vector buffer (string #\a 2) (set 'a 1)))
+ (((list (list 'a 'b 'a 'a 'c 'a)) 'a 4) vector buffer (string #\a 2) (set 'a 1)))
 
 ;; NOTE: Hash and Set can't be reversed because they're not ordered
 (add-collection-tests
