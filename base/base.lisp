@@ -89,3 +89,9 @@
 
 (defmethod copy (object)
   object)				; Immediate objects are immutable and don't need to be copied
+
+(defgeneric coerce (object output-spec)
+  (:documentation "Convert OBJECT into OUTPUT-SPEC"))
+
+(defmethod coerce (object output-spec)
+  (cl:coerce object output-spec))

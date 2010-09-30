@@ -3,6 +3,7 @@
 (defpackage #:standard.base
   (:nicknames #:std.base)
   (:use #:cl)
+  (:shadow #:coerce)
   (:export
    #:defun-alias
    #:def-metapackage
@@ -13,4 +14,5 @@
    #:dec!
    #:rotate!
    #:compose
-   #:copy))
+   #:copy
+   #:coerce))
