@@ -86,3 +86,6 @@
 
 (defgeneric copy (object)
   (:documentation "Get a copy of object"))
+
+(defmethod copy (object)
+  object)				; Immediate objects are immutable and don't need to be copied
