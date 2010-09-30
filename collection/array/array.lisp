@@ -40,8 +40,10 @@
 
 ; NOTE: We don't define a put! since we can't sensibly define one with &rest subscripts
 
-(defun length (array)			; TODO: Is this what we want?  We already have total-size for total size, but this is different than everything else we do with arrays
-  (first (dimensions array)))		; TODO: I don't think so.  Since all functions use the total-size, length wouldn't be useful for anything
+(defun-alias 'total-size 'length)
+
+;; (defun length (array)			; TODO: Is this what we want?  We already have total-size for total size, but this is different than everything else we do with arrays
+;;   (first (dimensions array)))		; TODO: I don't think so.  Since all functions use the total-size, length wouldn't be useful for anything
 
 ; TODO: This function needs some efficiency work
 (defun map (function &rest arrays)
