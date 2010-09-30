@@ -45,7 +45,6 @@
 
 ; TODO: This function needs some efficiency work
 (defun map (function &rest arrays)
-  (declare (optimize (debug 3) (speed 0) (space 0)))
   (let* ((dimensions-list (apply #'mapcar #'min (mapcar #'dimensions arrays)))
 	 (result (make dimensions-list))
 	 (dimensions (coerce dimensions-list 'vector))
