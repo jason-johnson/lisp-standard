@@ -39,18 +39,3 @@
 (defmethod std.collection:count-if-not (predicate (collection hash-table) &key from-end start end key)
   (declare (ignore from-end start end))
   (hash.values:count-if-not predicate collection key))
-
-;; NOTE: count ignored because it makes no sense.  If the user wants to remove all but one they can use remove-duplicates
-;; (defmethod std.collection:remove^ (item (collection hash-table) &key from-end test test-not start end count key)
-;;   (declare (ignore from-end start end count))
-;;   (cond
-;;     (test (remove-if^ (lambda (v) (funcall test v item)) collection key))
-;;     (test-not (remove-if-not^ (lambda (v) (funcall test-not v item)) collection key))
-;;     (t (remove-if^ (lambda (v) (eql v item)) collection key))))
-
-;; (defmethod std.collection:remove (item (collection hash-table) &key from-end test test-not start end count key)
-;;   (declare (ignore from-end start end count))
-;;   (cond
-;;     (test (remove-if (lambda (v) (funcall test v item)) collection key))
-;;     (test-not (remove-if-not (lambda (v) (funcall test-not v item)) collection key))
-;;     (t (remove-if (lambda (v) (eql v item)) collection key))))
