@@ -6,6 +6,8 @@
 (defgeneric put! (collection key value)
   (:documentation "Put value at key"))
 
+(defgeneric length (collection)
+  (:documentation "Length of COLLECTION"))
 
 
 (defgeneric count (item collection &key from-end start end key test test-not)

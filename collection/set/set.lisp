@@ -138,6 +138,9 @@
 (defmethod std.base:copy ((collection set))
   (copy collection))
 
+(defmethod std.collection:length ((collection set))
+  (length collection))
+
 (defmethod std.collection:count (item (collection set) &key from-end start end key test test-not)
   (declare (ignore from-end start end))
   (count item collection :key key :test test :test-not test-not))

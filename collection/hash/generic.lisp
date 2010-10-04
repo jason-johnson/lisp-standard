@@ -9,6 +9,9 @@
 (defmethod std.base:copy ((collection hash-table))
   (copy collection))
 
+(defmethod std.collection:length ((collection hash-table))
+  (length collection))
+
 (defmethod std.collection:reduce (function (collection hash-table) &key key from-end start end (initial-value nil initial-value-p))
   (declare (ignore start end))
   (apply #'hash.values:reduce function collection :key key :from-end from-end (if initial-value-p (list :initial-value initial-value))))
