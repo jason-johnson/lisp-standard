@@ -31,7 +31,7 @@
 		  (incf count)))))
 
        (defun ,count-if-not (predicate ,name &optional key)
-	 (,count-if (compose #'not predicate) ,name key))
+	 (,count-if (complement predicate) ,name key))
 
        (defun ,count (item ,name &key key test test-not)
 	 (cond
@@ -49,7 +49,7 @@
 		    (return-from ,find-if ,val))))))
 
        (defun ,find-if-not (predicate ,name &optional key)
-	 (,find-if (compose #'not predicate) ,name key))
+	 (,find-if (complement predicate) ,name key))
 
        (defun ,find (item ,name &key key test test-not)
 	 (cond

@@ -100,7 +100,7 @@
 	  (incf count)))))
 
 (defun count-if-not (predicate array &key from-end (start 0) end key)
-  (count-if (compose #'not predicate) array :from-end from-end :start start :end end :key key))
+  (count-if (complement predicate) array :from-end from-end :start start :end end :key key))
 
 (defun count (item array &key from-end (start 0) end key test test-not)
   (cond
@@ -161,7 +161,7 @@
 	    (return-from find-if item))))))
 
 (defun find-if-not (predicate array &key from-end (start 0) end key)
-  (find-if (compose #'not predicate) array :from-end from-end :start start :end end :key key))
+  (find-if (complement predicate) array :from-end from-end :start start :end end :key key))
 
 (defun find (item array &key from-end (start 0) end key test test-not)
   (cond
