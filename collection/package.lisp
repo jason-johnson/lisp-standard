@@ -37,6 +37,9 @@
    #:remove^
    #:map-to
    #:map
+   #:split
+   #:split-if
+   #:split-if-not
    #:count
    #:count-if
    #:count-if-not

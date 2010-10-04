@@ -10,6 +10,15 @@
   (:documentation "Length of COLLECTION"))
 
 
+(defgeneric split (delimiter collection &key key from-end start end count test test-not remove-empty)
+  (:documentation "Split COLLECTION into subcollections based on DELIMITER"))
+
+(defgeneric split-if (predicate collection &key key from-end start end count remove-empty)
+  (:documentation "Split COLLECTION into subcollections based on PREDICATE"))
+
+(defgeneric split-if-not (predicate collection &key key from-end start end count remove-empty)
+  (:documentation "Split COLLECTION into subcollections base on not satisfying PREDICATE"))
+
 (defgeneric count (item collection &key from-end start end key test test-not)
   (:documentation "How many times item occurs in collection"))
 
