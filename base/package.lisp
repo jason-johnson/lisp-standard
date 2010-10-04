@@ -14,5 +14,6 @@
    #:dec!
    #:rotate!
    #:compose
+   #:iterate
    #:copy
    #:coerce))

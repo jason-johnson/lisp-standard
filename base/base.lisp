@@ -77,10 +77,21 @@
   `(eval-when (:compile-toplevel :load-toplevel :execute)
      (setf (symbol-function ,destination) (symbol-function ,source))))
 
+;; These next two functions should probably be moved to another package at some point
+
 (defun compose (&rest functions)
   (setf functions (nreverse functions))
   (lambda (&rest args)
     (reduce (lambda (val f) (funcall f val)) (rest functions) :initial-value (apply (first functions) args))))
+
+(let (iterate-value)
+  (defun iterate (function initial-value)
+    "Returns a function that when called will return the results of applying FUNCTION to the last result of the call (starting value will be INITIAL-VALUE)"
+    (setf iterate-value initial-value)
+    (lambda ()
+      (prog1
+	  iterate-value
+	(setf iterate-value (funcall function iterate-value))))))
 
 ;; Generic functions
 
