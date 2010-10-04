@@ -7,6 +7,9 @@
   (:shadow
    #:get
    #:length
+   #:position
+   #:position-if
+   #:position-if-not
    #:count
    #:count-if
    #:count-if-not
@@ -32,6 +35,9 @@
    #:get
    #:put!
    #:length
+   #:position
+   #:position-if
+   #:position-if-not
    #:copy
    #:remove
    #:remove^

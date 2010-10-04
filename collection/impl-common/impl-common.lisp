@@ -20,6 +20,15 @@
 (defmethod std.collection:length ((collection sequence))
   (length collection))
 
+(defmethod std.collection:position (item (collection sequence) &key from-end (start 0) end key test test-not)
+  (position item collection :from-end from-end :start start :end end :key key :test test :test-not test-not))
+
+(defmethod std.collection:position-if (predicate (collection sequence) &key from-end (start 0) end key)
+  (position-if predicate collection :from-end from-end :start start :end end :key key))
+
+(defmethod std.collection:position-if-not (predicate (collection sequence) &key from-end (start 0) end key)
+  (position-if-not predicate collection :from-end from-end :start start :end end :key key))
+
 (defmethod std.collection:count (item (collection sequence) &key from-end (start 0) end key (test #'eql) (test-not nil test-not-p))
   (apply #'count item collection :from-end from-end :start start :end end :key key
 	 (if test-not-p

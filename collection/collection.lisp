@@ -9,6 +9,15 @@
 (defgeneric length (collection)
   (:documentation "Length of COLLECTION"))
 
+(defgeneric position (item collection &key from-end start end key test test-not)
+  (:documentation "Position of ITEM within COLLECTION"))
+
+(defgeneric position-if (predicate collection &key from-end start end key)
+  (:documentation "Position of ITEM within COLLECTION"))
+
+(defgeneric position-if-not (predicate collection &key from-end start end key)
+  (:documentation "Position of ITEM within COLLECTION"))
+
 
 (defgeneric split (delimiter collection &key key from-end start end count test test-not remove-empty)
   (:documentation "Split COLLECTION into subcollections based on DELIMITER"))
