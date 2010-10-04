@@ -22,7 +22,8 @@
 					      :depends-on ("package" "collection"))
 				     (:module list
 					      :components ((:file "package")
-							   (:file "list" :depends-on ("package")))
+							   (:file "list" :depends-on ("package"))
+							   (:file "generic" :depends-on ("package" "list")))
 					      :depends-on ("package" "collection" #:impl-common))
 				     (:module array
 					      :components ((:file "package")
