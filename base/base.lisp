@@ -78,9 +78,9 @@
      (setf (symbol-function ,destination) (symbol-function ,source))))
 
 (defun compose (&rest functions)
-	   (setf functions (nreverse functions))
-	   (lambda (&rest args)
-	     (reduce (lambda (val f) (funcall f val)) (rest functions) :initial-value (apply (first functions) args))))
+  (setf functions (nreverse functions))
+  (lambda (&rest args)
+    (reduce (lambda (val f) (funcall f val)) (rest functions) :initial-value (apply (first functions) args))))
 
 ;; Generic functions
 
