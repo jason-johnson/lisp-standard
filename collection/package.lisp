@@ -6,6 +6,7 @@
   (:shadowing-import-from #:std.base #:coerce)
   (:shadow
    #:get
+   #:copy
    #:length
    #:position
    #:position-if
@@ -34,6 +35,8 @@
   (:export
    #:get
    #:put!
+   #:copy
+   #:copy^
    #:length
    #:position
    #:position-if

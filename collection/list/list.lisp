@@ -37,6 +37,21 @@
 
 (defun-alias 'copy-tree 'deep-copy)
 
+(defun copy^ (list &optional (start 0) end)
+  (let* ((count 0)
+	 (head (cl:do ((head list (rest head)))
+		      ((= start count)
+		       head)
+		 (incf count))))
+    (when end
+      (let* ((end (1- end))
+	     (tail (cl:do ((tail head (rest tail)))
+			  ((= end count)
+			   tail)
+		     (incf count))))
+	(setf (rest tail) nil)))
+    head))
+
 (defun-alias 'list-length 'length)
 
 (defmacro do ((var list &optional result) &body body)

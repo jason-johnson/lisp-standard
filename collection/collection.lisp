@@ -18,6 +18,11 @@
 (defgeneric position-if-not (predicate collection &key from-end start end key)
   (:documentation "Position of ITEM within COLLECTION"))
 
+(defgeneric copy (collection &optional start end)
+  (:documentation "Returns a copy of COLLECTION from the begginging of the collection or START until the end of the collection or END if provided"))
+
+(defgeneric copy^ (collection &optional start end)
+  (:documentation "Destructive version of subset"))
 
 (defgeneric split (delimiter collection &key key from-end start end count test test-not remove-empty)
   (:documentation "Split COLLECTION into subcollections based on DELIMITER"))

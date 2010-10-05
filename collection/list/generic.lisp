@@ -9,6 +9,11 @@
 (defmethod std.base:copy ((object cons))
   (copy object))
 
+;; NOTE: Use common collection:copy
+
+(defmethod std.collection:copy^ ((collection cons) &optional (start 0) end)
+  (copy^ collection start end))
+
 (defmethod std.collection:sort ((collection cons) predicate &key key)
   (sort collection predicate :key key))
 

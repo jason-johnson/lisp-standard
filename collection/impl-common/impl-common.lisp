@@ -17,6 +17,9 @@
 
 ;; Define sensible default for all collection generic functions
 
+(defmethod std.collection:copy ((collection sequence) &optional (start 0) end)
+  (subseq collection start end))
+
 (defmethod std.collection:length ((collection sequence))
   (length collection))
 

@@ -10,6 +10,7 @@
    #:get
    #:put!
    #:copy
+   #:copy^
    #:deep-copy
    #:do
    #:length
