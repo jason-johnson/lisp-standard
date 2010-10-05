@@ -11,11 +11,27 @@
   (funcall put! collection index new)
   (ensure-same new (funcall get collection index)))
 
-(defun %test-copy (copy collection)
+(defun %test-base-copy (copy collection)
   (let ((result (funcall copy collection))
 	(*lift-equality-test* 'equalp))
     (ensure-same result collection)
     (ensure-null (eq result collection))))
+
+(defun %test-collection-copy (copy collection expected start end)
+  (let ((result (funcall copy collection start end))
+	(c (std:copy collection)))
+    (ensure-null (equalp result collection))
+    (ensure (equalp result expected))
+    (ensure-null (eq result collection))
+    (ensure (equalp collection c))))
+
+(defun %test-collection-copy^ (copy collection expected start end)
+  (let ((c (std:copy collection))
+	(result (funcall copy collection start end)))
+    (ensure-null (equalp result collection))
+    (ensure (equalp result expected))
+    (ensure-null (eq result collection))
+    (ensure-null (equalp collection c))))
 
 (defun %test-reduce (reduce collection f expected from-end)
   (let ((*lift-equality-test* 'equalp))
@@ -182,9 +198,25 @@
 (list (array (list 0 1)) vector buffer (string 1 #\b #\z) (hash 2)))
 
 (add-collection-tests
- copy
- %test-copy (#'std:copy) ()
+ base-copy
+ %test-base-copy (#'std:copy) ()
  (list array vector buffer string hash set))
+
+(add-collection-tests
+ collection-copy
+ %test-collection-copy (#'std.collection:copy) (expected (start 1) (end 3))
+ ((list (list 'b 'c))
+  (vector (vector 'b 'c))
+  (buffer (vector 'b 'c))
+  (string "bc")))
+
+(add-collection-tests
+ collection-copy^
+ %test-collection-copy^ (#'std.collection:copy^) (expected (start 1) (end 3))
+ ((list (list 'b 'c))
+  (vector (vector 'b 'c))
+  (buffer (vector 'b 'c))
+  (string "bc")))
 
 (add-collection-tests
  reduce
@@ -310,7 +342,7 @@
   (%test-put! #'buffer:get #'buffer:put! -buffer- 1 'b 'z))
 
 (addtest test-copy
-  (%test-copy #'buffer:copy -buffer-))
+  (%test-base-copy #'buffer:copy -buffer-))
 
 (addtest test-remove^
   (%test-remove^ #'buffer:find #'buffer:remove^ -buffer- 'b))
