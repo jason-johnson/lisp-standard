@@ -233,7 +233,15 @@
 (add-collection-tests
  reduce-from-end
  %test-reduce-with-i-v (#'std:reduce) ((fun #'cons) (expected (list 'a 'b 'c 'a)) (from-end t) initial-value)
- (list array vector buffer (string #'cons (list #\a #\b #\c #\a)) hash set))
+ (list array vector buffer (string #'cons (list #\a #\b #\c #\a)) hash))
+
+;; NOTE: Specialized for set since we can't guess the order the set will be in.  But this working proves that :from-end t causes the cons to work correctly
+(addtest test-reduce-from-end-set
+  (let ((expected (list 'a 'b 'c))
+	(result (std:reduce #'cons -set- :initial-value nil :from-end t)))
+    (ensure-same (std:length expected) (std:length result))
+    (dolist (v expected)
+      (ensure (std:find v result)))))
 
 (add-collection-tests
  count
