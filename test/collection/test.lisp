@@ -11,6 +11,9 @@
   (funcall put! collection index new)
   (ensure-same new (funcall get collection index)))
 
+(defun %test-position (position collection item expected &optional from-end)
+  (ensure-same expected (funcall position item collection :from-end from-end)))
+
 (defun %test-base-copy (copy collection)
   (let ((result (funcall copy collection))
 	(*lift-equality-test* 'equalp))
@@ -201,6 +204,16 @@
  base-copy
  %test-base-copy (#'std:copy) ()
  (list array vector buffer string hash set))
+
+(add-collection-tests
+ position
+ %test-position (#'std:position) ((item 'a) (expected 0))
+ (list array vector buffer (string #\a) hash set))
+
+(add-collection-tests
+ position-from-end
+ %test-position (#'std:position) ((item 'a) (expected 3) (from-end t))
+ (list array vector buffer (string #\a) hash set))
 
 (add-collection-tests
  collection-copy
