@@ -3,6 +3,10 @@
 (defun run-all-tests ()
   (run-tests :suite 'standard-collection-test))
 
+(defun make-vector (&rest args)
+  (let ((length (cl:length args)))
+    (vector:make length :adjustable t :initial-contents args :fill-pointer length)))
+
 (defun %test-get (get collection index expected)
   (ensure-same expected (funcall get collection index)))
 
@@ -184,7 +188,7 @@
   (:setup
    (setf -list- (list 'a 'b 'c 'a))
    (setf -array- (array:make '(2 2) :initial-contents '((a b) (c a))))
-   (setf -vector- (vector:make 4 :adjustable t :initial-contents (list 'a 'b 'c 'a) :fill-pointer 4))
+   (setf -vector- (make-vector 'a 'b 'c 'a))
    (setf -buffer- (vector 'a 'b 'c 'a))
    (setf -string- (string:copy "abca"))
    (setf -hash- (hash:copy #{1 a, 2 b, 3 c, 4 a}))
@@ -219,7 +223,7 @@
  collection-copy
  %test-collection-copy (#'std.collection:copy) (expected (start 1) (end 3))
  ((list (list 'b 'c))
-  (vector (vector 'b 'c))
+  (vector (make-vector 'b 'c))
   (buffer (vector 'b 'c))
   (string "bc")))
 
@@ -227,7 +231,7 @@
  collection-copy^
  %test-collection-copy^ (#'std.collection:copy^) (expected (start 1) (end 3))
  ((list (list 'b 'c))
-  (vector (vector 'b 'c))
+  (vector (make-vector 'b 'c))
   (buffer (vector 'b 'c))
   (string "bc")))
 
@@ -237,7 +241,7 @@
  (
   ((list (list 1 2 3)))
   ((array (array:make '(2 2) :initial-contents '((1 2) (3 0)))))
-  ((vector (vector:make 3 :adjustable t :initial-contents (list 1 2 3) :fill-pointer 3)))
+  ((vector (make-vector 1 2 3)))
   ((buffer (vector 1 2 3)))
   (string #'list (list (list (list #\a #\b) #\c) #\a))
   ((hash (hash:copy #{a 1, b 2, c 3})))
