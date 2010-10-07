@@ -105,12 +105,6 @@
 (defgeneric substitute-if-not! (new predicate collection &key from-end start count end key)
   (:documentation "Substitute non-matching item for new in place"))
 
-(defgeneric append (collection &rest collections)
-  (:documentation "Append collections together with collection"))
-
-(defgeneric append! (collection &rest collections)
-  (:documentation "Like append, but in place"))
-
 (defgeneric sort (collection predicate &key key)
   (:documentation "Sort the contents of a collection"))
 

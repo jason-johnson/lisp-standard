@@ -12,7 +12,6 @@
 (defun-alias 'nsubstitute 'substitute!)
 (defun-alias 'nsubstitute-if 'substitute-if!)
 (defun-alias 'nsubstitute-if-not 'substitute-if-not!)
-(defun-alias 'nconc 'append!)
 (defun-alias 'sort 'sort^)
 
 ;; Define sensible default for all collection generic functions
@@ -106,12 +105,6 @@
 
 (defmethod std.collection:substitute-if-not! (new predicate (collection sequence) &key from-end (start 0) count end key)
   (substitute-if-not! new predicate collection :from-end from-end :start start :end end :count count :key key))
-
-(defmethod std.collection:append ((collection sequence) &rest collections)
-  (apply #'append collection collections))
-
-(defmethod std.collection:append! ((collection sequence) &rest collections)
-  (apply #'append! collection collections))
 
 (defmethod std.collection:sort^ ((collection sequence) predicate &key key)
   (sort collection predicate :key key))

@@ -54,6 +54,8 @@
 
 (defun-alias 'list-length 'length)
 
+(defun-alias 'nconc 'append!)
+
 (defmacro do ((var list &optional result) &body body)
   `(dolist (,var ,list ,result)
      ,@body))
