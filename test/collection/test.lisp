@@ -183,6 +183,24 @@
 		      `(addtest ,(as-symbol "test-~a-~a" name cname)
 			(test ,collection ,@args)))))))
 
+(defmacro add-collection-tests-with-template (name local-test-fun target-test-funs extra-args template collections)
+  (flet ((template (tp mt)
+	   `(macrolet ((type (&rest args)
+			 `(list ',',tp ,@args))
+		       (make-type (&rest args)
+			 `(list ',',mt ,@args)))
+	      ,@template)))
+    `(add-collection-tests
+      ,name
+      ,local-test-fun ,target-test-funs ,extra-args
+      ,(loop for c in collections
+	   collect
+	     (if (and
+		  (not (atom c))
+		  (eq (first c) 'template))
+		 (eval (apply #'template (rest c)))
+		 c)))))
+
 (deftestsuite standard-collection-test ()
   (-list- -array- -vector- -buffer- -string- -hash- -set-)
   (:setup
