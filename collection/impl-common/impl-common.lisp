@@ -100,7 +100,7 @@
 (defmethod std.collection:substitute-if! (new predicate (collection sequence) &key from-end (start 0) count end key)
   (substitute-if! new predicate collection :from-end from-end :start start :end end :count count :key key))
 
-(defmethod std.collection:substitute-if-not ((collection sequence) predicate new &key from-end (start 0) count end key)
+(defmethod std.collection:substitute-if-not (new predicate (collection sequence) &key from-end (start 0) count end key)
   (substitute-if-not new predicate collection :from-end from-end :start start :end end :count count :key key))
 
 (defmethod std.collection:substitute-if-not! (new predicate (collection sequence) &key from-end (start 0) count end key)
