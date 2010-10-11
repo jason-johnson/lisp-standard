@@ -189,7 +189,9 @@
 			 `(list ',',tp ,@args))
 		       (make-type (&rest args)
 			 `(list ',',mt ,@args)))
-	      ,@template)))
+	      (symbol-macrolet ((type '',tp)
+				(make-type '',mt))
+		,@template))))
     `(add-collection-tests
       ,name
       ,local-test-fun ,target-test-funs ,extra-args
