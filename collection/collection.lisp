@@ -57,17 +57,17 @@
 (defgeneric remove (item collection &key from-end test test-not start end count key)
   (:documentation "Remove item from collection"))
 
-(defgeneric remove^ (item collection &key from-end test test-not start end count key)
-  (:documentation "Destructive form of remove"))
-
 (defgeneric remove-if (predicate collection &key from-end start end count key)
   (:documentation "Remove items from collection for which predicate returns t"))
 
-(defgeneric remove-if^ (predicate collection &key from-end start end count key)
-  (:documentation "Destructive form of remove-if"))
-
 (defgeneric remove-if-not (predicate collection &key from-end start end count key)
   (:documentation "Remove items from collection for which predicate returns nil"))
+
+(defgeneric remove^ (item collection &key from-end test test-not start end count key)
+  (:documentation "Destructive form of remove"))
+
+(defgeneric remove-if^ (predicate collection &key from-end start end count key)
+  (:documentation "Destructive form of remove-if"))
 
 (defgeneric remove-if-not^ (predicate collection &key from-end start end count key)
   (:documentation "Destructive form of remove-if-not"))
@@ -90,17 +90,17 @@
 (defgeneric substitute (new old collection &key from-end test test-not start count end key)
   (:documentation "Substitute old item for new"))
 
-(defgeneric substitute! (new old collection &key from-end test test-not start count end key)
-  (:documentation "Substitute old item for new"))
-
 (defgeneric substitute-if (new predicate collection &key from-end start count end key)
   (:documentation "Substitute matching items for new"))
 
-(defgeneric substitute-if! (new predicate collection &key from-end start count end key)
-  (:documentation "Substitute matching items for new in place"))
-
 (defgeneric substitute-if-not (new predicate collection &key from-end start count end key)
   (:documentation "Substitute non-matching items for new"))
+
+(defgeneric substitute! (new old collection &key from-end test test-not start count end key)
+  (:documentation "Substitute old item for new"))
+
+(defgeneric substitute-if! (new predicate collection &key from-end start count end key)
+  (:documentation "Substitute matching items for new in place"))
 
 (defgeneric substitute-if-not! (new predicate collection &key from-end start count end key)
   (:documentation "Substitute non-matching item for new in place"))
