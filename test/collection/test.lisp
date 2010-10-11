@@ -18,11 +18,20 @@
 (defun %test-position (position collection item expected &optional from-end)
   (ensure-same expected (funcall position item collection :from-end from-end)))
 
+(defun %test-position-if (position collection item expected &optional from-end)
+  (ensure-same expected (funcall position (lambda (i) (eql i item)) collection :from-end from-end)))
+
+(defun %test-position-if-not (position collection item expected &optional from-end)
+  (ensure-same expected (funcall position (lambda (i) (not (eql i item))) collection :from-end from-end)))
+
 (defun %test-base-copy (copy collection)
   (let ((result (funcall copy collection))
 	(*lift-equality-test* 'equalp))
     (ensure-same result collection)
     (ensure-null (eq result collection))))
+
+(defun %test-length (length collection expected)
+  (ensure-same expected (funcall length collection)))
 
 (defun %test-collection-copy (copy collection expected start end)
   (let ((result (funcall copy collection start end))
@@ -139,21 +148,72 @@
     (ensure-same 2 (funcall count item result))
     (ensure (equalp result collection))))
 
-(defun %test-substitute (substitute count collection old new)
-  (let ((c (funcall count old collection))
-	(result (funcall substitute new old collection)))
-    (ensure (< 0 c))
-    (ensure-same c (funcall count old collection))
-    (ensure-same 0 (funcall count old result))
-    (ensure-same c (funcall count new result))))
+(flet ((%test (count collection c old new result)
+	 (ensure (< 0 c))
+	 (ensure-same c (funcall count old collection))
+	 (ensure-same 0 (funcall count old result))
+	 (ensure-same c (funcall count new result))))
+  (defun %test-substitute (substitute count collection old new)
+    (let ((c (funcall count old collection))
+	  (result (funcall substitute new old collection)))
+      (%test count collection c old new result)))
+  (defun %test-substitute-if (substitute count collection old new)
+    (let ((c (funcall count old collection))
+	  (result (funcall substitute new (lambda (i) (eql i old)) collection)))
+      (%test count collection c old new result)))
+  (defun %test-substitute-if-not (substitute count collection old new)
+    (let ((c (funcall count old collection))
+	  (result (funcall substitute new (lambda (i) (not (eql i old))) collection)))
+      (%test count collection c old new result))))
 
-(defun %test-substitute! (substitute! count collection old new)
-  (let ((c (funcall count old collection))
-	(result (funcall substitute! new old collection)))
-    (ensure (< 0 c))
-    (ensure-same 0 (funcall count old collection))
-    (ensure-same c (funcall count new collection))
-    (ensure (equalp result collection))))
+(flet ((%test (count collection c old new result)
+	 (ensure (< 0 c))
+	 (ensure-same 0 (funcall count old collection))
+	 (ensure-same c (funcall count new collection))
+	 (ensure (equalp result collection))))
+  (defun %test-substitute! (substitute count collection old new)
+    (let ((c (funcall count old collection))
+	  (result (funcall substitute new old collection)))
+      (%test count collection c old new result)))
+  (defun %test-substitute-if! (substitute count collection old new)
+    (let ((c (funcall count old collection))
+	  (result (funcall substitute new (lambda (i) (eql i old)) collection)))
+      (%test count collection c old new result)))
+  (defun %test-substitute-if-not! (substitute count collection old new)
+    (let ((c (funcall count old collection))
+	  (result (funcall substitute new (lambda (i) (not (eql i old))) collection)))
+      (%test count collection c old new result))))
+
+(defun %test-sort (sort collection expected cmp)
+  (let ((orig (std:copy collection))
+	(result (funcall sort collection cmp))
+	(*lift-equality-test* #'equalp))
+    (ensure-same expected result)
+    (ensure-same orig collection)
+    (ensure-null (equalp collection result))))
+
+(defun %test-sort^ (sort collection expected cmp)
+  (let ((orig (std:copy collection))
+	(result (funcall sort collection cmp))
+	(*lift-equality-test* #'equalp))
+    (ensure-same expected result)
+    (ensure-null (equalp orig collection))))
+
+(defun %test-merge (merge collection output-spec one expected cmp)
+  (let ((orig (std:copy collection))
+	(result (funcall merge output-spec collection one cmp))
+	(*lift-equality-test* #'equalp))
+    (ensure-same expected result)
+    (ensure-same orig collection)
+    (ensure-null (equalp collection result))))
+
+(defun %test-merge^ (merge collection output-spec one expected cmp)
+  (let ((orig (std:copy collection))
+	(result (funcall merge output-spec collection one cmp))
+	(*lift-equality-test* #'equalp))
+    (ensure-same expected result)
+    (when (eql output-spec 'list)
+      (ensure-null (equalp orig collection)))))
 
 (defmacro add-collection-tests (name local-test-fun target-test-funs extra-args collections)
   (flet ((strip-defaults (args)
@@ -225,6 +285,11 @@
 (list (array (list 0 1)) vector buffer (string 1 #\b #\z) (hash 2)))
 
 (add-collection-tests
+ length
+ %test-length (#'std:length) ((expected 4))
+ (list array vector buffer string hash (set 4)))
+
+(add-collection-tests
  base-copy
  %test-base-copy (#'std:copy) ()
  (list array vector buffer string hash set))
@@ -237,6 +302,26 @@
 (add-collection-tests
  position-from-end
  %test-position (#'std:position) ((item 'a) (expected 3) (from-end t))
+ (list array vector buffer (string #\a) hash set))
+
+(add-collection-tests
+ position-if
+ %test-position-if (#'std:position-if) ((item 'a) (expected 0))
+ (list array vector buffer (string #\a) hash set))
+
+(add-collection-tests
+ position-if-from-end
+ %test-position-if (#'std:position-if) ((item 'a) (expected 3) (from-end t))
+ (list array vector buffer (string #\a) hash set))
+
+(add-collection-tests
+ position-if-not
+ %test-position-if-not (#'std:position-if-not) ((item 'a) (expected 0))
+ (list array vector buffer (string #\a) hash set))
+
+(add-collection-tests
+ position-if-not-from-end
+ %test-position-if-not (#'std:position-if-not) ((item 'a) (expected 3) (from-end t))
  (list array vector buffer (string #\a) hash set))
 
 (add-collection-tests
@@ -254,6 +339,8 @@
   (vector (make-vector 'b 'c))
   (buffer (vector 'b 'c))
   (string "bc")))
+
+; split, split-if, split-if-not
 
 (add-collection-tests
  reduce
@@ -373,9 +460,77 @@
  (list array vector buffer (string #\a #\z) hash set))
 
 (add-collection-tests
+ substitute-if
+ %test-substitute-if (#'std:substitute-if #'std:count) ((old 'a) (new 'z))
+ (list array vector buffer (string #\a #\z) hash set))
+
+(add-collection-tests
+ substitute-if-not
+ %test-substitute-if-not (#'std:substitute-if-not #'std:count) ((old 'a) (new 'z))
+ (list array vector buffer (string #\a #\z) hash set))
+
+(add-collection-tests
  substitute!
  %test-substitute! (#'std:substitute! #'std:count) ((old 'a) (new 'z))
  (list array vector buffer (string #\a #\z) hash set))
+
+(add-collection-tests
+ substitute-if!
+ %test-substitute-if! (#'std:substitute-if! #'std:count) ((old 'a) (new 'z))
+ (list array vector buffer (string #\a #\z) hash set))
+
+(add-collection-tests
+ substitute-if-not!
+ %test-substitute-if-not! (#'std:substitute-if-not! #'std:count) ((old 'a) (new 'z))
+ (list array vector buffer (string #\a #\z) hash set))
+
+(add-collection-tests-with-template
+ sort
+ %test-sort (#'std:sort) (expected (cmp #'<))
+ ((list (type (make-type 3 1 4 2)) (make-type 1 2 3 4)))
+ ((template list list)
+  (template vector make-vector)
+  (template buffer vector)
+  ((string (std:copy "3142")) "1234" #'char<)))
+
+(add-collection-tests-with-template
+ sort^
+ %test-sort^ (#'std:sort^) (expected (cmp #'<))
+ ((list (type (make-type 3 1 4 2)) (make-type 1 2 3 4)))
+ ((template list list)
+  (template vector make-vector)
+  (template buffer vector)
+  ((string (std:copy "3142")) "1234" #'char<)))
+
+;; TODO: Have to set up tests that verify sort is stable.  This probably can't be done for string since it only takes immediate types (chars)
+;;
+;; (add-collection-tests
+;;  stable-sort
+;;  %test-stable-sort (#'std:stable-sort) ()
+;;  ())
+
+;; (add-collection-tests
+;;  stable-sort^
+;;  %test-stable-sort^ (#'std:stable-sort^) ()
+;;  ())
+
+(add-collection-tests-with-template
+ merge
+ %test-merge (#'std:merge) (output-spec one expected (cmp #'<))
+ ((list (type (make-type 1 3)) type (make-type 2 4) (make-type 1 2 3 4)))
+ ((template list list)
+  (template vector make-vector)
+  ((buffer (vector 1 3)) 'vector (vector 2 4) (vector 1 2 3 4))
+  ((string "13") 'string "24" "1234" #'char<)))
+
+(add-collection-tests-with-template
+ merge^
+ %test-merge^ (#'std:merge^) (output-spec one expected (cmp #'<))
+ ((list (type (make-type 1 3)) type (make-type 2 4) (make-type 1 2 3 4)))
+ ((template list list)
+  (template vector make-vector)
+  ((buffer (vector 1 3)) 'vector (vector 2 4) (vector 1 2 3 4))
+  ((string "13") 'string "24" "1234" #'char<)))
 
 (deftestsuite standard-collection-buffer-test (standard-collection-test)
   ())
