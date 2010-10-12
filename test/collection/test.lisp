@@ -75,45 +75,33 @@
 (defun %test-find-if-not (find collection item)
   (ensure-same item (funcall find (lambda (i) (not (eql i item))) collection)))
 
-(defun %test-remove^ (find remove^ collection item)
-  (ensure-same item (funcall find item collection))
-  (let ((result (funcall remove^ item collection)))
-    (ensure-null (funcall find item result))
-    (ensure-null (funcall find item collection)))) ; NOTE: This is not necassarily true.  E.g. if you use a vector and remove the last element, the vector will probably be unchanged
+(flet ((%test (collection find item action)
+	 (ensure-same item (funcall find item collection))
+	 (let ((result (funcall action)))
+	   (ensure-null (funcall find item result))
+	   (ensure-same item (funcall find item collection)))))
+  (defun %test-remove (find remove collection item)
+    (%test collection find item (lambda () (funcall remove item collection))))
+  (defun %test-remove-if (find remove collection item)
+    (let ((f (lambda (i) (eql i item))))
+      (%test collection find item (lambda () (funcall remove f collection)))))
+  (defun %test-remove-if-not (find remove collection item)
+    (let ((f (lambda (i) (not (eql i item)))))
+      (%test collection find item (lambda () (funcall remove f collection))))))
 
-(defun %test-remove (find remove collection item)
-  (ensure-same item (funcall find item collection))
-  (let ((result (funcall remove item collection)))
-    (ensure-null (funcall find item result))
-    (ensure-same item (funcall find item collection))))
-
-(defun %test-remove-if^ (find remove^ collection item)
-  (let ((f (lambda (i) (eql i item))))
-    (ensure-same item (funcall find f collection))
-    (let ((result (funcall remove^ f collection)))
-      (ensure-null (funcall find f result))
-      (ensure-null (funcall find f collection))))) ; NOTE: This is not necassarily true.  E.g. if you use a vector and remove the last element, the vector will probably be unchanged
-
-(defun %test-remove-if (find remove collection item)
-  (let ((f (lambda (i) (eql i item))))
-    (ensure-same item (funcall find f collection))
-    (let ((result (funcall remove f collection)))
-      (ensure-null (funcall find f result))
-      (ensure-same item (funcall find f collection)))))
-
-(defun %test-remove-if-not^ (find remove^ collection item)
-  (let ((f (lambda (i) (not (eql i item)))))
-    (ensure-same item (funcall find f collection))
-    (let ((result (funcall remove^ f collection)))
-      (ensure-null (funcall find f result))
-      (ensure-null (funcall find f collection))))) ; NOTE: This is not necassarily true.  E.g. if you use a vector and remove the last element, the vector will probably be unchanged
-
-(defun %test-remove-if-not (find remove collection item)
-  (let ((f (lambda (i) (not (eql i item)))))
-    (ensure-same item (funcall find f collection))
-    (let ((result (funcall remove f collection)))
-      (ensure-null (funcall find f result))
-      (ensure-same item (funcall find f collection)))))
+(flet ((%test (collection find item action)
+	 (ensure-same item (funcall find item collection))
+	 (let ((result (funcall action)))
+	   (ensure-null (funcall find item result))
+	   (ensure-null (funcall find item collection))))) ; NOTE: This is not necassarily true.  E.g. if you use a vector and remove the last element, the vector will probably be unchanged
+  (defun %test-remove^ (find remove^ collection item)
+    (%test collection find item (lambda () (funcall remove^ item collection))))
+  (defun %test-remove-if^ (find remove^ collection item)
+    (let ((f (lambda (i) (eql i item))))
+      (%test collection find item (lambda () (funcall remove^ f collection)))))
+  (defun %test-remove-if-not^ (find remove^ collection item)
+    (let ((f (lambda (i) (not (eql i item)))))
+      (%test collection find item (lambda () (funcall remove^ f collection))))))
 
 (defun %test-remove-duplicates (count remove collection item starting)
   (ensure-same starting (funcall count item collection))
@@ -343,6 +331,21 @@
 ; split, split-if, split-if-not
 
 (add-collection-tests
+ count
+ %test-count (#'std:count) ((item 'a) (expected 2))
+ (list array vector buffer (string #\a) hash (set 'a 1)))
+
+(add-collection-tests
+ count-if
+ %test-count-if (#'std:count-if) ((item 'a) (expected 2))
+ (list array vector buffer (string #\a) hash (set 'a 1)))
+
+(add-collection-tests
+ count-if-not
+ %test-count-if-not (#'std:count-if-not) ((item 'a) (expected 2))
+ (list array vector buffer (string #\a) hash (set 'a 1)))
+
+(add-collection-tests
  reduce
  %test-reduce (#'std:reduce) ((fun #'+) (expected 6) from-end)
  (
@@ -368,21 +371,6 @@
       (ensure (std:find v result)))))
 
 (add-collection-tests
- count
- %test-count (#'std:count) ((item 'a) (expected 2))
- (list array vector buffer (string #\a) hash (set 'a 1)))
-
-(add-collection-tests
- count-if
- %test-count-if (#'std:count-if) ((item 'a) (expected 2))
- (list array vector buffer (string #\a) hash (set 'a 1)))
-
-(add-collection-tests
- count-if-not
- %test-count-if-not (#'std:count-if-not) ((item 'a) (expected 2))
- (list array vector buffer (string #\a) hash (set 'a 1)))
-
-(add-collection-tests
  find
  %test-find (#'std:find) ((item 'b))
  (list array vector buffer (string #\b) hash set))
@@ -398,33 +386,33 @@
  (list array vector buffer (string #\b) hash set))
 
 (add-collection-tests
- remove^
- %test-remove^ (#'std:find #'std:remove^) ((item 'b))
- (list vector buffer (string #\b)))
-
-(add-collection-tests
  remove
  %test-remove (#'std:find #'std:remove) ((item 'b))
  (list vector buffer (string #\b)))
 
 (add-collection-tests
- remove-if^
- %test-remove-if^ (#'std:find-if #'std:remove-if^) ((item 'b))
- (list vector buffer (string #\b)))
-
-(add-collection-tests
  remove-if
- %test-remove-if (#'std:find-if #'std:remove-if) ((item 'b))
- (list vector buffer (string #\b)))
-
-(add-collection-tests
- remove-if-not^
- %test-remove-if-not^ (#'std:find-if-not #'std:remove-if-not^) ((item 'b))
+ %test-remove-if (#'std:find #'std:remove-if) ((item 'b))
  (list vector buffer (string #\b)))
 
 (add-collection-tests
  remove-if-not
- %test-remove-if-not (#'std:find-if-not #'std:remove-if-not) ((item 'b))
+ %test-remove-if-not (#'std:find #'std:remove-if-not) ((item 'b))
+ (list vector buffer (string #\b)))
+
+(add-collection-tests
+ remove^
+ %test-remove^ (#'std:find #'std:remove^) ((item 'b))
+ (list vector buffer (string #\b)))
+
+(add-collection-tests
+ remove-if^
+ %test-remove-if^ (#'std:find #'std:remove-if^) ((item 'b))
+ (list vector buffer (string #\b)))
+
+(add-collection-tests
+ remove-if-not^
+ %test-remove-if-not^ (#'std:find #'std:remove-if-not^) ((item 'b))
  (list vector buffer (string #\b)))
 
 ;; NOTE: Hash makes no sense for remove-duplicates because keys are also relevant (how do you know which to keep?).  Array makes no sense because how would you truncate on subarray but not the other at that level
