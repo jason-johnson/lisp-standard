@@ -251,6 +251,34 @@
 		 (eval (apply #'template (rest c)))
 		 c)))))
 
+(defmacro define-specific-collection-suite-with-default-tests (name &key (key 1) (elem ''b) (change ''z) skip)
+  (labels ((as-symbol (&rest args)
+	     (intern (string-upcase (apply #'format nil args))))
+	   (pkg-fun (f)
+	     (intern (string-upcase f) name))
+	   (as-name ()
+	     (as-symbol "-~a-" name))
+	   (as-pkg-fun (f)
+	     `#',(pkg-fun f)))
+    `(progn
+       (deftestsuite ,(as-symbol "standard-collection-~a-test" name) (standard-collection-test)
+	 ())
+       ,@(unless (cl:find 'get skip)
+		 `((addtest test-get
+		     (%test-get ,(as-pkg-fun "get") ,(as-name) ,key ,elem))))
+       ,@(unless (cl:find 'put! skip)
+		 `((addtest test-put!
+		     (%test-put! ,(as-pkg-fun "get") ,(as-pkg-fun "put!") ,(as-name) ,key ,elem ,change))))
+       ,@(unless (cl:find 'copy skip)
+		 `((addtest test-copy
+		     (%test-base-copy ,(as-pkg-fun "copy") ,(as-name)))))
+       ,@(unless (cl:find 'remove^ skip)
+		 `((addtest test-remove^
+		     (%test-remove^ ,(as-pkg-fun "find") ,(as-pkg-fun "remove^") ,(as-name) ,elem))))
+       ,@(unless (cl:find 'remove skip)
+		 `((addtest test-remove
+		     (%test-remove ,(as-pkg-fun "find") ,(as-pkg-fun "remove") ,(as-name) ,elem)))))))
+
 (deftestsuite standard-collection-test ()
   (-list- -array- -vector- -buffer- -string- -hash- -set-)
   (:setup
@@ -520,20 +548,16 @@
   ((buffer (vector 1 3)) 'vector (vector 2 4) (vector 1 2 3 4))
   ((string "13") 'string "24" "1234" #'char<)))
 
-(deftestsuite standard-collection-buffer-test (standard-collection-test)
-  ())
+(define-specific-collection-suite-with-default-tests list)
 
-(addtest test-get
-  (%test-get #'buffer:get -buffer- 1 'b))
+(define-specific-collection-suite-with-default-tests array :key (list 0 1) :skip (put! remove remove^))
 
-(addtest test-put!
-  (%test-put! #'buffer:get #'buffer:put! -buffer- 1 'b 'z))
+(define-specific-collection-suite-with-default-tests vector)
 
-(addtest test-copy
-  (%test-base-copy #'buffer:copy -buffer-))
+(define-specific-collection-suite-with-default-tests buffer)
 
-(addtest test-remove^
-  (%test-remove^ #'buffer:find #'buffer:remove^ -buffer- 'b))
+(define-specific-collection-suite-with-default-tests string :elem #\b :change #\z)
 
-(addtest test-remove
-  (%test-remove #'buffer:find #'buffer:remove -buffer- 'b))
+(define-specific-collection-suite-with-default-tests hash :skip (remove remove^))
+
+(define-specific-collection-suite-with-default-tests set :skip (get put! remove remove^))
