@@ -287,18 +287,18 @@
    (setf -vector- (make-vector 'a 'b 'c 'a))
    (setf -buffer- (vector 'a 'b 'c 'a))
    (setf -string- (string:copy "abca"))
-   (setf -hash- (hash:copy #{1 a, 2 b, 3 c, 4 a}))
+   (setf -hash- (hash:copy #{0 a, 1 b, 2 c, 3 a}))
    (setf -set- (set:copy #[a b c]))))
 
 (add-collection-tests
  get
  %test-get (#'std:get) ((index 1) (expected 'b))
- (list (array (list 0 1))  vector buffer (string 1 #\b) (hash 2)))
+ (list (array (list 0 1))  vector buffer (string 1 #\b) hash))
 
 (add-collection-tests
  put!
  %test-put! (#'std:get #'std:put!) ((index 1) (old 'b) (new 'z))
-(list (array (list 0 1)) vector buffer (string 1 #\b #\z) (hash 2)))
+(list (array (list 0 1)) vector buffer (string 1 #\b #\z) hash))
 
 (add-collection-tests
  length
