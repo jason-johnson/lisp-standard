@@ -1,3 +1,5 @@
+VERSIONING TAGS: Milestones are taged with msX.X.X.X, releases are tagged vX.X.X.  Note that milestones always have a fourth number that indicates the specific milestone.  For example before the first release the release is v0.0.0 so all prerelease milestones start with this.  The fourth prerelease milestone would be ms0.0.0.4.
+
 Consider making defun aliases for the different layers of an interface, e.g. defun-highlevel, so that documentation can be generated easier
 
 I want to set up the API so that the specific pacakges (e.g. collection.list, collection.hash) have the most efficient implementation possible, while the top level uses almost exclusively generic functions, so that users can create objects that the "built in" functions work on.  Note that common lisp built in functions are always prefered over custom ones since they can be implemented much more efficiently (but if I find I can match them, then this restriction relaxes).  For example, even though e.g. remove works on lists *or* arrays, I still prefer using it as the "efficient" remove over writing one for each.
