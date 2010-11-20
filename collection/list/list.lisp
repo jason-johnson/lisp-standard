@@ -76,3 +76,39 @@
 
 (defun merge (list1 list2 predicate &key key)
   (merge^ (deep-copy list1) (deep-copy list2) predicate :key key))
+
+(defun split-if^ (predicate list &key key from-end start end count remove-empty)
+  (let ((first? t)
+	(p (if key
+	       (compose predicate key)
+	       predicate))
+	last
+	result)
+    (flet ((push-last ()
+	     (unless (and remove-empty (not last))
+	       (if from-end (setf last (nreverse last)))
+	       (push last result))))
+      (if from-end (setf list (nreverse list)))
+      (cl:do ((head list (rest head))
+	      (pointer (cons nil list) head))
+	     ((not head) (progn
+			   (push-last)
+			   (if from-end result (nreverse result))))
+	(cond
+	  ((funcall p (first head))
+	   (rplacd pointer nil)
+	   (push-last)
+	   (setf last nil
+		 first? t))
+	  (first?
+	   (setf first? nil
+		 last head)))))))
+
+(defun split-if-not^ (predicate list &key key from-end start end count remove-empty)
+  (split-if^ (complement predicate) list :key key :from-end from-end :start start :end end :count count :remove-empty remove-empty))
+
+(defun split^ (delimiter list &key key from-end start end count test test-not remove-empty)
+  (cond
+    (test (split-if^ (lambda (v) (funcall test v delimiter)) list :key key :from-end from-end :start start :end end :count count :remove-empty remove-empty))
+    (test-not (split-if-not^ (lambda (v) (funcall test-not v delimiter)) list :key key :from-end from-end :start start :end end :count count :remove-empty remove-empty))
+    (t (split-if^ (lambda (v) (eql v delimiter)) list :key key :from-end from-end :start start :end end :count count :remove-empty remove-empty))))

@@ -3,7 +3,7 @@
 (defpackage #:standard.collection.list
   (:nicknames #:std.collection.list #:collection.list #:list)
   (:use #:cl #:impl-common)
-  (:import-from #:std.base #:defun-alias)
+  (:import-from #:std.base #:defun-alias #:compose)
   (:shadow #:get #:put! #:copy #:length #:do #:map #:concatenate #:sort #:stable-sort #:merge)
   (:export
    #:make
@@ -50,6 +50,9 @@
    #:substitute-if!
    #:substitute-if-not
    #:substitute-if-not!
+   #:split^
+   #:split-if^
+   #:split-if-not^
    #:append
    #:append!
    #:sort
