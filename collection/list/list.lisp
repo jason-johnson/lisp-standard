@@ -85,21 +85,22 @@
 	       predicate))
 	last
 	result)
+    (when end (incf end))
     (flet ((push-last ()
 	     (unless (and remove-empty (not last))
-	       (if from-end (setf last (nreverse last)))
 	       (incf pushed)
 	       (push last result))))
-      (if from-end (setf list (nreverse list)))
       (cl:do ((head list (rest head))
 	      (pointer (cons nil list) head)
 	      (current 0 (1+ current)))
 	     ((or
 	       (not head)
-	       (and count (= count pushed)))
+	       (and count (not from-end) (= count pushed)))
 	      (progn
 		(push-last)
-		(if from-end result (nreverse result))))
+		(when from-end
+		  (setf result (subseq result 0 count)))
+		(nreverse result)))
 	(cond
 	  ((< current start))
 	  ((and end (= current end))
