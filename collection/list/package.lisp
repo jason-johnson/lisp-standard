@@ -53,6 +53,9 @@
    #:split^
    #:split-if^
    #:split-if-not^
+   #:split
+   #:split-if
+   #:split-if-not
    #:append
    #:append!
    #:sort
