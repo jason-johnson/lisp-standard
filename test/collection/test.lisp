@@ -300,7 +300,7 @@
 (add-collection-tests
  length
  %test-length (#'std:length) ((expected 4))
- (list array vector buffer string hash (set 4)))
+ (list array vector buffer string hash (set 3)))
 
 (add-collection-tests
  base-copy
