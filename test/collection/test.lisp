@@ -470,32 +470,32 @@
 (add-collection-tests
  substitute
  %test-substitute (#'std:substitute #'std:count) ((old 'a) (new 'z))
- (list array vector buffer (string #\a #\z) hash set))
+ (list array vector buffer (string #\a #\z) hash))
 
 (add-collection-tests
  substitute-if
  %test-substitute-if (#'std:substitute-if #'std:count) ((old 'a) (new 'z))
- (list array vector buffer (string #\a #\z) hash set))
+ (list array vector buffer (string #\a #\z) hash))
 
 (add-collection-tests
  substitute-if-not
  %test-substitute-if-not (#'std:substitute-if-not #'std:count) ((old 'a) (new 'z))
- (list array vector buffer (string #\a #\z) hash set))
+ (list array vector buffer (string #\a #\z) hash))
 
 (add-collection-tests
  substitute!
  %test-substitute! (#'std:substitute! #'std:count) ((old 'a) (new 'z))
- (list array vector buffer (string #\a #\z) hash set))
+ (list array vector buffer (string #\a #\z) hash))
 
 (add-collection-tests
  substitute-if!
  %test-substitute-if! (#'std:substitute-if! #'std:count) ((old 'a) (new 'z))
- (list array vector buffer (string #\a #\z) hash set))
+ (list array vector buffer (string #\a #\z) hash))
 
 (add-collection-tests
  substitute-if-not!
  %test-substitute-if-not! (#'std:substitute-if-not! #'std:count) ((old 'a) (new 'z))
- (list array vector buffer (string #\a #\z) hash set))
+ (list array vector buffer (string #\a #\z) hash))
 
 (add-collection-tests-with-template
  sort
