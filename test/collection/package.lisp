@@ -2,5 +2,4 @@
 
 (defpackage #:standard-test.collection
   (:use #:standard #:lift)
-  (:export
-   #:run-all-tests))
+  (:export))

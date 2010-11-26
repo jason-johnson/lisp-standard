@@ -3,4 +3,4 @@
 (defpackage #:standard-test
   (:use #:standard #:lift)
   (:export 
-   #:run-tests))
+   #:run-all-tests))

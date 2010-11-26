@@ -1,8 +1,5 @@
 (in-package #:standard-test.collection)
 
-(defun run-all-tests ()
-  (run-tests :suite 'standard-collection-test))
-
 (defun make-vector (&rest args)
   (let ((length (cl:length args)))
     (vector:make length :adjustable t :initial-contents args :fill-pointer length)))
@@ -279,7 +276,7 @@
 		 `((addtest test-remove
 		     (%test-remove ,(as-pkg-fun "find") ,(as-pkg-fun "remove") ,(as-name) ,elem)))))))
 
-(deftestsuite standard-collection-test ()
+(deftestsuite standard-collection-test (standard-test)
   (-list- -array- -vector- -buffer- -string- -hash- -set-)
   (:setup
    (setf -list- (list 'a 'b 'c 'a))
