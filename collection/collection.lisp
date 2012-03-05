@@ -24,7 +24,7 @@
 (defgeneric copy^ (collection &optional start end)
   (:documentation "Destructive version of subset"))
 
-(defgeneric split (delimiter collection &key key from-end start end count test test-not remove-empty)
+(defgeneric split (delimiter collection &key key from-end start end count equal test test-not remove-empty)
   (:documentation "Split COLLECTION into subcollections based on DELIMITER"))
 
 (defgeneric split-if (predicate collection &key key from-end start end count remove-empty)
