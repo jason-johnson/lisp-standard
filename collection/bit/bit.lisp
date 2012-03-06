@@ -24,4 +24,3 @@
 
 ;; Generic access
 
-;; NOTE: vector and simple-vector are subtypes of array so the copy defined in the array module works for us too
