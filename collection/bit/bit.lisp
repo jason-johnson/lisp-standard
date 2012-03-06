@@ -5,7 +5,7 @@
 (defun make (dimension &key initial-contents initial-element adjustable fill-pointer displaced-to displaced-index-offset)
   "Make a bit vector"
   (flet ((compute-arguments ()
-	   (let ((result (list dimension :element-type 'bit)))
+	   (let ((result (list 'bit :element-type dimension)))
 	     (flet ((maybe-put! (key value)
 		      (when value
 			(push key result)
