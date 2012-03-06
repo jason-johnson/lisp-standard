@@ -38,6 +38,10 @@
 					      :components ((:file "package")
 							   (:file "buffer" :depends-on ("package")))
 					      :depends-on ("package" "collection" "aliases" #:array #:vector #:impl-common))
+				     (:module bit-vector
+					      :components ((:file "package")
+							   (:file "bit-vector" :depends-on ("package")))
+					      :depends-on ("package" "collection" "aliases" #:array #:vector #:impl-common))
 				     (:module string
 					      :components ((:file "package")
 							   (:file "string" :depends-on ("package")))
