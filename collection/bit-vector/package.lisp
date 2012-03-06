@@ -5,8 +5,8 @@
   (:use #:std.collection.vector #:cl #:impl-common)
   (:import-from #:std.base #:defun-alias)
   (:shadowing-import-from #:std.collection.array #:copy #:do)
-  (:shadowing-import-from #:std.collection.vector #:get #:map #:sort #:stable-sort #:merge^ #:merge)
-  (:shadow #:make #:concatenate)
+  (:shadowing-import-from #:std.collection.vector #:map #:sort #:stable-sort #:merge^ #:merge)
+  (:shadow #:get #:make #:concatenate #:and #:or #:not)
   (:export
    #:make
    #:get
@@ -30,6 +30,39 @@
    #:has-fill-pointer
    #:fill-pointer
    #:adjustable-p
+   #:and
+   #:nand
+   #:or
+   #:nor
+   #:xor
+   #:xnor
+   #:not
+   #:andc1
+   #:andc2
+   #:orc1
+   #:orc2
+   #:and!
+   #:nand!
+   #:or!
+   #:nor!
+   #:xor!
+   #:xnor!
+   #:not!
+   #:andc1!
+   #:andc2!
+   #:orc1!
+   #:orc2!
+   #:and-into!
+   #:nand-into!
+   #:or-into!
+   #:nor-into!
+   #:xor-into!
+   #:xnor-into!
+   #:not-into!
+   #:andc1-into!
+   #:andc2-into!
+   #:orc1-into!
+   #:orc2-into!
    #:remove
    #:remove^
    #:remove-if
