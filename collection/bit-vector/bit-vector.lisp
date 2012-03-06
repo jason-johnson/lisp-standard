@@ -1,4 +1,4 @@
-(in-package #:std.collection.bit)
+(in-package #:std.collection.bit-vector)
 
 ;; Normal access
 

@@ -1,7 +1,7 @@
 (in-package #:cl-user)
 
 (defpackage #:standard.collection.bit-vector
-  (:nicknames #:std.collection.bit #:collection.bit #:bit-vector #:bit)
+  (:nicknames #:std.collection.bit-vector #:collection.bit-vector #:bit-vector)
   (:use #:std.collection.vector #:cl #:impl-common)
   (:import-from #:std.base #:defun-alias)
   (:shadowing-import-from #:std.collection.array #:copy #:do)
