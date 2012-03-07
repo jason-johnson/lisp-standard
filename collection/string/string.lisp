@@ -2,7 +2,6 @@
 
 ;; Normal access
 
-; NOTE: what we call "buffer", common lisp calls "simple-vector", so we must restrict make so that it can't return anything we can't use
 (defun make (dimension &key (element-type 'character) initial-element adjustable fill-pointer displaced-to displaced-index-offset)
   "Make a string"
   (flet ((compute-arguments ()
