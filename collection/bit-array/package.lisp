@@ -4,8 +4,31 @@
   (:nicknames #:std.collection.bit-array #:collection.bit-array #:bit-array)
   (:use #:std.collection.array #:cl #:impl-common)
   (:import-from #:std.base #:defun-alias)
-  (:shadowing-import-from #:std.collection.array #:map #:copy #:do #:sort #:stable-sort #:merge^ #:merge)
-  (:shadow #:get #:make #:concatenate #:and #:or #:not)
+  (:shadowing-import-from #:std.collection.array
+			  #:get
+			  #:map
+			  #:copy
+			  #:do
+			  #:length
+			  #:reduce
+			  #:concatenate
+			  #:count
+			  #:count-if
+			  #:count-if-not
+			  #:find
+			  #:find-if
+			  #:find-if-not
+			  #:substitute!
+			  #:substitute-if!
+			  #:substitute-if-not!
+			  #:append!
+			  #:reverse^
+			  #:sort
+			  #:sort^
+			  #:stable-sort
+			  #:merge^
+			  #:merge)
+  (:shadow #:make #:and #:or #:not)
   (:export
    #:make
    #:get
