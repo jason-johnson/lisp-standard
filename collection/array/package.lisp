@@ -32,4 +32,20 @@
    #:adjustable-p
    #:adjust
    #:row-major-get
-   #:row-major-put!))
+   #:row-major-put!
+   #:reverse
+   #:reverse^
+   #:substitute
+   #:substitute!
+   #:substitute-if
+   #:substitute-if!
+   #:substitute-if-not
+   #:substitute-if-not!
+   #:append
+   #:append!
+   #:sort
+   #:sort^
+   #:stable-sort
+   #:stable-sort^
+   #:merge
+   #:merge^))			; TODO: Try to add as many collection functions as possible.  Simply none that modify the structur.  Things like append! have to take compatible structures.
