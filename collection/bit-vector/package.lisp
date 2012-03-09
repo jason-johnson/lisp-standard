@@ -2,11 +2,26 @@
 
 (defpackage #:standard.collection.bit-vector
   (:nicknames #:std.collection.bit-vector #:collection.bit-vector #:bit-vector)
-  (:use #:std.collection.vector #:cl #:impl-common)
+  (:use #:standard.collection.bit-array #:std.collection.vector #:cl #:impl-common)
   (:import-from #:std.base #:defun-alias)
-  (:shadowing-import-from #:std.collection.array #:copy #:do)
-  (:shadowing-import-from #:std.collection.vector #:map #:sort #:stable-sort #:merge^ #:merge)
-  (:shadow #:get #:make #:concatenate #:and #:or #:not)
+  (:shadowing-import-from #:standard.collection.bit-array #:make #:and #:or #:not)
+  (:shadowing-import-from #:std.collection.vector
+			  #:map
+			  #:copy
+			  #:do
+			  #:length
+			  #:concatenate
+			  #:substitute!
+			  #:substitute-if!
+			  #:substitute-if-not!
+			  #:append!
+			  #:reverse^
+			  #:sort
+			  #:sort^
+			  #:stable-sort
+			  #:merge^
+			  #:merge)
+  (:shadow #:get #:put!)
   (:export
    #:make
    #:get
