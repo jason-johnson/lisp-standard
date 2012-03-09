@@ -37,7 +37,7 @@
 				     (:module buffer
 					      :components ((:file "package")
 							   (:file "buffer" :depends-on ("package")))
-					      :depends-on ("package" "collection" "aliases" #:array #:vector #:impl-common))
+					      :depends-on ("package" "collection" "aliases" #:vector #:impl-common))
 				     (:module bit-array
 					      :components ((:file "package")
 							   (:file "bit-array" :depends-on ("package")))
@@ -49,7 +49,7 @@
 				     (:module string
 					      :components ((:file "package")
 							   (:file "string" :depends-on ("package")))
-					      :depends-on ("package" "collection" "aliases" #:array #:vector #:impl-common))
+					      :depends-on ("package" "collection" "aliases" #:vector #:impl-common))
 				     (:module hash
 					      :components ((:file "package")
 							   (:file "hash" :depends-on ("package"))
