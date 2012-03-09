@@ -69,51 +69,33 @@
 
 (defun read-hash (stream subchar arg)
   (declare (ignore subchar arg))
-  (let ((buffer (array:make 0 :adjustable t :fill-pointer 0 :element-type 'character))
+  (let ((buffer (vector:make 0 :adjustable t :fill-pointer 0 :element-type 'character))
+	(equal 'eql)
+	(key? t)
 	result
-	options
 	data
-	keyword
-	in-quote
 	in-double-quote)
-    (labels ((emptyp ()
+    (labels ((empty? ()
 	       (= 0 (vector:length buffer)))
 	     (save (char)
 	       (vector-push-extend char buffer))
 	     (current-string ()
-	       (unless (emptyp)
+	       (unless (empty?)
 		 (prog1
 		     (read-from-string (copy-seq buffer))
-		   (setf (array:fill-pointer buffer) 0))))
-	     (handle-colon ()
-	       (cond
-		 (in-quote
-		  (setf in-quote nil)
-		  (save #\:))
-		 (keyword (error "parse error, unexpected-colon"))
-		 ((emptyp) (save #\:)) ; working with a keyword
-		 (t (setf keyword (current-string)
-			  in-quote t))))	; variable to a keyword is quoted
-	     (handle-quote ()
-	       (save #\')
-	       (setf in-quote t))
+		   (setf (vector:fill-pointer buffer) 0))))
 	     (handle-double-quote ()
+	       (when key?
+		 (setf equal 'equal))
 	       (setf in-double-quote (not in-double-quote))
 	       (save #\"))
 	     (handle-end-token ()
-	       (let* ((token (current-string)))
-		 (if in-quote (setf in-quote nil))
+	       (setf key? (not key?))
+	       (let ((token (current-string)))
 		 (when token
-		   (cond
-		     (keyword
-		      (push keyword options)
-		      (push token options)
-		      (setf keyword nil))
-		     (t (push token data))))))
+		   (push token data))))
 	     (handle-char (char)
 	       (case char
-		 (#\: (handle-colon))
-		 (#\' (handle-quote))
 		 (#\" (handle-double-quote))
 		 ((#\, #\Space) (handle-end-token))
 		 (t (save char))))
@@ -127,7 +109,7 @@
 		  when (and (eq ch char) (not in-double-quote))
 		  do (progn
 		       (handle-end-token)
-		       (setf result (apply #'make (nreverse options)))
+		       (setf result (make :test equal))
 		       (load-data (nreverse data))
 		       (return result))
 		  do (if (and in-double-quote (not (eq ch #\")))
