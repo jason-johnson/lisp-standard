@@ -26,6 +26,7 @@
    #:in-bounds-p
    #:displacement
    #:has-fill-pointer-p
+   #:fill-pointer
    #:adjustable-p
    #:adjust
    #:push!
