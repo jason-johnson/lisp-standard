@@ -93,6 +93,12 @@
 	  iterate-value
 	(setf iterate-value (funcall function iterate-value))))))
 
+;; Macro helpers
+
+(defmacro with-gensyms ((&rest names) &body body)
+  `(let ,(loop for n in names collect `(,n (gensym)))
+     ,@body))
+
 ;; Generic functions
 
 (defgeneric copy (object)
