@@ -169,27 +169,27 @@
     (test-not (find-if-not (lambda (v) (funcall test-not v item)) array :from-end from-end :start start :end end :key key))
     (t (find-if (lambda (v) (eql v item)) array :from-end from-end :start start :end end :key key))))
 
+(defun new-from (array &key (dimensions (dimensions array)) (element-type (element-type array) element-type?) (adjustable (adjustable-p array) adjustable?) (fill-pointer nil fill-pointer?) displaced-to displaced-index-offset)
+  (let ((options (list dimensions)))
+    (macrolet ((when-put! (test key value)
+		 `(when ,test
+		    (push ,key options)
+		    (push ,value options))))
+      (when-put! element-type? :element-type element-type)
+      (when-put! adjustable? :adjustable adjustable)
+      (when-put! fill-pointer? :fill-pointer fill-pointer)
+      (when-put! displaced-to :displaced-to displaced-to)
+      (when-put! displaced-index-offset :displaced-index-offset displaced-index-offset))
+    (apply #'make (nreverse options))))
+
 (defun copy (array)
-  (flet ((copy-arguments (array)
-	   (let ((args (list (dimensions array))))
-	     (macrolet ((when-put! (test key value)
-			  `(when ,test
-			     (push ,key args)
-			     (push ,value args))))
-	       (when-put! (not (eq (element-type array) t)) :element-type (element-type array))
-	       (when-put! (eq (adjustable-p array) t) :adjustable t)
-	       (when-put! (and
-			    (vectorp array)
-			    (has-fill-pointer-p array))
-			   :fill-pointer
-			   (fill-pointer array)))
-	     (when (displacement array)
-	       (error "copy not supported for displaced arrays"))
-	     (nreverse args))))
-    (let ((result (apply #'make (copy-arguments array))))
-      (dotimes (i (total-size array))
-	(setf (row-major-get result i) (row-major-get array i)))
-      result)))
+  (let ((result (multiple-value-bind (da di) (displacement array)
+		  (if da
+		      (new-from array :displaced-to da :displaced-index-offset di)
+		      (new-from array)))))
+    (dotimes (i (total-size array))
+      (setf (row-major-get result i) (row-major-get array i)))
+    result))
 
 (defmacro do ((var array &optional result) &body body)
   `(loop for i from 0 below (total-size ,array)

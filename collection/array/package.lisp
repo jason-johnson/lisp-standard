@@ -7,6 +7,7 @@
   (:shadow #:get #:map #:count #:count-if #:count-if-not #:reduce #:find #:find-if #:find-if-not #:length #:copy #:do)
   (:export
    #:make
+   #:new-from
    #:get
    #:copy
    #:map
