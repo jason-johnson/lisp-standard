@@ -310,32 +310,32 @@
 (add-collection-tests
  position
  %test-position (#'std:position) ((item 'a) (expected 0))
- (list array vector buffer (string #\a) hash set))
+ (list array vector buffer (string #\a) hash))
 
 (add-collection-tests
  position-from-end
  %test-position (#'std:position) ((item 'a) (expected 3) (from-end t))
- (list array vector buffer (string #\a) hash set))
+ (list array vector buffer (string #\a) hash))
 
 (add-collection-tests
  position-if
  %test-position-if (#'std:position-if) ((item 'a) (expected 0))
- (list array vector buffer (string #\a) hash set))
+ (list array vector buffer (string #\a) hash))
 
 (add-collection-tests
  position-if-from-end
  %test-position-if (#'std:position-if) ((item 'a) (expected 3) (from-end t))
- (list array vector buffer (string #\a) hash set))
+ (list array vector buffer (string #\a) hash))
 
 (add-collection-tests
  position-if-not
  %test-position-if-not (#'std:position-if-not) ((item 'a) (expected 0))
- (list array vector buffer (string #\a) hash set))
+ (list array vector buffer (string #\a) hash))
 
 (add-collection-tests
  position-if-not-from-end
  %test-position-if-not (#'std:position-if-not) ((item 'a) (expected 3) (from-end t))
- (list array vector buffer (string #\a) hash set))
+ (list array vector buffer (string #\a) hash))
 
 (add-collection-tests
  collection-copy
