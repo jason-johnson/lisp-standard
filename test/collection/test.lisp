@@ -547,7 +547,10 @@
 
 (define-specific-collection-suite-with-default-tests list)
 
-(define-specific-collection-suite-with-default-tests array :key (list 0 1) :skip (put! remove remove^))
+(define-specific-collection-suite-with-default-tests array :key (list 0 1) :skip (get put! remove remove^))
+
+(addtest test-get
+  (ensure-same 'b (array:get -array- 0 1)))
 
 (define-specific-collection-suite-with-default-tests vector)
 
