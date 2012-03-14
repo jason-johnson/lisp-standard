@@ -36,7 +36,7 @@
    #:set
    #:setp
    #:make
-   #:memberp
+   #:member?
    #:add
    #:copy
    #:remove

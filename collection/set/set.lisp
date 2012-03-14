@@ -47,7 +47,7 @@
 
 ;;  Normal access
 
-(declaim (inline memberp add remove! remove))
+(declaim (inline member? add remove! remove))
 
 (defun make (&key (test 'eql) (size 16) (rehash-size 1.5) (rehash-threshold 1) hash-function synchronized)
   (make-set :data (hash:make
@@ -58,7 +58,7 @@
 		   :hash-function hash-function
 		   :synchronized synchronized)))
 
-(defun memberp (set member)
+(defun member? (set member)
   (eq (get set member) +dummy-set-value+))
 
 (defun add (set member)
@@ -105,7 +105,7 @@
 
 (defun intersection! (set1 set2)
   (do (member set2)
-    (if (memberp set1 member)
+    (if (member? set1 member)
 	(hash:put! (set-data set1) member 1)))
   (do (member set1 set1)
     (if (eq (get set1 member) 1)
@@ -130,7 +130,7 @@
 
 (defun subsetp (set1 set2)
   (do (member set1 t)
-    (unless (memberp set2 member)
+    (unless (member? set2 member)
       (return nil))))
 
 ;; Generic access
