@@ -172,31 +172,22 @@
 ;; Read/write macros
 
 (defun read-set (stream subchar arg)
-  (declare (ignore subchar)
-	   (ignore arg))
-  (let ((keywords (list (cons :test 'eql)))
+  (declare (ignore subchar arg))
+  (let ((equal 'eql)
 	atoms)
-    (labels ((assoc->list (assoc)
-	       (list (first assoc) (rest assoc)))
-	     (set-keyword (key value)
-	       (ccase key
-		 ((:test :size :rehash-size :rehash-threshold)
-		  (if (assoc key keywords)
-		      (rplacd (assoc key keywords) value)
-		      (push (cons key value) keywords)))))
-	     (parse (token stream)
-	       (ctypecase token
-		 (keyword (set-keyword token (read stream t)))
-		 (t (push token atoms)))))
+    (flet ((parse (token)
+	     (typecase token
+	       (string
+		(setf equal 'equal)))
+	     (push token atoms)))
       (loop
 	 for token = (read stream nil)
 	 while token
-	 do (parse token stream))
-      (let ((set (apply #'make (apply #'append (mapcar #'assoc->list keywords)))))
-	(loop
-	   for member in atoms
-	   do (add set member))
-	set))))
+	 do (parse token)))
+    (let ((result (make :test equal)))
+      (loop for member in atoms
+	 do (add result member))
+      result)))
 
 (defun write-set (stream set)
   (let ((atoms (loop
