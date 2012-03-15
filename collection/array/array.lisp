@@ -76,28 +76,35 @@
 	       (%map)))
       (%map))))
 
+(defmacro traverse-array ((array start end length predicate key from-end? get item result) &body body)
+  (with-gensyms (g s e step check i)
+    `(progn
+       (unless ,end (setf ,end (1- (,length ,array))))
+       (let ((,g (if ,key
+		    (compose ,key ,get)
+		    ,get))
+	     ,s ,e ,step ,check)
+	 (if ,from-end?
+	     (setf
+	      ,s ,end
+	      ,e ,start
+	      ,step #'1-
+	      ,check #'<)
+	     (setf
+	      ,s ,start
+	      ,e ,end
+	      ,step #'1+
+	      ,check #'>))
+	 (cl:do ((,i ,s (funcall ,step ,i)))
+		 ((funcall ,check ,i ,e) ,result)
+	   (let ((,item (funcall ,g ,array ,i)))
+	     (when (funcall ,predicate ,item)
+	       ,@body)))))))
+
 (defun count-if (predicate array &key from-end (start 0) end key)
-  (unless end (setf end (1- (total-size array))))
-  (let ((count 0)
-	(p (if key
-	       (compose predicate key)
-	       predicate))
-	s e step check)
-    (if from-end
-	(setf
-	 s end
-	 e start
-	 step #'1-
-	 check #'<)
-	(setf
-	 s start
-	 e end
-	 step #'1+
-	 check #'>))
-    (cl:do* ((i s (funcall step i)))
-	    ((funcall check i e) count)
-      (when (funcall p (row-major-get array i))
-	  (incf count)))))
+  (let ((count 0))
+    (traverse-array (array start end total-size predicate key from-end #'row-major-get item count)
+      (incf count))))
 
 (defun count-if-not (predicate array &key from-end (start 0) end key)
   (count-if (complement predicate) array :from-end from-end :start start :end end :key key))
@@ -138,27 +145,8 @@
 	    ((funcall check i e) result))))
 
 (defun find-if (predicate array &key from-end (start 0) end key)
-  (unless end (setf end (1- (total-size array))))
-  (let ((p (if key
-	       (compose predicate key)
-	       predicate))
-	s e step check)
-    (if from-end
-	(setf
-	 s end
-	 e start
-	 step #'1-
-	 check #'<)
-	(setf
-	 s start
-	 e end
-	 step #'1+
-	 check #'>))
-    (cl:do* ((i s (funcall step i)))
-	    ((funcall check i e))
-      (let ((item (row-major-get array i)))
-	(if (funcall p item)
-	    (return-from find-if item))))))
+  (traverse-array (array start end total-size predicate key from-end #'row-major-get item nil)
+    (return-from find-if item)))
 
 (defun find-if-not (predicate array &key from-end (start 0) end key)
   (find-if (complement predicate) array :from-end from-end :start start :end end :key key))
