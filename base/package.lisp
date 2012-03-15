@@ -15,5 +15,6 @@
    #:compose
    #:iterate
    #:with-gensyms
+   #:once-only
    #:copy
    #:coerce))
