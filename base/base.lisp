@@ -77,6 +77,19 @@
   `(eval-when (:compile-toplevel :load-toplevel :execute)
      (setf (symbol-function ,destination) (symbol-function ,source))))
 
+;; Looping
+
+;; NOTE: Do is used in the next two because that enables #'go and #'return to be used in their bodies.  This would not be the case with loop
+(defmacro while (test &body body)
+  `(do ()
+       ((not ,test))
+     ,@body))
+
+(defmacro until (test &body body)
+  `(do ()
+       (,test)
+     ,@body))
+
 ;; These next two functions should probably be moved to another package at some point
 
 (defun compose (&rest functions)

@@ -12,6 +12,8 @@
    #:inc!
    #:dec!
    #:rotate!
+   #:while
+   #:until
    #:compose
    #:iterate
    #:with-gensyms
