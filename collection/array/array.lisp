@@ -115,34 +115,48 @@
     (test-not (count-if-not (lambda (v) (funcall test-not v item)) array :from-end from-end :start start :end end :key key))
     (t (count-if (lambda (v) (eql v item)) array :from-end from-end :start start :end end :key key))))
 
+(defmacro traverse-array2 ((array get length start end key from-end? item result &key from-end-forms from-start-forms pre-do-forms do-var-forms) &body body)
+  (with-gensyms (g s e step check i)
+    `(macrolet ((%get-start-value ()
+		  `(funcall ,',g array ,',s))
+		(%step-start ()
+		  `(setf ,',s (funcall ,',step ,',s))))
+       (progn
+	 (unless ,end (setf ,end (1- (funcall ,length ,array))))
+	 (let ((,g (if ,key
+		       (compose ,key ,get)
+		       ,get))
+	       ,s ,e ,step ,check)
+	   (if ,from-end?
+	       (setf
+		,@from-end-forms
+		,s ,end
+		,e ,start
+		,step #'1-
+		,check #'<=)
+	       (setf
+		,@from-start-forms
+		,s ,start
+		,e ,end
+		,step #'1+
+		,check #'>=))
+	   ,@pre-do-forms
+	   (do* ((,i ,s (funcall ,step ,i))
+		 (,item (funcall ,g ,array ,i) (funcall ,g ,array ,i))
+		 ,@do-var-forms)
+		((funcall ,check ,i ,e) ,result)
+	     ,@body))))))
+
 (defun reduce (function array &key key from-end (start 0) end (initial-value nil initial-value-p))
-  (unless end (setf end (1- (total-size array))))
   (let ((last-result initial-value)
-	(get #'row-major-get)
-	f s e step check)
-    (if from-end
-	(setf
-	 f (lambda (r v) (funcall function v r))
-	 s end
-	 e start
-	 step #'1-
-	 check #'<=)
-	(setf
-	 f function
-	 s start
-	 e end
-	 step #'1+
-	 check #'>=))
-    (if key
-	(setf get (compose key get)))
-    (unless initial-value-p
-      (setf
-       last-result (funcall get array s)
-       s (funcall step s)))
-    (cl:do* ((i s (funcall step i))
-	     (value (funcall get array i) (funcall get array i))
-	     (result (funcall f last-result value) (funcall f result value)))
-	    ((funcall check i e) result))))
+	f)
+    (traverse-array2 (array #'row-major-get #'total-size start end key from-end item result
+			    :from-end-forms (f (lambda (r v) (funcall function v r)))
+			    :from-start-forms (f function)
+			    :pre-do-forms ((unless initial-value-p
+					    (setf last-result (%get-start-value))
+					    (%step-start)))
+			    :do-var-forms ((result (funcall f last-result item) (funcall f result item)))))))
 
 (defun find-if (predicate array &key from-end (start 0) end key)
   (traverse-array (array start end total-size predicate key from-end #'row-major-get item nil)
