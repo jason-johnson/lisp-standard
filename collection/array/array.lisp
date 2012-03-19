@@ -120,32 +120,33 @@
     `(macrolet ((%get-start-value ()
 		  `(funcall ,',g array ,',s))
 		(%step-start ()
-		  `(setf ,',s (funcall ,',step ,',s))))
-       (progn
-	 (unless ,end (setf ,end (1- (funcall ,length ,array))))
-	 (let ((,g (if ,key
-		       (compose ,key ,get)
-		       ,get))
-	       ,s ,e ,step ,check)
-	   (if ,from-end?
-	       (setf
-		,@from-end-forms
-		,s ,end
-		,e ,start
-		,step #'1-
-		,check #'<=)
-	       (setf
-		,@from-start-forms
-		,s ,start
-		,e ,end
-		,step #'1+
-		,check #'>=))
-	   ,@pre-do-forms
-	   (do* ((,i ,s (funcall ,step ,i))
-		 (,item (funcall ,g ,array ,i) (funcall ,g ,array ,i))
-		 ,@do-var-forms)
-		((funcall ,check ,i ,e) ,result)
-	     ,@body))))))
+		  `(funcall ,',step ,',s)))
+       (symbol-macrolet (($start ,s))
+	 (progn
+	   (unless ,end (setf ,end (1- (funcall ,length ,array))))
+	   (let ((,g (if ,key
+			 (compose ,key ,get)
+			 ,get))
+		 ,s ,e ,step ,check)
+	     (if ,from-end?
+		 (setf
+		  ,@from-end-forms
+		  ,s ,end
+		  ,e ,start
+		  ,step #'1-
+		  ,check #'<=)
+		 (setf
+		  ,@from-start-forms
+		  ,s ,start
+		  ,e ,end
+		  ,step #'1+
+		  ,check #'>=))
+	     ,@pre-do-forms
+	     (do* ((,i ,s (funcall ,step ,i))
+		   (,item (funcall ,g ,array ,i) (funcall ,g ,array ,i))
+		   ,@do-var-forms)
+		  ((funcall ,check ,i ,e) ,result)
+	       ,@body)))))))
 
 (defun reduce (function array &key key from-end (start 0) end (initial-value nil initial-value-p))
   (let ((last-result initial-value)
@@ -154,8 +155,8 @@
 			    :from-end-forms (f (lambda (r v) (funcall function v r)))
 			    :from-start-forms (f function)
 			    :pre-do-forms ((unless initial-value-p
-					    (setf last-result (%get-start-value))
-					    (%step-start)))
+					    (setf last-result (%get-start-value)
+						  $start (%step-start))))
 			    :do-var-forms ((result (funcall f last-result item) (funcall f result item)))))))
 
 (defun find-if (predicate array &key from-end (start 0) end key)
