@@ -110,6 +110,25 @@
 		  ((funcall ,check ,i ,e) ,result)
 	       ,@body)))))))
 
+(defmacro traverse-array-as-vector-with-predicate ((array predicate get length item start end key from-end? result) &body body)
+  `(traverse-array-as-vector (,array ,get ,length ,item ,start ,end ,key ,from-end? ,result)
+    (when (funcall ,predicate ,item)
+      ,@body)))
+
+(defun count-if (predicate array &key from-end (start 0) end key)
+  (let ((count 0))
+    (traverse-array-as-vector-with-predicate (array predicate #'row-major-get #'total-size item start end key from-end count)
+      (incf count))))
+
+(defun count-if-not (predicate array &key from-end (start 0) end key)
+  (count-if (complement predicate) array :from-end from-end :start start :end end :key key))
+
+(defun count (item array &key from-end (start 0) end key test test-not)
+  (cond
+    (test (count-if (lambda (v) (funcall test v item)) array :from-end from-end :start start :end end :key key))
+    (test-not (count-if-not (lambda (v) (funcall test-not v item)) array :from-end from-end :start start :end end :key key))
+    (t (count-if (lambda (v) (eql v item)) array :from-end from-end :start start :end end :key key))))
+
 (defun reduce (function array &key key from-end (start 0) end (initial-value nil initial-value-p))
   (let ((last-result initial-value)
 	f)
@@ -122,7 +141,7 @@
 			    :do-var-forms ((result (funcall f last-result item) (funcall f result item)))))))
 
 (defun find-if (predicate array &key from-end (start 0) end key)
-  (traverse-array (array start end total-size predicate key from-end #'row-major-get item nil)
+  (traverse-array-as-vector-with-predicate (array predicate #'row-major-get #'total-size item start end key from-end nil)
     (return-from find-if item)))
 
 (defun find-if-not (predicate array &key from-end (start 0) end key)
