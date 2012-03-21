@@ -76,15 +76,22 @@
 	       (%map)))
       (%map))))
 
-(defmacro traverse-array-as-vector ((array get length item start end key from-end? result &key from-end-forms from-start-forms pre-do-forms do-var-forms) &body body)
+(defmacro traverse-array-as-vector ((array get length item start end key from-end? result &key get-item-in-varlist from-end-forms from-start-forms pre-do-forms do-var-forms) &body body)
   "Traverse ARRAY linear as a vector"
-  (with-gensyms (g s e step check i)
-    `(macrolet ((%get (i)
-		  `(funcall ,',g array ,i))
-		(%step (i)
-		  `(funcall ,',step ,i)))
-       (symbol-macrolet (($start ,s))
-	 (progn
+  (let (less-than greater-than)
+    (if get-item-in-varlist
+	(setf
+	 less-than '#'<=
+	 greater-than '#'>=)
+	(setf
+	 less-than '#'<
+	 greater-than '#'>))
+    (with-gensyms (g s e step check i)
+      `(macrolet ((%get (i)
+		    `(funcall ,',g array ,i))
+		  (%step (i)
+		    `(funcall ,',step ,i)))
+	 (symbol-macrolet (($start ,s))
 	   (unless ,end (setf ,end (1- (funcall ,length ,array))))
 	   (let ((,g (if ,key
 			 (compose ,key ,get)
@@ -96,19 +103,22 @@
 		  ,s ,end
 		  ,e ,start
 		  ,step #'1-
-		  ,check #'<=)
+		  ,check ,less-than)
 		 (setf
 		  ,@from-start-forms
 		  ,s ,start
 		  ,e ,end
 		  ,step #'1+
-		  ,check #'>=))
+		  ,check ,greater-than))
 	     ,@pre-do-forms
 	     (do* ((,i ,s (%step ,i))
-		   (,item (%get ,i) (%get ,i))
+		   ,@(when get-item-in-varlist `((,item (%get ,i) (%get ,i))))
 		   ,@do-var-forms)
 		  ((funcall ,check ,i ,e) ,result)
-	       ,@body)))))))
+	       ,@(if get-item-in-varlist
+		     body
+		     `((let ((,item (%get ,i)))
+			 ,@body))))))))))
 
 (defmacro traverse-array-as-vector-with-predicate ((array predicate get length item start end key from-end? result) &body body)
   `(traverse-array-as-vector (,array ,get ,length ,item ,start ,end ,key ,from-end? ,result)
@@ -133,12 +143,13 @@
   (let ((last-result initial-value)
 	f)
     (traverse-array-as-vector (array #'row-major-get #'total-size item start end key from-end result
-			    :from-end-forms (f (lambda (r v) (funcall function v r)))
-			    :from-start-forms (f function)
-			    :pre-do-forms ((unless initial-value-p
-					    (setf last-result (%get $start)
-						  $start (%step $start))))
-			    :do-var-forms ((result (funcall f last-result item) (funcall f result item)))))))
+				     :get-item-in-varlist t
+				     :from-end-forms (f (lambda (r v) (funcall function v r)))
+				     :from-start-forms (f function)
+				     :pre-do-forms ((unless initial-value-p
+						      (setf last-result (%get $start)
+							    $start (%step $start))))
+				     :do-var-forms ((result (funcall f last-result item) (funcall f result item)))))))
 
 (defun find-if (predicate array &key from-end (start 0) end key)
   (traverse-array-as-vector-with-predicate (array predicate #'row-major-get #'total-size item start end key from-end nil)
