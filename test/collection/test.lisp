@@ -444,12 +444,12 @@
 (add-collection-tests
  remove-duplicates
  %test-remove-duplicates (#'std:count #'std:remove-duplicates) ((item 'a) (starting 2))
- (list vector buffer (string #\a 2) (set 'a 1)))
+ (list vector buffer (string #\a 2)))
 
 (add-collection-tests
  remove-duplicates^
  %test-remove-duplicates^ (#'std:count #'std:remove-duplicates^) ((item 'a) (starting 2))
- (((list (list 'a 'b 'a 'a 'c 'a)) 'a 4) vector buffer (string #\a 2) (set 'a 1)))
+ (((list (list 'a 'b 'a 'a 'c 'a)) 'a 4) vector buffer (string #\a 2)))
 
 ;; NOTE: Hash and Set can't be reversed because they're not ordered
 (add-collection-tests
