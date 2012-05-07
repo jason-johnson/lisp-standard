@@ -4,11 +4,11 @@ Consider making defun aliases for the different layers of an interface, e.g. def
 
 I want to set up the API so that the specific pacakges (e.g. collection.list, collection.hash) have the most efficient implementation possible, while the top level uses almost exclusively generic functions, so that users can create objects that the "built in" functions work on.  Note that common lisp built in functions are always prefered over custom ones since they can be implemented much more efficiently (but if I find I can match them, then this restriction relaxes).  For example, even though e.g. remove works on lists *or* arrays, I still prefer using it as the "efficient" remove over writing one for each.
 
+Note: 'inc! and dec! should also be generic functions at the top level so users can create objects that act like indexes.  There needs to be a "math" package or something where users can have the one that doesn't take a dispatch if they want.
+
 Note that the hash version of get takes a default value to return if the key doesn't exist.  Map should do this as well.
 
 We should also consider a "deep-copy" that does a deeper copy than the default (e.g. copy-tree vs. copy-list).  In many cases it just aliases with regular copy (or maybe I'll just define it for list)
-
-Maybe options to the different collections should be seperated by a |, e.g.  #{:test equal, :size 10| this 1, that 2, the 3, other 4} and #[:test equal, :size 10| 1 2 3 4 5].  We could also make only "simple" hashes/sets printable.  If any options are used then the hash/set isn't simple and wont be printed out.  Kind of following existing CL behavior.
 
 We'll have to get some experience with array to see if the current syntax is ok or if (defun get (array &rest indexes)) would be better.  We can do that because we have to use apply in any case.  The problem is that it can't be consistant with generic get then.
 
