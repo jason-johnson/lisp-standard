@@ -16,6 +16,8 @@
    #:until
    #:compose
    #:iterate
+   #:arr
+   #:hash
    #:with-unique-names
    #:once-only
    #:copy

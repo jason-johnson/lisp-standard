@@ -106,6 +106,37 @@
 	  iterate-value
 	(setf iterate-value (funcall function iterate-value))))))
 
+;; Collection constructors (needed because variables can be put into literals)
+
+;; NOTE: The following should be called array, but cl exports the symbol array for its own array class.  In theory I should be able to shadow that symbol, set the function cell to this function and the class cell
+;; NOTE: to cl:array but that causes some problem with the type system.
+;; TODO: For the second phase, this builtin function should be called array and exported as normal
+(defun arr (&rest args)
+    (labels ((get-demensions (list)
+	       (loop
+		  for cell in list
+		  count cell into top
+		  when (and (= 1 top) (consp cell))
+		  append (get-demensions cell) into next
+		  finally (return (append (list top) next)))))
+      (make-array (get-demensions args) :initial-contents args)))
+
+(Defun hash (&rest args)
+	   (assert (evenp (length args)))
+	   (let ((equal 'eql))
+	     (loop
+		for key in args by #'cddr
+		for val in (rest args) by #'cddr
+		do (progn
+		     (when (typep key 'string)
+		       (setf equal 'equal)))
+		collect (cons key val) into pairs
+		finally (let ((result (make-hash-table :test equal)))
+			  (loop
+			     for (key . val) in pairs
+			     do (setf (gethash key result) val))
+			  (return result)))))
+
 ;; Macro helpers
 
 (defmacro with-unique-names ((&rest names) &body body)
