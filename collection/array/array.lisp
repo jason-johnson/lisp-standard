@@ -120,7 +120,7 @@
 		  (%step (i)
 		    `(funcall ,',step ,i)))
 	 (symbol-macrolet (($start ,s))
-	   (unless ,end (setf ,end (1- (funcall ,length ,array))))
+	   (setf ,end (if ,end (1- ,end) (1- (funcall ,length ,array))))
 	   (let ((,g (if ,key
 			 (compose ,key ,get)
 			 ,get))
