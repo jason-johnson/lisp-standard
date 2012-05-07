@@ -27,7 +27,8 @@
 					      :depends-on ("package" "collection" #:impl-common))
 				     (:module array
 					      :components ((:file "package")
-							   (:file "array" :depends-on ("package"))
+							   (:file "subscript" :depends-on ("package"))
+							   (:file "array" :depends-on ("package" "subscript"))
 							   (:file "generic" :depends-on ("package" "array")))
 					      :depends-on ("package" "collection"))
 				     (:module vector
