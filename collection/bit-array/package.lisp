@@ -18,6 +18,9 @@
 			  #:find
 			  #:find-if
 			  #:find-if-not
+			  #:position
+			  #:position-if
+			  #:position-if-not
 			  #:substitute!
 			  #:substitute-if!
 			  #:substitute-if-not!

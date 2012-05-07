@@ -57,82 +57,52 @@
 	     (e (apply function items)))
 	(setf (apply #'aref result ss) e)))))
 
+;; NOTE: I could ensure end position isn't past the array but I would prefer the compiler to deal with this at some point
 
 (defun position-if (predicate array &key from-end start end key)
-  (let* ((dimensions-list (dimensions array))
-	 (dimensions-last (1- (cl:length dimensions-list)))
-	 (dimensions-max (apply #'vector (mapcar #'1- dimensions-list)))
-	 (start (if start (apply #'vector start) (new-from dimensions-max)))
-	 (end (if end (apply #'vector end) (copy dimensions-max)))
-	 (end-index 0)
+  (let* ((has-end? (if from-end (not (null end)) (not (null start))))
+	 (start (make-subscripts array start))
+	 (end (make-subscripts array (or end t)))
+	 (last-dimension (subscripts-last-dimension start))
 	 (g (if key
 		(compose key #'get)
 		#'get))
-	 s e compare-current index-adjustment reset)
+	 (end-index 0)
+	 s e advance)
     (if from-end
-	(setf s end
-	      e start
-	      compare-current (lambda (indexes i) (> (svref indexes i) 0))
-	      index-adjustment -1
-	      reset (lambda (i) (svref dimensions-max i)))
+	(setf s (subscripts-dec! end)
+	      e (subscripts-dec! start)
+	      has-end? (when e has-end?)
+	      advance #'subscripts-dec!)
 	(setf s start
 	      e end
-	      compare-current (lambda (indexes i) (< (svref indexes i) (svref dimensions-max i)))
-	      index-adjustment 1
-	      reset (constantly 0)))
-    (labels ((fail ()
-	       (return-from position-if nil))
-	     (prepare-end! ()
-	       (incf (svref e dimensions-last) index-adjustment))
-	     (%finished? (indexes)
-	       (format t "(finished? ~a :end-index ~a)~%" indexes end-index)
-	       (when (eql (svref e end-index) (svref indexes end-index))
-		 (if (eql end-index dimensions-last)
+	      advance #'subscripts-inc!))
+    (labels ((ssref (subscript index)
+	       (svref (subscripts-current subscript) index))
+	     (%finished? (subscripts)	; Here we take advantage of the fact that once a left-most position reaches the expected number it won't increase anymore and doesn't need to be checked anymore
+	       (when (eql (ssref e end-index) (ssref subscripts end-index))
+		 (if (eql end-index last-dimension)
 		     t
 		     (progn
 		       (incf end-index)
-		       (%finished? indexes)))))
-	     (finished? (indexes)
-	       (when e
-		 (%finished? indexes)))
-	     (advance! (indexes i)
-	       (cond
-		 ((< i 0) (fail))
-		 ((funcall compare-current indexes i) (incf (svref indexes i) index-adjustment))
-		 (t
-		  (setf (svref indexes i) (funcall reset i))
-		  (format t "advance!: after reset indexes = ~a (dimensions-max = ~a, i = ~a)~%" indexes dimensions-max i)
-		  (advance! indexes (1- i)))))
-	     (next! (indexes)
-	       (advance! indexes dimensions-last))
-	     (%get (indexes)
-	       (apply g array (coerce indexes 'list))))
-      (prepare-end!)
-      (format t "dimensions-max = ~a, s = ~a, e = ~a~%" dimensions-max s e)
-      (cl:do* ((indexes (copy s))
-	       (item (%get indexes) (%get indexes)))
-	      ((funcall predicate item) indexes)
-	(next! indexes)
-	(when (finished? indexes) (fail))))))
+		       (%finished? subscripts)))))
+	     (finished? (subscripts)
+	       (when has-end? (%finished? subscripts))))
+      (cl:do ((subscripts s (funcall advance subscripts)))
+	     ((or (null subscripts) (finished? subscripts)) nil)
+	(let* ((ss (coerce (subscripts-current subscripts) 'list))
+	       (item (apply g array ss)))
+	  (when (funcall predicate item)
+	    (return-from position-if ss)))))))
 
-(defun iterate-dimensions (dimensions-last dimensions-max indexes &optional from-end)
-  (let (compare-current index-adjustment reset)
-    (if from-end
-	(setf compare-current (lambda (i) (> (get indexes i) 0))
-	      index-adjustment -1
-	      reset (lambda (i) (get dimensions-max i)))
-	(setf compare-current (lambda (i) (< (get indexes i) (get dimensions-max i)))
-	      index-adjustment 1
-	      reset (constantly 0)))
-    (labels ((advance (i)
-	       (cond
-		 ((> 0 i) (return-from iterate-dimensions nil))
-		 ((funcall compare-current i) (incf (get indexes i) index-adjustment))
-		 (t
-		  (advance (1- i))
-		  (setf (get indexes i) (funcall reset i))))))
-      (advance dimensions-last)))
-  indexes)
+(defun position-if-not (predicate array &key from-end start end key)
+  (position-if (complement predicate) array :from-end from-end :start start :end end :key key))
+
+(defun position (item array &key from-end start end key test test-not)
+  (cond
+    (test (position-if (lambda (e) (funcall test item e)) array :from-end from-end :start start :end end :key key))
+    (test-not (position-if-not (lambda (e) (funcall test-not item e)) array :from-end from-end :start start :end end :key key))
+    (t (position-if (lambda (e) (equal item e)) array :from-end from-end :start start :end end :key key))))
 
 (defmacro traverse-array-as-vector ((array get length item start end key from-end? result &key get-item-in-varlist from-end-forms from-start-forms pre-do-forms do-var-forms) &body body)
   "Traverse ARRAY linear as a vector"

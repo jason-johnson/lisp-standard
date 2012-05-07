@@ -38,3 +38,12 @@
 
 (defmethod std.collection:sort ((collection array) predicate &key key)
   (sort (copy collection) predicate :key key))
+
+(defmethod std.collection:position-if (predicate (collection array) &key from-end start end key)
+  (position-if predicate collection :from-end from-end :start start :end end :key key))
+
+(defmethod std.collection:position-if-not (predicate (collection array) &key from-end start end key)
+  (position-if-not predicate collection :from-end from-end :start start :end end :key key))
+
+(defmethod std.collection:position (item (collection array) &key from-end start end key test test-not)
+  (position item collection :from-end from-end :start start :end end :key key :test test :test-not test-not))

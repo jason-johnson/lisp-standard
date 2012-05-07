@@ -3,8 +3,8 @@
 (defpackage #:standard.collection.array
   (:nicknames #:std.collection.array #:collection.array #:array)
   (:use #:cl)
-  (:shadow #:get #:map #:count #:count-if #:count-if-not #:reduce #:find #:find-if #:find-if-not #:length #:copy #:do)
-  (:import-from #:std.base #:defun-alias #:compose #:with-unique-names)
+  (:import-from #:std.base #:defun-alias #:compose #:with-unique-names #:arr)
+  (:shadow #:get #:map #:count #:count-if #:count-if-not #:reduce #:find #:find-if #:find-if-not #:position #:position-if #:position-if-not #:length #:copy #:do)
   (:export
    #:make
    #:new-from
@@ -19,6 +19,9 @@
    #:find
    #:find-if
    #:find-if-not
+   #:position
+   #:position-if
+   #:position-if-not
    #:length
    #:rank
    #:dimension
