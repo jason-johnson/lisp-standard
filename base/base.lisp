@@ -108,7 +108,7 @@
 
 ;; Macro helpers
 
-(defmacro with-gensyms ((&rest names) &body body)
+(defmacro with-unique-names ((&rest names) &body body)
   `(let ,(loop for n in names collect `(,n (gensym)))
      ,@body))
 

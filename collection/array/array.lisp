@@ -162,7 +162,7 @@
 	(setf
 	 less-than '#'<
 	 greater-than '#'>))
-    (with-gensyms (g s e step check i)
+    (with-unique-names (g s e step check i)
       `(macrolet ((%get (i)
 		    `(funcall ,',g array ,i))
 		  (%step (i)

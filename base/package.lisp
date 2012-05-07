@@ -16,7 +16,7 @@
    #:until
    #:compose
    #:iterate
-   #:with-gensyms
+   #:with-unique-names
    #:once-only
    #:copy
    #:coerce))
