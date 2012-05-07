@@ -45,36 +45,18 @@
 ;; (defun length (array)			; TODO: Is this what we want?  We already have total-size for total size, but this is different than everything else we do with arrays
 ;;   (first (dimensions array)))		; TODO: I don't think so.  Since all functions use the total-size, length wouldn't be useful for anything
 
-; TODO: This function needs some efficiency work
+;; These functions should be tested to see if coerce is too slow vs modifying a list via pointers directly
 (defun map (function &rest arrays)
   (let* ((dimensions-list (apply #'mapcar #'min (mapcar #'dimensions arrays)))
 	 (result (make dimensions-list))
-	 (dimensions (coerce dimensions-list 'vector))
-	 (indexes (make (cl:length dimensions) :initial-element 0))
-	 (index (1- (cl:length dimensions))))
-    (labels ((next (i)
-	       (if (< i 0) (return-from map result))
-	       (if (>= (get indexes i) (1- (get dimensions i)))
-		   (progn
-		     (setf (get indexes i) 0)
-		     (next (1- i)))
-		   (setf (get indexes i) (1+ (get indexes i)))))
-	     (%get (array)
-	       (let ((is (coerce indexes 'list))
-		     (diff (- (list-length (dimensions array)) (cl:length indexes))))
-		 (unless (eql diff 0)
-		   (setf is (nreverse is))
-		   (dotimes (dummy diff)
-		     (cl:push 0 is))
-		   (setf is (nreverse is)))
-		 (apply #'get array is)))
-	     (%map ()
-	       (let ((i (apply #'row-major-index result (coerce indexes 'list)))
-		     (e (apply function (mapcar #'%get arrays))))
-		 (row-major-put! result i e))
-	       (next index)
-	       (%map)))
-      (%map))))
+	 (s (make-subscripts result)))
+    (cl:do ((subscripts s (subscripts-inc! subscripts)))
+	   ((null subscripts) result)
+      (let* ((ss (coerce (subscripts-current subscripts) 'list))
+	     (items (mapcar (lambda (array) (apply #'get array ss)) arrays))
+	     (e (apply function items)))
+	(setf (apply #'aref result ss) e)))))
+
 
 (defun position-if (predicate array &key from-end start end key)
   (let* ((dimensions-list (dimensions array))
