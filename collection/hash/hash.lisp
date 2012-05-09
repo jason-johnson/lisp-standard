@@ -78,6 +78,7 @@
 
 ;; Read/write macros
 
+;; TODO: WARNING ***** This function uses sb-int twice.  We need to make a function called simple-reader-error that is platform independant to use
 (defun read-hash (stream subchar arg)
   (declare (ignore subchar arg))
   (let* ((crash-on-rb? nil)
