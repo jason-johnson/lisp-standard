@@ -47,7 +47,7 @@
 
 (defun-alias 'maphash 'map)
 
-(defmacro do (((key value) hash &optional result) &body body) ;TODO: Needs a with-gensyms on hash
+(defmacro do (((key value) hash &optional result) &body body)
   "Iterate over a hash.  key or value can be set to nil if not used"
   `(loop
       ,@(if key `(for ,key being the hash-keys of ,hash))

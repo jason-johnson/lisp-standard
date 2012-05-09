@@ -1,6 +1,6 @@
 (in-package #:std.collection.hash.keys)
 
-(defmacro do ((key hash &optional result) &body body) ;TODO: Needs a with-gensyms on hash
+(defmacro do ((key hash &optional result) &body body)
   "Iterate over a hash's keys"
   `(hash:do ((,key nil) ,hash ,result)
 	    ,@body))
