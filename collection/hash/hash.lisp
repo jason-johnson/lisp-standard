@@ -110,7 +110,6 @@
 			for end? = (read-seperator)
 			unless (or (eq end? comma) (eq end? end)) do (sb-int:simple-reader-error stream ", or } expected")
 			when (typep key 'string) do (setf equal 'equal)
-			do (format *standard-output* "key:~a(~a), val:~a(~a), comma:~a~%" key (type-of key) val (type-of val) end?)
 			collect (list key val)
 			until (eq end? end))))
 	     (result (make :test equal)))
