@@ -47,7 +47,7 @@
 
 ;;  Normal access
 
-(declaim (inline member? add remove! remove))
+(declaim (inline member? add! remove! remove))
 
 (defun make (&key (test 'eql) (size 16) (rehash-size 1.5) (rehash-threshold 1) hash-function synchronized)
   (make-set :data (hash:make
@@ -61,7 +61,7 @@
 (defun member? (set member)
   (eq (get set member) +dummy-set-value+))
 
-(defun add (set member)
+(defun add! (set member)
   (put! set member)
   member)
 
@@ -74,7 +74,7 @@
 (defun copy (set)
   (let ((result (apply #'make (options set))))
     (do (member set result)
-	(add result member))))
+	(add! result member))))
 
 (defun remove! (set member)
   (hash:remove! (set-data set) member))
@@ -92,13 +92,13 @@
 (defun map (fun set)			; NOTE: Maping over more than one unordered set makes no sense
   (let ((result (apply #'make (options set))))
     (do (e set result)
-	(add result (funcall fun e)))))
+	(add! result (funcall fun e)))))
 
 ;; Set operations
 
 (defun union! (set1 set2)
   (do (member set2 set1)
-    (add set1 member)))
+    (add! set1 member)))
 
 (defun union (set1 set2)
   (union! (copy set1) set2))
@@ -126,7 +126,7 @@
   (let ((result (apply #'make (options set1))))
     (do (member1 set1 result)
       (do (member2 set2)
-	(add result (cons member1 member2))))))
+	(add! result (cons member1 member2))))))
 
 (defun subsetp (set1 set2)
   (do (member set1 t)
@@ -186,7 +186,7 @@
 	 do (parse token)))
     (let ((result (make :test equal)))
       (loop for member in atoms
-	 do (add result member))
+	 do (add! result member))
       result)))
 
 (defun write-set (stream set)
