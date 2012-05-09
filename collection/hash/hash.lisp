@@ -63,7 +63,18 @@
 
 ;; Operations across pairs
 
-(impl-common.unordered:define-collection-functions hash do reduce count count-if count-if-not find find-if find-if-not (k v) (cons k v))
+;; TODO TODO TODO: The following is wrong as it conses key and value together before passing to callers.  This would probably be required with reduce but for others the predicate/whatever should take two values
+;; TODO TODO TODO: But check this logic before changing too much
+(impl-common.unordered:define-collection-functions hash do
+  :value (k v)
+  :value-form (cons k v)
+  :reduce reduce
+  :count count
+  :count-if count-if
+  :count-if-not count-if-not
+  :find find
+  :find-if find-if
+  :find-if-not find-if-not)
 
 ;; Read/write macros
 

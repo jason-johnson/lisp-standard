@@ -87,7 +87,7 @@
 (defun length (set)
   (hash:length (set-data set)))
 
-(impl-common.unordered:define-collection-functions set do reduce count count-if count-if-not find find-if find-if-not)
+(impl-common.unordered:define-collection-functions set do :reduce reduce :count count :count-if count-if :count-if-not count-if-not :find find :find-if find-if :find-if-not find-if-not)
 
 (defun map (fun set)			; NOTE: Maping over more than one unordered set makes no sense
   (let ((result (apply #'make (options set))))
