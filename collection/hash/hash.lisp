@@ -80,53 +80,44 @@
 
 (defun read-hash (stream subchar arg)
   (declare (ignore subchar arg))
-  (let ((buffer (vector:make 0 :adjustable t :fill-pointer 0 :element-type 'character))
-	(equal 'eql)
-	(key? t)
-	result
-	data
-	in-double-quote)
-    (labels ((empty? ()
-	       (= 0 (vector:length buffer)))
-	     (save (char)
-	       (vector-push-extend char buffer))
-	     (current-string ()
-	       (unless (empty?)
-		 (prog1
-		     (read-from-string (copy-seq buffer))
-		   (setf (vector:fill-pointer buffer) 0))))
-	     (handle-double-quote ()
-	       (when key?
-		 (setf equal 'equal))
-	       (setf in-double-quote (not in-double-quote))
-	       (save #\"))
-	     (handle-end-token ()
-	       (setf key? (not key?))
-	       (let ((token (current-string)))
-		 (when token
-		   (push token data))))
-	     (handle-char (char)
-	       (case char
-		 (#\" (handle-double-quote))
-		 ((#\, #\Space) (handle-end-token))
-		 (t (save char))))
-	     (load-data (data)
-	       (loop
-		  for key in data by #'cddr
-		  for val in (rest data) by #'cddr
-		  do (put! result key val)))
-	     (read-until (char)
-	       (loop for ch = (read-char-no-hang stream)
-		  when (and (eq ch char) (not in-double-quote))
-		  do (progn
-		       (handle-end-token)
-		       (setf result (make :test equal))
-		       (load-data (nreverse data))
-		       (return result))
-		  do (if (and in-double-quote (not (eq ch #\")))
-			 (save ch)
-			 (handle-char ch)))))
-      (read-until #\}))))
+  (let* ((crash-on-rb nil)
+	 (*end-action* (lambda () (when crash-on-rb (sb-int:simple-reader-error stream "unexpected termination character"))))
+	 (end (gensym "END"))
+	 (comma (gensym "COMMA"))
+	 (*readtable* (copy-readtable)))
+    (declare (special *end-action*))
+    (set-macro-character #\} (lambda (stream subchar)
+			       (declare (ignore stream subchar))
+			       (funcall *end-action*)))
+    (flet ((read-first-key ()
+	     (prog1
+		 (read stream nil nil t)
+	       (setf crash-on-rb t)))
+	   (read-seperator ()
+	     (let ((*readtable* (copy-readtable))
+		   (*end-action* (lambda () end)))
+	       (declare (special *end-action*))
+	       (set-macro-character #\, (lambda (stream char)
+					  (declare (ignore char) (ignore stream))
+					  comma))
+	       (read stream nil))))
+      (let* ((first-key (read-first-key))
+	     (equal 'eql)
+	     (data (when first-key
+		     (loop
+			for key = first-key then (read stream nil nil t)
+			for val = (read stream nil nil t)
+			for end? = (read-seperator)
+			unless (or (eq end? comma) (eq end? end)) do (sb-int:simple-reader-error stream ", or } expected")
+			when (typep key 'string) do (setf equal 'equal)
+			do (format *standard-output* "key:~a(~a), val:~a(~a), comma:~a~%" key (type-of key) val (type-of val) end?)
+			collect (list key val)
+			until (eq end? end))))
+	     (result (make :test equal)))
+	(loop
+	   for (key val) in data
+	   do (put! result key val))
+	result))))
 
 (defun write-hash (stream hash)
   (let ((pairs (loop
