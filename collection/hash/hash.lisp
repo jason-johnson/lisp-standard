@@ -81,18 +81,16 @@
 ;; TODO: WARNING ***** This function uses sb-int twice.  We need to make a function called simple-reader-error that is platform independant to use
 (defun read-hash (stream subchar arg)
   (declare (ignore subchar arg))
-  (let* ((*crash-on-rb?* nil)
-	 (end (gensym "END"))
-	 (end-action (lambda ()
-		       (if *crash-on-rb?*
-			   (sb-int:simple-reader-error stream "unexpected termination character")
-			   end)))
-	 (comma (gensym "COMMA"))
-	 (*readtable* (copy-readtable)))
+  (let ((*crash-on-rb?* nil)
+	(end (gensym "END"))
+	(comma (gensym "COMMA"))
+	(*readtable* (copy-readtable)))
     (declare (special *crash-on-rb?*))
-    (set-macro-character #\} (lambda (stream subchar)
-			       (declare (ignore stream subchar))
-			       (funcall end-action)))
+    (set-macro-character #\} (lambda (stream char)
+			       (declare (ignore char))
+			       (if *crash-on-rb?*
+				   (sb-int:simple-reader-error stream "unexpected termination")
+				   end)))
     (flet ((read-first-key ()
 	     (prog1
 		 (read stream nil nil t)
