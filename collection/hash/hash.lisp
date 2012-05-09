@@ -108,7 +108,7 @@
 			for key = first-key then (read stream nil nil t)
 			for val = (read stream nil nil t)
 			for end? = (read-seperator)
-			unless (or (eq end? comma) (eq end? end)) do (sb-int:simple-reader-error stream ", or } expected")
+			unless (or (eq end? comma) (eq end? end)) do (sb-int:simple-reader-error stream "seperator (,) or terminator (}) expected")
 			when (typep key 'string) do (setf equal 'equal)
 			collect (list key val)
 			until (eq end? end))))
