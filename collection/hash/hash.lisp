@@ -80,8 +80,8 @@
 
 (defun read-hash (stream subchar arg)
   (declare (ignore subchar arg))
-  (let* ((crash-on-rb nil)
-	 (*end-action* (lambda () (when crash-on-rb (sb-int:simple-reader-error stream "unexpected termination character"))))
+  (let* ((crash-on-rb? nil)
+	 (*end-action* (lambda () (when crash-on-rb? (sb-int:simple-reader-error stream "unexpected termination character"))))
 	 (end (gensym "END"))
 	 (comma (gensym "COMMA"))
 	 (*readtable* (copy-readtable)))
@@ -92,7 +92,7 @@
     (flet ((read-first-key ()
 	     (prog1
 		 (read stream nil nil t)
-	       (setf crash-on-rb t)))
+	       (setf crash-on-rb? t)))
 	   (read-seperator ()
 	     (let ((*readtable* (copy-readtable))
 		   (*end-action* (lambda () end)))
