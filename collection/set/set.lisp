@@ -173,21 +173,21 @@
 
 (defun read-set (stream subchar arg)
   (declare (ignore subchar arg))
-  (let ((equal 'eql)
-	atoms)
-    (flet ((parse (token)
-	     (typecase token
-	       (string
-		(setf equal 'equal)))
-	     (push token atoms)))
-      (loop
-	 for token = (read stream nil)
-	 while token
-	 do (parse token)))
-    (let ((result (make :test equal)))
-      (loop for member in atoms
-	 do (add! result member))
-      result)))
+  (let ((end (gensym "END"))
+	(*readtable* (copy-readtable)))
+    (set-macro-character #\] (lambda (stream char)
+			       (declare (ignore stream char))
+			       end))
+    (let* ((equal 'eql)
+	   (values (loop
+		      for value = (read stream t nil t)
+		      until (eq value end)
+		      when (typep value 'string) do (setf equal 'equal)
+		      collect value)))
+      (let ((result (make :test equal)))
+	(loop for member in values
+	   do (add! result member))
+	result))))
 
 (defun write-set (stream set)
   (let ((atoms (loop
@@ -196,8 +196,3 @@
     (format stream "#[~{~S~^ ~}]" atoms)))
 
 (set-dispatch-macro-character #\# #\[ #'read-set)
-
-(set-macro-character #\] (lambda (stream char)
-			   (declare (ignore stream)
-				    (ignore char))
-				    nil))
