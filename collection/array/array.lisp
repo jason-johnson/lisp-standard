@@ -57,9 +57,8 @@
 	     (e (apply function items)))
 	(setf (apply #'aref result ss) e)))))
 
-;; NOTE: I could ensure end position isn't past the array but I would prefer the compiler to deal with this at some point
-
 (defun position-if (predicate array &key from-end start end key)
+  (when end (ensure-valid-end-subscript array end)) ; NOTE: Would be nice if the compiler could do this when possible
   (let* ((has-end? (if from-end (not (null end)) (not (null start))))
 	 (start (make-subscripts array start))
 	 (end (make-subscripts array (or end t)))

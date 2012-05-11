@@ -28,3 +28,8 @@
 	       subscripts)))
   (def-advance subscripts-inc! (< (svref subscript-array i) (svref subscript-max i)) incf 0)
   (def-advance subscripts-dec! (> (svref subscript-array i) 0) decf (svref subscript-max i)))
+
+(defun ensure-valid-end-subscript (array subscript-list)
+  (declare (ignore array subscript-list))
+  ;; TODO!
+  )
