@@ -51,31 +51,7 @@
 (defmethod std.collection:put! ((collection vector) index value)
   (setf (get collection index) value))
 
-;; NOTE: vector and simple-vector are subtypes of array so the copy defined in the array module works for us too.  This also requires us to override various generic methods
-
-(defmethod std.collection:count (item (collection vector) &key from-end (start 0) end key (test #'eql) (test-not nil test-not-p))
-  (apply #'count item collection :from-end from-end :start start :end end :key key
-	 (if test-not-p
-	     (list :test-not test-not)
-	     (list :test test))))
-
-(defmethod std.collection:count-if (predicate (collection vector) &key from-end (start 0) end key)
-  (count-if predicate collection :from-end from-end :start start :end end :key key))
-
-(defmethod std.collection:count-if-not (predicate (collection vector) &key from-end (start 0) end key)
-  (count-if-not predicate collection :from-end from-end :start start :end end :key key))
-
-(defmethod std.collection:reduce (function (collection vector) &key key from-end (start 0) end (initial-value nil initial-value-p))
-  (apply #'reduce function collection :key key :from-end from-end :start start :end end (if initial-value-p (list :initial-value initial-value))))
-
-(defmethod std.collection:find (item (collection vector) &key from-end (start 0) end key test test-not)
-  (find item collection :from-end from-end :test test :test-not test-not :start start :end end :key key))
-
-(defmethod std.collection:find-if (predicate (collection vector) &key from-end (start 0) end key)
-  (find-if predicate collection :from-end from-end :start start :end end :key key))
-
-(defmethod std.collection:find-if-not (predicate (collection vector) &key from-end (start 0) end key)
-  (find-if-not predicate collection :from-end from-end :start start :end end :key key))
+;; NOTE: vector and simple-vector are subtypes of array so the copy defined in the array module works for us too.
 
 (defmethod std.collection:sort ((collection vector) predicate &key key)
   (sort collection predicate :key key))
