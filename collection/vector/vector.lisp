@@ -40,8 +40,9 @@
 (defun merge (vector1 vector2 predicate &key key)
   (merge^ (copy vector1) (copy vector2) predicate :key key))
 
-(defun concatenate (&rest sequences)
-  (apply #'cl:concatenate 'vector sequences))
+(defun concatenate (&rest vectors)
+  (apply #'cl:concatenate 'vector vectors))
+
 
 ;; Generic access
 
