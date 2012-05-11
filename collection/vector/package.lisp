@@ -14,6 +14,7 @@
    #:get
    #:put!
    #:copy
+   #:copy^
    #:new-from
    #:do
    #:map

@@ -13,6 +13,7 @@
    #:map
    #:concatenate
    #:copy
+   #:copy^
    #:do
    #:push!
    #:push-extend!

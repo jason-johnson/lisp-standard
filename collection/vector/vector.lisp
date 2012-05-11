@@ -29,6 +29,15 @@
 (defun map (fun &rest vectors)
   (apply #'map-to 'vector fun (first vectors) (rest vectors)))
 
+(defun copy^ (vector &optional (start 0) end)
+  (let ((end (1- (if end end (length vector)))))
+    (when (> start 0)
+      (cl:do ((i 0 (1+ i))
+	      (r start (1+ r)))
+	     ((> r end))
+	(put! vector i (get vector r))))
+    (adjust vector (- (1+ end) start))))
+
 (defun sort (vector predicate &key key)
   (cl:sort (copy vector) predicate :key key))
 
@@ -54,6 +63,9 @@
   (setf (get collection index) value))
 
 ;; NOTE: vector and simple-vector are subtypes of array so the copy defined in the array module works for us too.
+
+(defmethod std.collection:copy^ ((collection vector) &optional (start 0) end)
+  (copy^ collection start end))
 
 (defmethod std.collection:sort ((collection vector) predicate &key key)
   (sort collection predicate :key key))

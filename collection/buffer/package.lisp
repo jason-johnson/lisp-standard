@@ -13,6 +13,7 @@
    #:put!
    #:map
    #:copy
+   #:copy^
    #:do
    #:length
    #:rank
