@@ -5,7 +5,7 @@
   (:use #:cl #:std.collection.hash)
   (:import-from #:std.base #:defun-alias #:compose)
   (:shadowing-import-from #:hash #:map #:get #:length)
-  (:shadow #:do #:count #:count-if #:reduce #:find #:find-if #:remove #:remove!)
+  (:shadow #:do #:count #:count-if #:reduce #:find #:find-if #:position #:position-if #:remove #:remove!)
   (:export
    #:do
    #:count
@@ -13,5 +13,7 @@
    #:reduce
    #:find
    #:find-if
+   #:position
+   #:position-if
    #:remove
    #:remove!))

@@ -31,3 +31,11 @@
 (defmethod std.collection:count-if (predicate (collection hash-table) &key from-end start end key)
   (declare (ignore from-end start end))
   (hash.values:count-if predicate collection key))
+
+(defmethod std.collection:position (item (collection hash-table) &key from-end start end key (test #'eql))
+  (declare (ignore from-end start end))
+  (hash.values:position item collection :key key :test test))
+
+(defmethod std.collection:position-if (predicate (collection hash-table) &key from-end start end key)
+  (declare (ignore from-end start end))
+  (hash.values:position-if predicate collection key))
