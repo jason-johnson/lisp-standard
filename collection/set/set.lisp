@@ -87,7 +87,7 @@
 (defun length (set)
   (hash:length (set-data set)))
 
-(impl-common.unordered:define-collection-functions set do :reduce reduce :count count :count-if count-if :count-if-not count-if-not :find find :find-if find-if :find-if-not find-if-not)
+(impl-common.unordered:define-collection-functions set do :reduce reduce :count count :count-if count-if :find find :find-if find-if)
 
 (defun map (fun set)			; NOTE: Maping over more than one unordered set makes no sense
   (let ((result (apply #'make (options set))))
@@ -141,33 +141,25 @@
 (defmethod std.collection:length ((collection set))
   (length collection))
 
-(defmethod std.collection:count (item (collection set) &key from-end start end key test test-not)
+(defmethod std.collection:count (item (collection set) &key from-end start end key (test #'eql))
   (declare (ignore from-end start end))
-  (count item collection :key key :test test :test-not test-not))
+  (count item collection :key key :test test))
 
 (defmethod std.collection:count-if (predicate (collection set) &key from-end start end key)
   (declare (ignore from-end start end))
   (count-if predicate collection key))
 
-(defmethod std.collection:count-if-not (predicate (collection set) &key from-end start end key)
-  (declare (ignore from-end start end))
-  (count-if-not predicate collection key))
-
 (defmethod std.collection:reduce (function (collection set) &key key from-end start end (initial-value nil initial-value-p))
   (declare (ignore start end))
   (apply #'reduce function collection :key key :from-end from-end (if initial-value-p (list :initial-value initial-value))))
 
-(defmethod std.collection:find (item (collection set) &key from-end start end key test test-not)
+(defmethod std.collection:find (item (collection set) &key from-end start end key (test #'eql))
   (declare (ignore from-end start end))
-  (find item collection :key key :test test :test-not test-not))
+  (find item collection :key key :test test))
 
 (defmethod std.collection:find-if (predicate (collection set) &key from-end start end key)
   (declare (ignore from-end start end))
   (find-if predicate collection key))
-
-(defmethod std.collection:find-if-not (predicate (collection set) &key from-end start end key)
-  (declare (ignore from-end start end))
-  (find-if-not predicate collection key))
 
 ;; Read/write macros
 

@@ -115,20 +115,11 @@
 	   (setf first? nil
 		 last head)))))))
 
-(defun split-if-not^ (predicate list &key key from-end (start 0) end count remove-empty)
-  (split-if^ (complement predicate) list :key key :from-end from-end :start start :end end :count count :remove-empty remove-empty))
-
-(defun split^ (delimiter list &key key from-end (start 0) end count (equal 'eql) test test-not remove-empty)
-  (cond
-    (test (split-if^ (lambda (v) (funcall test v delimiter)) list :key key :from-end from-end :start start :end end :count count :remove-empty remove-empty))
-    (test-not (split-if-not^ (lambda (v) (funcall test-not v delimiter)) list :key key :from-end from-end :start start :end end :count count :remove-empty remove-empty))
-    (t (split-if^ (lambda (v) (funcall equal v delimiter)) list :key key :from-end from-end :start start :end end :count count :remove-empty remove-empty))))
+(defun split^ (delimiter list &key key from-end (start 0) end count (test #'eql) remove-empty)
+  (split-if^ (lambda (e) (funcall test e delimiter)) list :key key :from-end from-end :start start :end end :count count :remove-empty remove-empty))
 
 (defun split-if (predicate list &key key from-end (start 0) end count remove-empty)
   (split-if^ predicate (copy list) :key key :from-end from-end :start start :end end :count count :remove-empty remove-empty))
 
-(defun split-if-not (predicate list &key key from-end (start 0) end count remove-empty)
-  (split-if-not^ predicate (copy list) :key key :from-end from-end :start start :end end :count count :remove-empty remove-empty))
-
-(defun split (delimiter list &key key from-end (start 0) end count (equal 'eql) test test-not remove-empty)
-  (split^ delimiter (copy list) :key key :from-end from-end :start start :end end :count count :equal equal :test test :test-not test-not :remove-empty remove-empty))
+(defun split (delimiter list &key key from-end (start 0) end count (test #'eql) remove-empty)
+  (split^ delimiter (copy list) :key key :from-end from-end :start start :end end :count count :test test :remove-empty remove-empty))

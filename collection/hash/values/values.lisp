@@ -5,4 +5,4 @@
   `(hash:do ((nil ,value) ,hash ,result)
 	    ,@body))
 
-(impl-common.unordered:define-collection-functions hash do :reduce reduce :count count :count-if count-if :count-if-not count-if-not :find find :find-if find-if :find-if-not find-if-not)
+(impl-common.unordered:define-collection-functions hash do :reduce reduce :count count :count-if count-if :find find :find-if find-if)

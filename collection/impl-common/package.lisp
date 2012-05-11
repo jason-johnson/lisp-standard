@@ -9,8 +9,8 @@
    #:remove^
    #:remove-if
    #:remove-if^
-   #:remove-if-not
-   #:remove-if-not^
+   #:filter
+   #:filter^
    #:remove-duplicates
    #:remove-duplicates^
    #:reverse
@@ -19,8 +19,6 @@
    #:substitute!
    #:substitute-if
    #:substitute-if!
-   #:substitute-if-not
-   #:substitute-if-not!
    #:append
    #:append!
    #:sort^))

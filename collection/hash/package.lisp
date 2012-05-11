@@ -4,7 +4,7 @@
   (:nicknames #:std.collection.hash #:collection.hash #:hash)
   (:use #:cl)
   (:import-from #:std.base #:defun-alias #:compose)
-  (:shadow #:get #:put! #:copy #:make #:count #:count-if #:count-if-not #:reduce #:find #:find-if #:find-if-not #:remove #:remove! #:do #:length #:map)
+  (:shadow #:get #:put! #:copy #:make #:count #:count-if #:reduce #:find #:find-if #:remove #:remove! #:do #:length #:map)
   (:export
    #:make
    #:get
@@ -13,11 +13,9 @@
    #:map
    #:count
    #:count-if
-   #:count-if-not
    #:reduce
    #:find
    #:find-if
-   #:find-if-not
    #:remove
    #:remove!
    #:do

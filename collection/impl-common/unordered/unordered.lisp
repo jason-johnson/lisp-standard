@@ -2,7 +2,7 @@
 
 ;; NOTE: We make the user pass every symbol we define because I don't know how else to inject the definition into the calling package
 
-(defmacro define-collection-functions (name do &key (value 'value) (value-form 'value) reduce count count-if count-if-not find find-if find-if-not)
+(defmacro define-collection-functions (name do &key (value 'value) (value-form 'value) reduce count count-if find find-if)
   (let ((val (gensym)))
     `(progn
        ,@(if reduce
@@ -33,16 +33,9 @@
 		       (when (funcall p ,value-form)
 			 (incf count)))))))
 
-       ,@(if (and count-if count-if-not)
-	     `((defun ,count-if-not (predicate ,name &optional key)
-		(,count-if (complement predicate) ,name key))))
-
-       ,@(if (and count-if count-if-not count)
-	     `((defun ,count (item ,name &key key test test-not)
-		(cond
-		  (test (,count-if (lambda (v) (funcall test v item)) ,name key))
-		  (test-not (,count-if-not (lambda (v) (funcall test-not v item)) ,name key))
-		  (t (,count-if (lambda (v) (eql v item)) ,name key))))))
+       ,@(if (and count-if count)
+	     `((defun ,count (item ,name &key key (test #'eql))
+		 (,count-if (lambda (v) (funcall test v item)) ,name key))))
 
        ,@(if find-if
 	     `((defun ,find-if (predicate ,name &optional key)
@@ -54,18 +47,6 @@
 			 (when (funcall p ,val)
 			   (return-from ,find-if ,val))))))))
 
-       ,@(if (and find-if find-if-not)
-	     `((defun ,find-if-not (predicate ,name &optional key)
-		(,find-if (complement predicate) ,name key))))
-
-       ,@(if (and find-if find-if-not find)
-	     `((defun ,find (item ,name &key key test test-not)
-		(cond
-		  (test (,find-if (lambda (v) (funcall test v item)) ,name key))
-		  (test-not (,find-if-not (lambda (v) (funcall test-not v item)) ,name key))
-		  (t (,find-if (lambda (v) (eql v item)) ,name key)))))))))
-
-;(defgeneric substitute (new old collection &key test test-not start count end key)
-
-;(defgeneric substitute-if (new predicate collection &key start count end key)
-
+       ,@(if (and find-if find)
+	     `((defun ,find (item ,name &key key (test #'eql))
+		 (,find-if (lambda (v) (funcall test v item)) ,name key)))))))

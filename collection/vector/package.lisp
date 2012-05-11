@@ -5,8 +5,8 @@
   (:use #:std.collection.array #:cl #:impl-common)
   (:import-from #:std.base #:defun-alias)
   (:import-from #:std.collection #:map-to)
-  (:shadowing-import-from #:impl-common #:substitute! #:substitute-if! #:substitute-if-not! #:append! #:reverse^ #:sort^)
-  (:shadowing-import-from #:cl #:count #:count-if #:count-if-not #:reduce #:find #:find-if #:find-if-not #:position #:position-if #:position-if-not #:length)
+  (:shadowing-import-from #:impl-common #:substitute! #:substitute-if! #:append! #:reverse^ #:sort^)
+  (:shadowing-import-from #:cl #:count #:count-if #:reduce #:find #:find-if #:position #:position-if #:length)
   (:shadowing-import-from #:std.collection.array #:copy)
   (:shadow #:get #:do #:map #:sort #:stable-sort #:merge #:merge^ #:concatenate)
   (:export
@@ -35,17 +35,15 @@
    #:pop!
    #:count
    #:count-if
-   #:count-if-not
    #:reduce
    #:find
    #:find-if
-   #:find-if-not
    #:remove
    #:remove^
    #:remove-if
    #:remove-if^
-   #:remove-if-not
-   #:remove-if-not^
+   #:filter
+   #:filter^
    #:remove-duplicates
    #:remove-duplicates^
    #:reverse
@@ -54,8 +52,6 @@
    #:substitute!
    #:substitute-if
    #:substitute-if!
-   #:substitute-if-not
-   #:substitute-if-not!
    #:append
    #:append!
    #:sort

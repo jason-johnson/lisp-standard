@@ -16,26 +16,18 @@
   (declare (ignore start end))
   (apply #'hash.values:reduce function collection :key key :from-end from-end (if initial-value-p (list :initial-value initial-value))))
 
-(defmethod std.collection:find (item (collection hash-table) &key from-end start end key test test-not)
+(defmethod std.collection:find (item (collection hash-table) &key from-end start end key (test #'eql))
   (declare (ignore from-end start end))
-  (hash.values:find item collection :key key :test test :test-not test-not))
+  (hash.values:find item collection :key key :test test))
 
 (defmethod std.collection:find-if (predicate (collection hash-table) &key from-end start end key)
   (declare (ignore from-end start end))
   (hash.values:find-if predicate collection key))
 
-(defmethod std.collection:find-if-not (predicate (collection hash-table) &key from-end start end key)
+(defmethod std.collection:count (item (collection hash-table) &key from-end start end key (test #'eql))
   (declare (ignore from-end start end))
-  (hash.values:find-if-not predicate collection key))
-
-(defmethod std.collection:count (item (collection hash-table) &key from-end start end key test test-not)
-  (declare (ignore from-end start end))
-  (hash.values:count item collection :key key :test test :test-not test-not))
+  (hash.values:count item collection :key key :test test))
 
 (defmethod std.collection:count-if (predicate (collection hash-table) &key from-end start end key)
   (declare (ignore from-end start end))
   (hash.values:count-if predicate collection key))
-
-(defmethod std.collection:count-if-not (predicate (collection hash-table) &key from-end start end key)
-  (declare (ignore from-end start end))
-  (hash.values:count-if-not predicate collection key))

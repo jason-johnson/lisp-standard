@@ -14,16 +14,12 @@
 			  #:concatenate
 			  #:count
 			  #:count-if
-			  #:count-if-not
 			  #:find
 			  #:find-if
-			  #:find-if-not
 			  #:position
 			  #:position-if
-			  #:position-if-not
 			  #:substitute!
 			  #:substitute-if!
-			  #:substitute-if-not!
 			  #:append!
 			  #:reverse^
 			  #:sort
@@ -89,8 +85,6 @@
    #:substitute!
    #:substitute-if
    #:substitute-if!
-   #:substitute-if-not
-   #:substitute-if-not!
    #:append
    #:append!
    #:sort

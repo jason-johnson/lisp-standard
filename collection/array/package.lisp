@@ -4,7 +4,7 @@
   (:nicknames #:std.collection.array #:collection.array #:array)
   (:use #:cl)
   (:import-from #:std.base #:defun-alias #:compose #:with-unique-names #:arr)
-  (:shadow #:get #:map #:count #:count-if #:count-if-not #:reduce #:find #:find-if #:find-if-not #:position #:position-if #:position-if-not #:length #:copy #:do)
+  (:shadow #:get #:map #:count #:count-if #:reduce #:find #:find-if #:position #:position-if #:length #:copy #:do)
   (:export
    #:make
    #:new-from
@@ -14,14 +14,11 @@
    #:do
    #:count
    #:count-if
-   #:count-if-not
    #:reduce
    #:find
    #:find-if
-   #:find-if-not
    #:position
    #:position-if
-   #:position-if-not
    #:length
    #:rank
    #:dimension
@@ -43,8 +40,6 @@
    #:substitute!
    #:substitute-if
    #:substitute-if!
-   #:substitute-if-not
-   #:substitute-if-not!
    #:append
    #:append!
    #:sort

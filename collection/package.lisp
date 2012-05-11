@@ -10,24 +10,19 @@
    #:length
    #:position
    #:position-if
-   #:position-if-not
    #:count
    #:count-if
-   #:count-if-not
    #:reduce
    #:find
    #:find-if
-   #:find-if-not
    #:remove
    #:map
    #:remove-if
-   #:remove-if-not
    #:remove-duplicates
    #:reverse
    #:fill
    #:substitute
    #:substitute-if
-   #:substitute-if-not
    #:append
    #:sort
    #:stable-sort
@@ -40,7 +35,6 @@
    #:length
    #:position
    #:position-if
-   #:position-if-not
    #:copy
    #:remove
    #:remove^
@@ -48,18 +42,15 @@
    #:map
    #:split
    #:split-if
-   #:split-if-not
    #:count
    #:count-if
-   #:count-if-not
    #:reduce
    #:find
    #:find-if
-   #:find-if-not
    #:remove-if
    #:remove-if^
-   #:remove-if-not
-   #:remove-if-not^
+   #:filter
+   #:filter^
    #:remove-duplicates
    #:remove-duplicates^
    #:reverse
@@ -69,8 +60,6 @@
    #:substitute!
    #:substitute-if
    #:substitute-if!
-   #:substitute-if-not
-   #:substitute-if-not!
    #:append
    #:append!
    #:sort

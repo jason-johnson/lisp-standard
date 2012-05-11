@@ -18,9 +18,6 @@
 (defun %test-position-if (position collection item expected &optional from-end)
   (ensure-same expected (funcall position (lambda (i) (eql i item)) collection :from-end from-end)))
 
-(defun %test-position-if-not (position collection item expected &optional from-end)
-  (ensure-same expected (funcall position (lambda (i) (not (eql i item))) collection :from-end from-end)))
-
 (defun %test-base-copy (copy collection)
   (let ((result (funcall copy collection))
 	(*lift-equality-test* 'equalp))
@@ -60,17 +57,11 @@
 (defun %test-count-if (count collection item expected)
   (ensure-same expected (funcall count (lambda (i) (eql i item)) collection)))
 
-(defun %test-count-if-not (count collection item expected)
-  (ensure-same expected (funcall count (lambda (i) (not (eql i item))) collection)))
-
 (defun %test-find (find collection item)
   (ensure-same item (funcall find item collection)))
 
 (defun %test-find-if (find collection item)
   (ensure-same item (funcall find (lambda (i) (eql i item)) collection)))
-
-(defun %test-find-if-not (find collection item)
-  (ensure-same item (funcall find (lambda (i) (not (eql i item))) collection)))
 
 (flet ((%test (collection find item action)
 	 (ensure-same item (funcall find item collection))
@@ -82,9 +73,9 @@
   (defun %test-remove-if (find remove collection item)
     (let ((f (lambda (i) (eql i item))))
       (%test collection find item (lambda () (funcall remove f collection)))))
-  (defun %test-remove-if-not (find remove collection item)
+  (defun %test-filter (find filter collection item)
     (let ((f (lambda (i) (not (eql i item)))))
-      (%test collection find item (lambda () (funcall remove f collection))))))
+      (%test collection find item (lambda () (funcall filter f collection))))))
 
 (flet ((%test (collection find item action)
 	 (ensure-same item (funcall find item collection))
@@ -96,9 +87,9 @@
   (defun %test-remove-if^ (find remove^ collection item)
     (let ((f (lambda (i) (eql i item))))
       (%test collection find item (lambda () (funcall remove^ f collection)))))
-  (defun %test-remove-if-not^ (find remove^ collection item)
+  (defun %test-filter^ (find filter^ collection item)
     (let ((f (lambda (i) (not (eql i item)))))
-      (%test collection find item (lambda () (funcall remove^ f collection))))))
+      (%test collection find item (lambda () (funcall filter^ f collection))))))
 
 (defun %test-remove-duplicates (count remove collection item starting)
   (ensure-same starting (funcall count item collection))
@@ -145,10 +136,6 @@
   (defun %test-substitute-if (substitute count collection old new)
     (let ((c (funcall count old collection))
 	  (result (funcall substitute new (lambda (i) (eql i old)) collection)))
-      (%test count collection c old new result)))
-  (defun %test-substitute-if-not (substitute count collection old new)
-    (let ((c (funcall count old collection))
-	  (result (funcall substitute new (lambda (i) (not (eql i old))) collection)))
       (%test count collection c old new result))))
 
 (flet ((%test (count collection c old new result)
@@ -163,10 +150,6 @@
   (defun %test-substitute-if! (substitute count collection old new)
     (let ((c (funcall count old collection))
 	  (result (funcall substitute new (lambda (i) (eql i old)) collection)))
-      (%test count collection c old new result)))
-  (defun %test-substitute-if-not! (substitute count collection old new)
-    (let ((c (funcall count old collection))
-	  (result (funcall substitute new (lambda (i) (not (eql i old))) collection)))
       (%test count collection c old new result))))
 
 (defun %test-sort (sort collection expected cmp)
@@ -328,16 +311,6 @@
  (list array vector buffer (string #\a) hash))
 
 (add-collection-tests
- position-if-not
- %test-position-if-not (#'std:position-if-not) ((item 'a) (expected 0))
- (list array vector buffer (string #\a) hash))
-
-(add-collection-tests
- position-if-not-from-end
- %test-position-if-not (#'std:position-if-not) ((item 'a) (expected 3) (from-end t))
- (list array vector buffer (string #\a) hash))
-
-(add-collection-tests
  collection-copy
  %test-collection-copy (#'std.collection:copy) (expected (start 1) (end 3))
  ((list (list 'b 'c))
@@ -353,7 +326,7 @@
   (buffer (vector 'b 'c))
   (string "bc")))
 
-; split, split-if, split-if-not
+; split, split-if
 
 (add-collection-tests
  count
@@ -363,11 +336,6 @@
 (add-collection-tests
  count-if
  %test-count-if (#'std:count-if) ((item 'a) (expected 2))
- (list array vector buffer (string #\a) hash (set 'a 1)))
-
-(add-collection-tests
- count-if-not
- %test-count-if-not (#'std:count-if-not) ((item 'a) (expected 2))
  (list array vector buffer (string #\a) hash (set 'a 1)))
 
 (add-collection-tests
@@ -406,11 +374,6 @@
  (list array vector buffer (string #\b) hash set))
 
 (add-collection-tests
- find-if-not
- %test-find-if-not (#'std:find-if-not) ((item 'b))
- (list array vector buffer (string #\b) hash set))
-
-(add-collection-tests
  remove
  %test-remove (#'std:find #'std:remove) ((item 'b))
  (list vector buffer (string #\b)))
@@ -421,8 +384,8 @@
  (list vector buffer (string #\b)))
 
 (add-collection-tests
- remove-if-not
- %test-remove-if-not (#'std:find #'std:remove-if-not) ((item 'b))
+ filter
+ %test-filter (#'std:find #'std:filter) ((item 'b))
  (list vector buffer (string #\b)))
 
 (add-collection-tests
@@ -436,8 +399,8 @@
  (list vector buffer (string #\b)))
 
 (add-collection-tests
- remove-if-not^
- %test-remove-if-not^ (#'std:find #'std:remove-if-not^) ((item 'b))
+ filter^
+ %test-filter^ (#'std:find #'std:filter^) ((item 'b))
  (list vector buffer (string #\b)))
 
 ;; NOTE: Hash makes no sense for remove-duplicates because keys are also relevant (how do you know which to keep?).  Array makes no sense because how would you truncate on subarray but not the other at that level
@@ -478,11 +441,6 @@
  (list array vector buffer (string #\a #\z) hash))
 
 (add-collection-tests
- substitute-if-not
- %test-substitute-if-not (#'std:substitute-if-not #'std:count) ((old 'a) (new 'z))
- (list array vector buffer (string #\a #\z) hash))
-
-(add-collection-tests
  substitute!
  %test-substitute! (#'std:substitute! #'std:count) ((old 'a) (new 'z))
  (list array vector buffer (string #\a #\z) hash))
@@ -490,11 +448,6 @@
 (add-collection-tests
  substitute-if!
  %test-substitute-if! (#'std:substitute-if! #'std:count) ((old 'a) (new 'z))
- (list array vector buffer (string #\a #\z) hash))
-
-(add-collection-tests
- substitute-if-not!
- %test-substitute-if-not! (#'std:substitute-if-not! #'std:count) ((old 'a) (new 'z))
  (list array vector buffer (string #\a #\z) hash))
 
 (add-collection-tests-with-template

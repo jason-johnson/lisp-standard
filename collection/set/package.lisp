@@ -20,11 +20,9 @@
    #:copy
    #:count
    #:count-if
-   #:count-if-not
    #:reduce
    #:find
    #:find-if
-   #:find-if-not
    #:remove
    #:remove!
    #:set
@@ -45,11 +43,9 @@
    #:map
    #:count
    #:count-if
-   #:count-if-not
    #:reduce
    #:find
    #:find-if
-   #:find-if-not
    #:length
    #:clear
    #:size

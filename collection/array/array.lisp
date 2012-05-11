@@ -30,7 +30,7 @@
 
 (defun-alias 'make-array 'make)
 
-(declaim (inline get length find-if-not find))
+(declaim (inline get length find))
 
 (defun get (array &rest subscripts)
   (apply #'aref array subscripts))
@@ -94,14 +94,8 @@
 	  (when (funcall predicate item)
 	    (return-from position-if ss)))))))
 
-(defun position-if-not (predicate array &key from-end start end key)
-  (position-if (complement predicate) array :from-end from-end :start start :end end :key key))
-
-(defun position (item array &key from-end start end key test test-not)
-  (cond
-    (test (position-if (lambda (e) (funcall test item e)) array :from-end from-end :start start :end end :key key))
-    (test-not (position-if-not (lambda (e) (funcall test-not item e)) array :from-end from-end :start start :end end :key key))
-    (t (position-if (lambda (e) (equal item e)) array :from-end from-end :start start :end end :key key))))
+(defun position (item array &key from-end start end key (test #'eql))
+  (position-if (lambda (e) (funcall test item e)) array :from-end from-end :start start :end end :key key))
 
 (defmacro traverse-array-as-vector ((array get length item start end key from-end? result &key get-item-in-varlist from-end-forms from-start-forms pre-do-forms do-var-forms) &body body)
   "Traverse ARRAY linear as a vector"
@@ -157,14 +151,8 @@
     (traverse-array-as-vector-with-predicate (array predicate #'row-major-get #'total-size item start end key from-end count)
       (incf count))))
 
-(defun count-if-not (predicate array &key from-end (start 0) end key)
-  (count-if (complement predicate) array :from-end from-end :start start :end end :key key))
-
-(defun count (item array &key from-end (start 0) end key test test-not)
-  (cond
-    (test (count-if (lambda (v) (funcall test v item)) array :from-end from-end :start start :end end :key key))
-    (test-not (count-if-not (lambda (v) (funcall test-not v item)) array :from-end from-end :start start :end end :key key))
-    (t (count-if (lambda (v) (eql v item)) array :from-end from-end :start start :end end :key key))))
+(defun count (item array &key from-end (start 0) end key (test #'eql))
+  (count-if (lambda (v) (funcall test v item)) array :from-end from-end :start start :end end :key key))
 
 (defun reduce (function array &key key from-end (start 0) end (initial-value nil initial-value-p))
   (let ((last-result initial-value)
@@ -182,14 +170,8 @@
   (traverse-array-as-vector-with-predicate (array predicate #'row-major-get #'total-size item start end key from-end nil)
     (return-from find-if item)))
 
-(defun find-if-not (predicate array &key from-end (start 0) end key)
-  (find-if (complement predicate) array :from-end from-end :start start :end end :key key))
-
-(defun find (item array &key from-end (start 0) end key test test-not)
-  (cond
-    (test (find-if (lambda (v) (funcall test v item)) array :from-end from-end :start start :end end :key key))
-    (test-not (find-if-not (lambda (v) (funcall test-not v item)) array :from-end from-end :start start :end end :key key))
-    (t (find-if (lambda (v) (eql v item)) array :from-end from-end :start start :end end :key key))))
+(defun find (item array &key from-end (start 0) end key (test #'eql))
+  (find-if (lambda (v) (funcall test v item)) array :from-end from-end :start start :end end :key key))
 
 (defun new-from (array &key (dimensions (dimensions array)) (element-type (element-type array) element-type?) (adjustable (adjustable-p array) adjustable?) (fill-pointer nil fill-pointer?) displaced-to displaced-index-offset)
   (let ((options (list dimensions)))
