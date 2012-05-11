@@ -173,13 +173,12 @@
 (defun find (item array &key from-end (start 0) end key (test #'eql))
   (find-if (lambda (v) (funcall test v item)) array :from-end from-end :start start :end end :key key))
 
-(defun new-from (array &key (dimensions (dimensions array)) (element-type (element-type array) element-type?) (adjustable (adjustable-p array) adjustable?) (fill-pointer nil fill-pointer?) displaced-to displaced-index-offset)
-  (let ((options (list dimensions)))
+(defun new-from (array &key (dimensions (dimensions array)) (element-type (element-type array)) (adjustable (adjustable-p array) adjustable?) (fill-pointer nil fill-pointer?) displaced-to displaced-index-offset)
+  (let ((options (list element-type :element-type dimensions)))
     (macrolet ((when-put! (test key value)
 		 `(when ,test
 		    (push ,key options)
 		    (push ,value options))))
-      (when-put! element-type? :element-type element-type)
       (when-put! adjustable? :adjustable adjustable)
       (when-put! fill-pointer? :fill-pointer fill-pointer)
       (when-put! displaced-to :displaced-to displaced-to)
