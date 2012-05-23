@@ -216,7 +216,7 @@
 (defun copy (array)
   (let ((result (multiple-value-bind (da di) (displacement array)
 		  (if da
-		      (new-from array :displaced-to da :displaced-index-offset di)
+		      (return-from copy (new-from array :displaced-to da :displaced-index-offset di)) ;TODO: test this!
 		      (new-from array)))))
     (dotimes (i (total-size array))
       (setf (row-major-get result i) (row-major-get array i)))
