@@ -136,10 +136,12 @@
 		   ,@(when get-item-in-varlist `((,item (%get ,i) (%get ,i))))
 		   ,@do-var-forms)
 		  ((funcall ,check ,i ,e) ,result)
-	       ,@(if get-item-in-varlist
-		     body
-		     `((let ((,item (%get ,i)))
-			 ,@body))))))))))
+	       (macrolet ((%replace! (value)
+			    `(row-major-put! ,',array ,',i ,value)))
+		 ,@(if get-item-in-varlist
+		       body
+		       `((let ((,item (%get ,i)))
+			   ,@body)))))))))))
 
 (defmacro traverse-array-as-vector-with-predicate ((array predicate item start end key from-end? result) &body body)
   `(traverse-array-as-vector (,array ,item ,start ,end ,key ,from-end? ,result)
@@ -172,6 +174,18 @@
 
 (defun find (item array &key from-end (start 0) end key (test #'eql))
   (find-if (lambda (v) (funcall test v item)) array :from-end from-end :start start :end end :key key))
+
+(defun substitute-if! (new predicate array &key from-end (start 0) end key count)
+  (let ((cnt 0))
+    (traverse-array-as-vector-with-predicate (array predicate item start end key from-end array)
+      (%replace! new)
+      (when count
+	(incf cnt)
+	(when (= count cnt)
+	  (return-from substitute-if! array))))))
+
+(defun substitute! (new old array &key from-end (start 0) end key count (test #'eql))
+  (substitute-if! new (lambda (v) (funcall test v old)) array :from-end from-end :start start :end end :key key :count count))
 
 (defun new-from (array &key (dimensions (dimensions array)) (element-type (element-type array)) (adjustable (adjustable-p array) adjustable?) (fill-pointer nil fill-pointer?) displaced-to displaced-index-offset)
   (let ((options (list element-type :element-type dimensions)))
