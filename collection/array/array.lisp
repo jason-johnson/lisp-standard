@@ -78,7 +78,7 @@
 	      advance #'subscripts-inc!))
     (labels ((ssref (subscript index)
 	       (svref (subscripts-current subscript) index))
-	     (%finished? (subscripts)	; Here we take advantage of the fact that once a left-most position reaches the expected number it won't increase anymore and doesn't need to be checked anymore
+	     (%finished? (subscripts)	; Here we take advantage of the fact that once a left-most position reaches the expected number it won't increase anymore and won't need to be checked further
 	       (when (eql (ssref e end-index) (ssref subscripts end-index))
 		 (if (eql end-index last-dimension)
 		     t
