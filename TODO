@@ -4,7 +4,7 @@ Consider making defun aliases for the different layers of an interface, e.g. def
 
 I want to set up the API so that the specific pacakges (e.g. collection.list, collection.hash) have the most efficient implementation possible, while the top level uses almost exclusively generic functions, so that users can create objects that the "built in" functions work on.  Note that common lisp built in functions are always prefered over custom ones since they can be implemented much more efficiently (but if I find I can match them, then this restriction relaxes).  For example, even though e.g. remove works on lists *or* arrays, I still prefer using it as the "efficient" remove over writing one for each.
 
-Note: 'inc! and dec! should also be generic functions at the top level so users can create objects that act like indexes.  There needs to be a "math" package or something where users can have the one that doesn't take a dispatch if they want.
+Note: 'inc! and dec! should also be generic functions at the top level so users can create objects that act like indexes.  There needs to be a "math" package or something where users can have the one that doesn't take a dispatch if they want. "number" is probably the right thing.
 
 Note that the hash version of get takes a default value to return if the key doesn't exist.  Map should do this as well.
 
