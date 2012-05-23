@@ -165,6 +165,12 @@
 
 (defun read-set (stream subchar arg)
   (declare (ignore subchar arg))
+  (when *read-suppress*
+    (cl:do ((char (read-char stream nil 'eof t) (read-char stream nil 'eof t)))
+	   ((or (eq char 'eof) (char= char #\]))
+	    (if (eq char 'eof)
+		(error 'end-of-file :stream stream)
+		(return-from read-set nil)))))
   (let ((end (gensym "END"))
 	(*readtable* (copy-readtable)))
     (set-macro-character #\] (lambda (stream char)

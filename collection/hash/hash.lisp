@@ -79,6 +79,12 @@
 ;; TODO: WARNING ***** This function uses sb-int twice.  We need to make a function called simple-reader-error that is platform independant to use
 (defun read-hash (stream subchar arg)
   (declare (ignore subchar arg))
+  (when *read-suppress*
+    (cl:do ((char (read-char stream nil 'eof t) (read-char stream nil 'eof t)))
+	   ((or (eq char 'eof) (char= char #\}))
+	    (if (eq char 'eof)
+		(error 'end-of-file :stream stream)
+		(return-from read-hash nil)))))
   (let ((*crash-on-rb?* nil)
 	(end (gensym "END"))
 	(comma (gensym "COMMA"))
