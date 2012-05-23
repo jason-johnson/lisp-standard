@@ -121,7 +121,7 @@
 		  finally (return (append (list top) next)))))
       (make-array (get-demensions args) :initial-contents args)))
 
-(Defun hash (&rest args)
+(defun hash (&rest args)
 	   (assert (evenp (length args)))
 	   (let ((equal 'eql))
 	     (loop
