@@ -143,14 +143,14 @@
 		       `((let ((,item (%get ,i)))
 			   ,@body)))))))))))
 
-(defmacro traverse-array-as-vector-with-predicate ((array predicate item start end key from-end? result) &body body)
+(defmacro traverse-array-as-vector-when ((predicate array item start end key from-end? result) &body body)
   `(traverse-array-as-vector (,array ,item ,start ,end ,key ,from-end? ,result)
     (when (funcall ,predicate ,item)
       ,@body)))
 
 (defun count-if (predicate array &key from-end (start 0) end key)
   (let ((count 0))
-    (traverse-array-as-vector-with-predicate (array predicate item start end key from-end count)
+    (traverse-array-as-vector-when (predicate array item start end key from-end count)
       (incf count))))
 
 (defun count (item array &key from-end (start 0) end key (test #'eql))
@@ -169,7 +169,7 @@
 				     :do-var-forms ((result (funcall f last-result item) (funcall f result item)))))))
 
 (defun find-if (predicate array &key from-end (start 0) end key)
-  (traverse-array-as-vector-with-predicate (array predicate item start end key from-end nil)
+  (traverse-array-as-vector-when (predicate array item start end key from-end nil)
     (return-from find-if item)))
 
 (defun find (item array &key from-end (start 0) end key (test #'eql))
@@ -191,7 +191,7 @@
 
 (defun substitute-if! (new predicate array &key from-end (start 0) end key count)
   (let ((cnt 0))
-    (traverse-array-as-vector-with-predicate (array predicate item start end key from-end array)
+    (traverse-array-as-vector-when (predicate array item start end key from-end array)
       (%replace! new)
       (when count
 	(incf cnt)
