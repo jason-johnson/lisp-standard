@@ -175,6 +175,20 @@
 (defun find (item array &key from-end (start 0) end key (test #'eql))
   (find-if (lambda (v) (funcall test v item)) array :from-end from-end :start start :end end :key key))
 
+(defun reverse! (array)
+  (cl:do ((s 0 (1+ s))
+	  (e (1- (total-size array)) (1- e)))
+	 ((>= s e) array)
+    (rotatef (row-major-get array s) (row-major-get array e))))
+
+(defun reverse (array)
+  (let ((result (new-from array))
+	(size (total-size array)))
+    (cl:do ((i 0 (1+ i))
+	    (e (1- size) (1- e)))
+	   ((< e 0) result)
+      (row-major-put! result i (row-major-get array e)))))
+
 (defun substitute-if! (new predicate array &key from-end (start 0) end key count)
   (let ((cnt 0))
     (traverse-array-as-vector-with-predicate (array predicate item start end key from-end array)

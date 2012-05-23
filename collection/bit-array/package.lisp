@@ -21,7 +21,8 @@
 			  #:substitute!
 			  #:substitute-if!
 			  #:append!
-			  #:reverse^
+			  #:reverse
+			  #:reverse!
 			  #:sort
 			  #:sort^
 			  #:stable-sort
@@ -80,7 +81,7 @@
    #:orc1-into!
    #:orc2-into!
    #:reverse				; TODO: I think all structural modifying functions are gone, now this needs to be done to array/package.lisp and bit-vector needs to inherit from bit-array and vector
-   #:reverse^
+   #:reverse!
    #:substitute
    #:substitute!
    #:substitute-if

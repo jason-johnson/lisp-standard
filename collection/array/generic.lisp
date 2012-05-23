@@ -38,3 +38,9 @@
 
 (defmethod std.collection:position (item (collection array) &key from-end start end key (test 'eql))
   (position item collection :from-end from-end :start start :end end :key key :test test))
+
+(defmethod std.collection:reverse ((collection array))
+  (reverse collection))
+
+(defmethod std.collection:reverse^ ((collection array))
+  (reverse! collection))

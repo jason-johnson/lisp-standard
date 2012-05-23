@@ -14,6 +14,7 @@
 			  #:substitute!
 			  #:substitute-if!
 			  #:append!
+			  #:reverse
 			  #:reverse^
 			  #:sort
 			  #:sort^

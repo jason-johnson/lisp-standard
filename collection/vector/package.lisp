@@ -5,7 +5,7 @@
   (:use #:std.collection.array #:cl #:impl-common)
   (:import-from #:std.base #:defun-alias)
   (:import-from #:std.collection #:map-to)
-  (:shadowing-import-from #:impl-common #:substitute! #:substitute-if! #:append! #:reverse^ #:sort^)
+  (:shadowing-import-from #:impl-common #:substitute! #:substitute-if! #:append! #:reverse #:reverse^ #:sort^)
   (:shadowing-import-from #:cl #:count #:count-if #:reduce #:find #:find-if #:position #:position-if #:length)
   (:shadowing-import-from #:std.collection.array #:copy)
   (:shadow #:get #:do #:map #:sort #:stable-sort #:merge #:merge^ #:concatenate)
