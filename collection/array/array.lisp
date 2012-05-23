@@ -109,7 +109,7 @@
 	 greater-than '#'>))
     (with-unique-names (g s e step check i)
       `(macrolet ((%get (i)
-		    `(funcall ,',g array ,i))
+		    `(funcall ,',g ,',array ,i))
 		  (%step (i)
 		    `(funcall ,',step ,i)))
 	 (symbol-macrolet (($start ,s))
