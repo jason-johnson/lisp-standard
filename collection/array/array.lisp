@@ -137,8 +137,12 @@
 		   ,@(when get-item-in-varlist `((,item (%get ,i) (%get ,i))))
 		   ,@do-var-forms)
 		  ((funcall ,check ,i ,e) ,result)
-	       (macrolet ((%replace! (value)
-			    `(row-major-put! ,',array ,',i ,value)))
+	       (macrolet ((%put! (value &optional arr)
+			    `(row-major-put!
+			      ,(if arr
+				   `,arr
+				   `,',array)
+			      ,',i ,value)))
 		 ,@(if get-item-in-varlist
 		       body
 		       `((let ((,item (%get ,i)))
@@ -193,7 +197,7 @@
 (defun substitute-if! (new predicate array &key from-end (start 0) end key count)
   (let ((cnt 0))
     (traverse-array-as-vector-when (predicate array item start end key from-end array)
-      (%replace! new)
+      (%put! new)
       (when count
 	(incf cnt)
 	(when (= count cnt)
