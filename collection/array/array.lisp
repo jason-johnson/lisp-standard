@@ -59,9 +59,10 @@
 
 (defun position-if (predicate array &key from-end start end key)
   (when end (ensure-valid-end-subscript array end)) ; NOTE: Would be nice if the compiler could do this when possible
-  (let* ((has-end? (if from-end (not (null end)) (not (null start))))
+  (let* ((has-end? (not (null (if from-end start end))))
 	 (start (make-subscripts array start))
-	 (end (make-subscripts array (or end t)))
+	 (new-end (make-subscripts array (or end t)))
+	 (end (if end (subscripts-dec! new-end) new-end))
 	 (last-dimension (subscripts-last-dimension start))
 	 (g (if key
 		(compose key #'get)
@@ -69,7 +70,7 @@
 	 (end-index 0)
 	 s e advance)
     (if from-end
-	(setf s (subscripts-dec! end)
+	(setf s end
 	      e (subscripts-dec! start)
 	      has-end? (when e has-end?)
 	      advance #'subscripts-dec!)
