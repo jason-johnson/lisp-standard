@@ -98,7 +98,7 @@
 (defun position (item array &key from-end start end key (test #'eql))
   (position-if (lambda (e) (funcall test item e)) array :from-end from-end :start start :end end :key key))
 
-(defmacro traverse-array-as-vector ((array item start end key from-end? result &key get-item-in-varlist from-end-forms from-start-forms pre-do-forms do-var-forms) &body body)
+(defmacro traverse-array-as-vector ((array item start end key from-end? result &key get-item-in-varlist from-end-forms from-start-forms pre-do-forms do-var-forms (check-start-and-end t)) &body body)
   "Traverse ARRAY linear as a vector"
   (let (less-than greater-than)
     (if get-item-in-varlist
@@ -114,6 +114,9 @@
 		  (%step (i)
 		    `(funcall ,',step ,i)))
 	 (symbol-macrolet (($start ,s))
+	   ,@(when check-start-and-end
+		   `((when (listp ,start) (setf ,start (valid-subscript-index ,array ,start)))
+		     (when (and ,end (listp ,end)) (setf ,end (valid-subscript-index ,array ,end)))))
 	   (setf ,end (if ,end (1- ,end) (1- (total-size ,array))))
 	   (let ((,g (if ,key
 			 (compose ,key #'row-major-get)
