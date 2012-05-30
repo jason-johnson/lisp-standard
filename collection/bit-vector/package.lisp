@@ -11,6 +11,8 @@
 			  #:do
 			  #:length
 			  #:concatenate
+			  #:substitute
+			  #:substitute-if
 			  #:substitute!
 			  #:substitute-if!
 			  #:append!

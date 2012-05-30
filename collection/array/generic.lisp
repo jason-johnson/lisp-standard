@@ -39,6 +39,12 @@
 (defmethod std.collection:position (item (collection array) &key from-end start end key (test #'eql))
   (position item collection :from-end from-end :start start :end end :key key :test test))
 
+(defmethod std.collection:substitute-if (new predicate (collection array) &key from-end (start 0) end key count)
+  (substitute-if new predicate collection :from-end from-end :start start :end end :key key :count count))
+
+(defmethod std.collection:substitute (new old (collection array) &key from-end (start 0) end key count (test #'eql))
+  (substitute new old collection :from-end from-end :start start :end end :key key :count count :test test))
+
 (defmethod std.collection:substitute-if! (new predicate (collection array) &key from-end (start 0) end key count)
   (substitute-if! new predicate collection :from-end from-end :start start :end end :key key :count count))
 

@@ -18,6 +18,8 @@
 			  #:find-if
 			  #:position
 			  #:position-if
+			  #:substitute
+			  #:substitute-if
 			  #:substitute!
 			  #:substitute-if!
 			  #:append!

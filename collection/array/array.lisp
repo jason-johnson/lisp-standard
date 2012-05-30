@@ -209,6 +209,31 @@
 (defun substitute! (new old array &key from-end (start 0) end key count (test #'eql))
   (substitute-if! new (lambda (v) (funcall test v old)) array :from-end from-end :start start :end end :key key :count count))
 
+(defun substitute-if (new predicate array &key from-end (start 0) end key count)
+  (let ((result (new-from array))
+	(length (total-size array))
+	(cnt 0)
+	(continue? t))
+    (when (listp start) (setf start (valid-subscript-index array start)))
+    (when (and end (listp end)) (setf end (valid-subscript-index array end)))
+    (when (> start 0)
+      (dotimes (i start)
+	(row-major-put! result i (row-major-get array i))))
+    (when (and end (< end length))
+      (cl:do ((i end (1+ i)))
+	     ((= i length))
+	(row-major-put! result i (row-major-get array i))))
+    (traverse-array-as-vector (array item start end key from-end result :check-start-and-end nil)
+      (let ((match? (when continue? (funcall predicate item))))
+	(%put! (if match? new item) result)
+	(when (and count match?)
+	  (incf cnt)
+	  (when (= cnt count) (setf continue? nil
+				    count nil))))))) ; NOTE: no need to enter the when block anymore after we've hit this condition
+
+(defun substitute (new old array &key from-end (start 0) end key count (test #'eql))
+  (substitute-if new (lambda (v) (funcall test v old)) array :from-end from-end :start start :end end :key key :count count))
+
 (defun new-from (array &key (dimensions (dimensions array)) (element-type (element-type array)) (adjustable (adjustable-p array) adjustable?) (fill-pointer nil fill-pointer?) displaced-to displaced-index-offset)
   (let ((options (list element-type :element-type dimensions)))
     (macrolet ((when-put! (test key value)
