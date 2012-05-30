@@ -29,7 +29,11 @@
   (def-advance subscripts-inc! (< (svref subscript-array i) (svref subscript-max i)) incf 0)
   (def-advance subscripts-dec! (> (svref subscript-array i) 0) decf (svref subscript-max i)))
 
-(defun ensure-valid-end-subscript (array subscript-list)
-  (declare (ignore array subscript-list))
-  ;; TODO!
-  )
+(defun valid-subscript-index (array subscript-list)
+  (let ((max-end (copy-seq (array-dimensions array))))
+    (cl:do ((c max-end (cdr c)))
+	   ((null (cdr c)))
+      (decf (car c)))
+    (if (equal subscript-list max-end)
+	(total-size array)
+	(apply #'row-major-index array subscript-list))))

@@ -58,7 +58,7 @@
 	(setf (apply #'aref result ss) e)))))
 
 (defun position-if (predicate array &key from-end start end key)
-  (when end (ensure-valid-end-subscript array end)) ; NOTE: Would be nice if the compiler could do this when possible
+  (when end (valid-subscript-index array end)) ; NOTE: This will verify that end index is valid.  Would be nice to do this at compile time
   (let* ((has-end? (not (null (if from-end start end))))
 	 (start (make-subscripts array start))
 	 (new-end (make-subscripts array (or end t)))
